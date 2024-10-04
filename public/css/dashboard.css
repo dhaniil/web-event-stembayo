@@ -1,0 +1,107 @@
+body {
+    font-family: "Kanit", sans-serif;
+    background-color:#ffffff;
+}
+
+@media (max-width: 576px) {
+    .carousel-inner {
+    border-bottom-left-radius: 1%;
+    border-bottom-right-radius: 1%;
+    }
+    .carousel-item img {
+    height: 450px;
+    }
+    .carousel-caption a {
+    font-size: 10px;
+    }
+    .carousel-caption p {
+    font-size: 4px;
+    }
+    .navbar{
+        background-color: rgba(20, 20, 20, 0.8);
+    }
+    .nav-item{
+        text-align: center;
+    }
+}
+
+/* NAVBAR */
+.navbar{
+    padding:  7px ;
+    background-color: rgba(20, 20, 20, 0.5);
+    position: absolute;
+    width: 100%;
+    box-shadow: 0 10px 5px rgba(20, 20, 20, 0.5);
+}
+.navbar-toggler {
+color: #ffffff; 
+}
+
+.nav-item, .nav-item a{
+    font-size: 2.5vh;
+    color: #ffffff;
+}
+.nav-item i{
+    margin-right: 5px;
+}
+
+/* CAROUSEL AWAL */
+.gambar-awal .carousel-inner{
+    background-color: #000000;
+} 
+.gambar-awal .carousel-inner::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0), 
+        rgba(255, 255, 255, 1) 
+    );
+} 
+.carousel-item img {
+    height: 750px;
+    object-fit: cover;
+    opacity: 0.5;
+}
+.carousel-caption {
+    bottom: 50%;
+    transform: translateY(50%);
+}
+.carousel-caption a {
+    font-size: 6vh;
+    font-weight: bold;
+}
+.carousel-caption p {
+    font-size: 2vh;
+}
+
+/* ABOUT */
+.about h1{
+    font-size: 5vh;
+    font-weight: 600;
+}
+.about p{
+    font-size: 2.2vh;
+    color: #666666;
+}
+
+/* EVENT */
+.event .card{
+    height: 25vw;
+    border-radius: 40px;
+    margin-bottom: 1vw;
+}
+.event .card img{
+    height: 25vw;
+    border-radius: 40px;
+}
+.pagination{
+    text-align: center;
+    justify-content: center;
+}
+.pagination .btn{
+    margin: 1vh;
+}
