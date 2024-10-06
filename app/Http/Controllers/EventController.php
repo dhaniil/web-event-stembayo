@@ -9,20 +9,28 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $events = Event::query(); // Mulai query builder
+        $events = Event::all();
 
-        if ($request->has('month') && $request->has('year')) {
-            $events = $events->whereMonth('date', $request->month)
-                             ->whereYear('date', $request->year);
-        }
-
-        $events = $events->get(); // Ambil data setelah filtering
-
-        return view('events.dashboard', compact('events')); // Pass events to the view
+        return view('events.dashboard', compact('events')); 
     }
 
     public function create()
     {
+
+        $kategori = [
+        'KTYME Islam',
+        'KTYME Kristiani',
+        'KBBP',
+        'KBPL',
+        'BPPK',
+        'KK',
+        'PAKS',
+        'KJDK',
+        'PPBN',
+        'HUMTIK',
+    ];
+
+    return view('events.create', compact('kategori'));
         return view('events.create');
     }
 
@@ -32,14 +40,29 @@ class EventController extends Controller
             'name' => 'required|string|max:255',
             'date' => 'required|date',
             'description' => 'required|string',
-            'price' => 'required|numeric',
             'type' => 'required|string',
-            'image_url' => 'nullable|url', // Allow image_url to be optional
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096', 
+            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK','-', 
+            'penyelenggara' => 'required|string|max:255', 
         ]);
 
-        Event::create($request->all());
+       
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
 
-        return redirect()->route('events.index')->with('success', 'Event berhasil ditambahkan!');
+        Event::create([
+            'name' => $request->name,
+            'date' => $request->date,
+            'description' => $request->description,
+            'type' => $request->type,
+            'image' => $imagePath,
+            'kategori' => $request->kategori,
+            'penyelenggara' => $request->penyelenggara,
+        ]);
+
+        return redirect()->route('events.dashboard')->with('success', 'Event berhasil ditambahkan!');
     }
 
     public function show($id)
@@ -48,5 +71,10 @@ class EventController extends Controller
         return view('events.show', compact('event'));
     }
 
-
+    public function EventPage()
+    {
+        $events = Event::all();
+        return view('events.eventonly', compact('events'));
+    }
+    
 }

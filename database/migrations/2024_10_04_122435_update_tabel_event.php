@@ -14,15 +14,31 @@ return new class extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
+
             $table->id();
             $table->string('name');
             $table->date('date');
             $table->text('description');
-            $table->decimal('price', 8, 2); // Adjust precision if needed
             $table->string('type');
-            $table->string('image_url')->nullable(); // Allow image URL to be nullable
+            $table->binary('image');
+            $table->enum('sekbid', [
+                'KTYME Islam', 
+                'KTYME Kristiani', 
+                'KBBP', 
+                'KBPL', 
+                'BPPK', 
+                'KK', 
+                'PAKS', 
+                'KJDK', 
+                'PPBN',
+                '-', 
+                'HUMTIK'
+            ])->default('-'); 
+            $table->string('penyelenggara')->default('-'); 
             $table->timestamps();
+        
         });
+        
     }
 
     /**
