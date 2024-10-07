@@ -40,11 +40,11 @@ body {
 
 /* NAVBAR */
 .navbar{
-    padding:  7px ;
-    background-color: rgba(20, 20, 20, 0.5);
+    padding: 3px ;
+    background-color: rgba(20, 20, 20, 0.1);
     position: absolute;
     width: 100%;
-    box-shadow: 0 10px 5px rgba(20, 20, 20, 0.5);
+    /* box-shadow: 0 10px 5px rgba(20, 20, 20, 0.5); */
 }
 nav .navbar-brand{
     font-weight: 600;
@@ -218,7 +218,7 @@ color: #ffffff;
 
   .event .card-body .card:hover{
     transform: scale(1.02);
-    box-shadow: 5px 5px 10px rgba(20, 20, 20, 0.184);
+    box-shadow: 10px 10px 10    px rgba(10, 10, 10, 0.5);
   }
 
   /* .event .card-body .card .href-img{

@@ -38,6 +38,14 @@ h2 {
     font-size: 24px;
 }
 
+.navbar-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
 .search-bar {
     width: 300px;
     padding: 8px;
@@ -52,7 +60,12 @@ h2 {
     color: #fff;
     border-radius: 20px;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 5px;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
 }
 
 .navbar-right a {
@@ -70,11 +83,50 @@ h2 {
 
 .signup-btn {
     padding: 8px 20px;
-    background-color: #3c5cff;  
+    background-color: #3c5cff;
     border: none;
     color: #fff;
     border-radius: 20px;
     text-align: center;
+    margin-left: 10px;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    .navbar-center {
+        margin-bottom: 10px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .navbar-right {
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .navbar-right a {
+        margin: 10px 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .login-btn, .signup-btn {
+        width: 100%;
+    }
+
+    .signup-btn {
+        margin-left: 0;
+    }
 }
 
 

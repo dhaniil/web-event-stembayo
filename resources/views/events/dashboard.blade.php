@@ -51,7 +51,8 @@
     <div class="gambar-awal">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="https://smkn2depoksleman.sch.id/utama/wp-content/uploads/2024/03/DSC_0003-4.jpg" class="d-block w-100" alt="...">
+      <img src="https://i.ibb.co.com/LhwSwy5/SOC02116.jpg" class="d-block w-100" alt="...">
+      <!-- https://smkn2depoksleman.sch.id/utama/wp-content/uploads/2024/03/DSC_0003-4.jpg -->
       <div class="carousel-caption">
         <h4 class="judul">Website Event Stembayo</h4>
         <p>Selamat Datang Anggap Saja Sekolah Sendiri</p>
@@ -114,25 +115,6 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    </div>
-                                </div>
-
-                                <div class="carousel-item">
-                                    <div class="row">
-                                    @foreach($events as $event)
-                                    <div class="col-lg-3 col-md-4 col-sm-6 col-5" v-for="(card, index) in cards" :key="index">
-                                            <div class="card">
-                                                <a href="{{ route('events.show', $event->id) }}" class="img-href">
-                                                <img src="{{ asset('storage/' . $event->image) }}" alt="Image" class="card-img">
-                                                <div class="event-name d-flex flex-column">
-                                                    <figcaption>{{ $event->name }}</figcaption>
-                                                </a>
-                                                    <!-- <h5 class="card-title">[[ card.title ]]</h5> -->
-                                                    <!-- <p class="card-text">[[ card.description ]]</p> -->
-                                                </div>
-                                                </div>
-                                            </div>
-                                             @endforeach
                                     </div>
                                 </div>
                             </div>

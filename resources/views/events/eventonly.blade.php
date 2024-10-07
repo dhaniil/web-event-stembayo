@@ -20,11 +20,10 @@
                 EVENT STEMBAYO
             </a>
         </div>
-
         <div class="navbar-right">
             <div class="search-container">
                 <input type="text" class="search-bar" placeholder="Cari Event">
-                <i class="bi bi-search search-icon"></i>
+                <!-- <i class="bi bi-search search-icon"></i> -->
             </div>
             <button class="search-btn">Search</button>
             <a href="#" class="login-btn">Log In</a>
