@@ -12,8 +12,13 @@
         </div>
 
         <div class="form-group">
-            <label for="date">Tanggal Event</label>
-            <input type="date" class="form-control" id="date" name="date" required>
+            <label for="start_date">Tanggal Mulai</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" required>
+        </div>
+
+        <div class="form-group">
+            <label for="end_date">Tanggal Selesai</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" required>
         </div>
 
         <div class="form-group">
@@ -21,28 +26,25 @@
             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
         </div>
 
-        <!-- <div class="form-group">
-            <label for="price">Harga</label>
-            <input type="number" class="form-control" id="price" name="price" step="0.01">
-        </div> -->
-
         <div class="form-group">
             <label for="type">Tipe Event</label>
             <input type="text" class="form-control" id="type" name="type" required>
         </div>
 
         <div class="form-group">
-            <label for="image">Gambar Event</label>
+            <label for="image">Pamflet Event</label>
             <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
         </div>
 
         <div class="form-group">
             <label for="kategori">Kategori</label>
             <select class="form-control" id="kategori" name="kategori" required>
-                @foreach($kategori as $kategori)
-                    <option value="{{ $kategori }}">{{ $kategori }}</option>
-                @endforeach
-            </select>
+                <option value="-">-</option> <!-- Opsi default "-" -->
+            @foreach($kategori as $kategori)
+                <option value="{{ $kategori }}">{{ $kategori }}</option>
+            @endforeach
+        </select>
+
         </div>
 
         <div class="form-group">

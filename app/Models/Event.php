@@ -15,11 +15,12 @@ class Event extends Model
 
     protected $fillable = [
         'name',
-        'date',
+        'start_date',
+        'end_date',
         'description',
         'type',
         'image',
-        'model',
+        'kategori',
         'penyelenggara',
         'created_at',
         'updated_at',

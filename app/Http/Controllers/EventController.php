@@ -28,6 +28,7 @@ class EventController extends Controller
         'KJDK',
         'PPBN',
         'HUMTIK',
+        
     ];
 
     return view('events.create', compact('kategori'));
@@ -38,11 +39,12 @@ class EventController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'date' => 'required|date',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
             'description' => 'required|string',
             'type' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096', 
-            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK','-', 
+            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK',
             'penyelenggara' => 'required|string|max:255', 
         ]);
 
@@ -54,7 +56,8 @@ class EventController extends Controller
 
         Event::create([
             'name' => $request->name,
-            'date' => $request->date,
+            'start_date' => $request->start_date,
+            "end_date" => $request->end_date,
             'description' => $request->description,
             'type' => $request->type,
             'image' => $imagePath,

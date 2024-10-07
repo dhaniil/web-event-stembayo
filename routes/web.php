@@ -24,3 +24,14 @@ Route::get('/coba', function () {
     return view('cobaygy.home');
 });
 
+//Validasi role user
+Route::group(['middleware' => ['admin']], function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index']);
+    Route::resource('/admin/events', EventController::class);
+});
+
+Route::group(['middleware' => ['sekbid']], function () {
+    Route::get('/sekbid/events', [SekbidController::class, 'index']);
+    Route::resource('/sekbid/events', EventController::class)->except(['create', 'delete']);
+});
+
