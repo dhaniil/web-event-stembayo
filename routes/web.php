@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\SidebarController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -34,7 +36,7 @@ Route::post('/events/{id}/ticket', [TicketController::class, 'beli'])->name('tic
 // Rute baru untuk menambah event
 
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
-Route::get('/tambah', [EventController::class, 'create'])->name('events.create')->middleware('admin');
+// Route::get('/tambah', [EventController::class, 'create'])->name('events.create')->middleware('admin');
 
 Route::get('/event/only', [EventController::class, 'EventPage'])->name('events.eventonly');
 
@@ -49,12 +51,14 @@ Route::group(['middleware' => ['admin']], function () {
 });
 
 Route::group(['middleware' => ['sekbid']], function () {
+
     Route::get('/sekbid/events', [SekbidController::class, 'index']);
     Route::resource('/sekbid/events', EventController::class)->except(['create', 'delete']);
 });
 
-// Route::group(['middleware' => ['auth', 'admin']], function () {
-//     Route::get('/tambah',  () {
-//         return view('events.create'); // Menampilkan view untuk create event
-//     });
-// });
+Route::middleware([AdminMiddleware::class])->group(function () {
+    Route::get('/tambah', [EventController::class, 'create'])->name('events.create');
+    
+});
+
+// Route::get('/event/only', [SidebarController::class, 'getUserInfo'])->middleware('auth')->name('events.eventonly');

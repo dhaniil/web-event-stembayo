@@ -57,7 +57,7 @@
         <h4 class="judul">Website Event Stembayo</h4>
         <p>Selamat Datang Anggap Saja Sekolah Sendiri</p>
         <!-- <input type="text" class="search-bar form-control" placeholder="Search Event" aria-label="Search"> -->
-        <a class="button" type="submit">See More</a>
+        <!-- <a class="button" type="submit">See More</a> -->
       </div>
       </div>
     </div>
@@ -77,7 +77,7 @@
         </section> 
 
         <!-- Event -->
-        <section class="event">
+        <section class="event" >
             <div id="app" class="container">
                 <div class="card">
                     <div class="card-header">
