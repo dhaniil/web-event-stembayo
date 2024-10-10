@@ -180,41 +180,5 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    // Membuat Vue instance
-    // var app = new Vue({
-    //     el: '#app', // Mengikat Vue pada elemen dengan id 'app'
-    //     delimiters: ['[[', ']]'], // Mengubah delimiters Vue untuk menghindari konflik dengan Blade
-    //     data: {
-    //         // Data array yang berisi informasi setiap card
-    //         cards: [
-    //             {
-    //                 image: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/back-to-school-party%2C-school-summer-event-design-template-f1da39fc87803eeeaa2a2c7c21f1c3ba_screen.jpg?ts=1658281780',
-    //                 title: 'Event Stembayo', 
-    //                 description: 'Event ini akan diadakan pada....',
-    //                 link: '#'
-    //             },
-    //             {
-    //                 image: 'https://studio.mrngroup.co/storage/app/media/Prambors/Events/Skulprize%202023-20230515185504.webp',
-    //                 title: 'Event Nganu',
-    //                 description: 'Event ini akan diadakan pada....',
-    //                 link: '#'
-    //             },
-    //             {
-    //                 image: 'https://pbs.twimg.com/media/EADSa3hUIAA3Emk.jpg',
-    //                 title: 'Event YTTA',
-    //                 description: 'Event ini akan diadakan pada....',
-    //                 link: '#'
-    //             },
-    //             {
-    //                 image: 'https://png.pngtree.com/png-clipart/20210912/original/pngtree-creative-gradual-school-season-event-poster-ideas-png-image_6770906.jpg',
-    //                 title: 'Ndak tahu',
-    //                 description: 'Event ini akan diadakan pada....',
-    //                 link: '#'
-    //             }
-    //         ]
-    //     }
-    // });
-</script>
 </body>
 </html>
