@@ -9,10 +9,12 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        $events = Event::all();
-
-        return view('events.dashboard', compact('events')); 
+        // Mengambil 4 event teratas
+        $events = Event::take(4)->get();
+    
+        return view('events.dashboard', compact('events'));
     }
+    
 
     public function create()
     {
@@ -68,6 +70,61 @@ class EventController extends Controller
         return redirect()->route('events.dashboard')->with('success', 'Event berhasil ditambahkan!');
     }
 
+    public function edit($id)
+    {
+        $event = Event::findOrFail($id);
+    
+        $kategori = [
+            'KTYME Islam',
+            'KTYME Kristiani',
+            'KBBP',
+            'KBPL',
+            'BPPK',
+            'KK',
+            'PAKS',
+            'KJDK',
+            'PPBN',
+            'HUMTIK',
+        ];
+    
+        return view('events.edit', compact('event', 'kategori'));
+    }
+    
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+            'description' => 'required|string',
+            'type' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK',
+            'penyelenggara' => 'required|string|max:255',
+        ]);
+    
+        $event = Event::findOrFail($id);
+    
+        // Cek apakah ada file gambar yang diunggah
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $event->image = $imagePath; // Simpan path gambar baru
+        }
+    
+        // Update data event
+        $event->update([
+            'name' => $request->name,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'description' => $request->description,
+            'type' => $request->type,
+            'kategori' => $request->kategori,
+            'penyelenggara' => $request->penyelenggara,
+        ]);
+    
+        return redirect()->route('events.dashboard')->with('success', 'Event berhasil diperbarui!');
+    }
+    
     public function show($id)
     {
         $event = Event::findOrFail($id);
@@ -76,8 +133,9 @@ class EventController extends Controller
 
     public function EventPage()
     {
-        $events = Event::all();
+        $events = Event::take(3)->get();
         return view('events.eventonly', compact('events'));
     }
+    
     
 }

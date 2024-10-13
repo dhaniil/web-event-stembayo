@@ -280,7 +280,31 @@ border: 0;
 footer{
     background-color: #5356ff;
 }
-    /* .event {
-        background-color: #67C6E3;
-        color: #67C6E3;
-    } */
+
+footer .footer-logo i{
+    align-items: center;
+    color: #fff;
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+footer .footer-title h3{
+    text-align: center;
+    align-items: center;
+    font-weight: 600;
+}
+
+footer .footer-sponsor{
+    text-align: end;
+    align-items: center;
+}
+
+footer .footer-sponsor img{
+    width: 70px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+footer .col-md-6{
+    font-size: 15px;
+}

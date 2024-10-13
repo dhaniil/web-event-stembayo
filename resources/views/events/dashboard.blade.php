@@ -4,17 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stembayo Events</title>
-    <!-- CDN Bootsrap & Font Awesome -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <!-- CSS & Logo -->
+    {{-- ambil dari assets/asset --}}
+    @include('assets/asset')
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" /> 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <link rel="icon" href="https://smkn2depoksleman.sch.id/utama/wp-content/uploads/2024/09/cropped-Untitled-design-5-3.png" type="image/icon"> 
 </head>
 <style>
     /* css di public/css/dashboard.css */
@@ -27,12 +19,12 @@
             <img src="https://i.ibb.co.com/P5Lyxyc/stmby.png" alt="Logo" width="80" height="80" class="d-inline-block align-middle">
            STEMBAYO
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
-            </button>
+            </button> --}}
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
@@ -40,7 +32,7 @@
                     </li>
                     <li class="nav-item">
                     <a class="nav-link " href="#">Log In</a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>
@@ -90,7 +82,7 @@
                                 <!-- <a class="button"href="#">Terbaru</a>
                                 <a class="button"href="#">Tanggal</a>
                                 <a class="button"href="#">Sekbid</a> -->
-                                <a class="button"href="{{ route('events.eventonly') }}">Lainnya</a>
+                                <a class="button"href="{{ route('events.eventonly') }}">See More</a>
                             </div>
                         </div>
                     </div>
@@ -141,42 +133,13 @@
                 </div>
                 </div>
             </div>
-
-
-            
-
-
         </section>
-
     </main>     
 
 
 
     <!-- Footer -->
-            <footer class=" text-white pt-4">
-            <div class="container">
-                <div class="row">
-                <div class="col-md-6">
-                    <h5>About Us</h5>
-                    <p>
-                    Kita adalah 3L Lazer Limleye Lmx
-                    </p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <h5>Contact Us</h5>
-                    <ul class="list-unstyled">
-                    <li><i class="bi bi-geo-alt-fill"></i> 79H6+P86, Jl. Magelang, Jaran, Tridadi, Kec. Sleman, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55511</li>
-                    <li><i class="bi bi-telephone-fill"></i> +62 999 999 999</li>
-                    <li><i class="bi bi-envelope-fill"></i> 3el@gmail.com</li>
-                    </ul>
-                </div>
-                </div>
-                <hr class="my-4" />
-                <div class="text-center py-3">
-                <p>&copy; 2024 Stembayo Events. All rights reserved.</p>
-                </div>
-            </div>
-            </footer>
+    @include('layout.footer')
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

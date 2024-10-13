@@ -6,10 +6,16 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\SidebarController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
+use App\Files;
+
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::get('/ygy', function () {
+    return view('cobaygy.iseng');
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -28,7 +34,10 @@ require __DIR__.'/auth.php';
 //     return view('events.vue');
 // });
 
+
+
 Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
+
 
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
 Route::post('/events/{id}/ticket', [TicketController::class, 'beli'])->name('tickets.purchase');
@@ -36,29 +45,32 @@ Route::post('/events/{id}/ticket', [TicketController::class, 'beli'])->name('tic
 // Rute baru untuk menambah event
 
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
-// Route::get('/tambah', [EventController::class, 'create'])->name('events.create')->middleware('admin');
+Route::get('/tambah', [EventController::class, 'create'])->name('events.create');
 
 Route::get('/event/only', [EventController::class, 'EventPage'])->name('events.eventonly');
 
 Route::get('/coba', function () {
-    return view('cobaygy.home');
+    return view('tickets.cart');
 });
+
+Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
+Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
 
 //Validasi role user
-Route::group(['middleware' => ['admin']], function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index']);
-    Route::resource('/admin/events', EventController::class);
-});
+// Route::group(['middleware' => ['admin']], function () {
+//     Route::get('/admin/dashboard', [AdminController::class, 'index']);
+//     Route::resource('/admin/events', EventController::class);
+// });
 
-Route::group(['middleware' => ['sekbid']], function () {
+// Route::group(['middleware' => ['sekbid']], function () {
 
-    Route::get('/sekbid/events', [SekbidController::class, 'index']);
-    Route::resource('/sekbid/events', EventController::class)->except(['create', 'delete']);
-});
+//     Route::get('/sekbid/events', [SekbidController::class, 'index']);
+//     Route::resource('/sekbid/events', EventController::class)->except(['create', 'delete']);
+// });
 
-Route::middleware([AdminMiddleware::class])->group(function () {
-    Route::get('/tambah', [EventController::class, 'create'])->name('events.create');
+// Route::middleware([AdminMiddleware::class])->group(function () {
+//     Route::get('/tambah', [EventController::class, 'create'])->name('events.create');
     
-});
+// });
 
 // Route::get('/event/only', [SidebarController::class, 'getUserInfo'])->middleware('auth')->name('events.eventonly');

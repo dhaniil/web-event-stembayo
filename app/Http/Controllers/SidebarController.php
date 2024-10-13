@@ -11,6 +11,6 @@ class SidebarController extends Controller
     {
         $user = Auth::user(); // Get the authenticated user
 
-        return view('events.eventonly', compact('user')); // Pass user data to the view
+        return view('events.create', compact('user')); // Pass user data to the view
     }
 }
