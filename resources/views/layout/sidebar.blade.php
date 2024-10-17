@@ -104,8 +104,9 @@
 }
 
 .sidebar .menu ul li.active a {
+    margin-top: 10px;
     background-color: #5356ff;
-    border: 2px solid #00027b;
+    border: 2px solid #5356ff;
     color: #fff;
 }
 
@@ -141,7 +142,7 @@
               </div>
                   <div class="user-info d-flex">
                     <div class="user-profile">
-                      <img src="https://via.placeholder.com/60" alt="User Profile">
+                      <img src="https://i.pinimg.com/550x/e5/0e/0a/e50e0a63feb8687dc41e632d7e61d830.jpg" alt="User Profile">
                     </div>
                     <div class="user-name">
                       <h5>Username</h5>
@@ -150,7 +151,7 @@
                   </div>
                   <div class="menu" id="sidebar">
                     <ul class="menu-items">  <li class="active">
-                        <a href="#"><i class="bi bi-house-fill"></i>Dashboard</a>
+                        <a href="{{ route('events.eventonly') }}"><i class="bi bi-house-fill"></i>Dashboard</a>
                       </li>
                       <li>
                         <a href="#"><i class="bi bi-calendar"></i>Agenda Acara</a>

@@ -1,0 +1,94 @@
+.desc-event{
+    padding: 20px;
+}
+
+.event-detail .card{
+    margin: 0 100px;
+    /* width: 100%; */
+    height: 100%;
+
+}
+
+.event-detail .card{
+    margin-top: 30px;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.event-detail .event-image{
+    text-align: center;
+}
+.event-detail .card img{
+    height: 400px;
+    object-fit: cover;
+    width: 300px;
+    border-radius: 20px;
+    /* border-bottom-right-radius: 200px; */
+}
+
+.event-ticket .row{
+    justify-content: center;
+    align-items: center;
+}
+.event-ticket .card{
+    margin: 15px 5px;
+    justify-content: center;
+}
+
+.event-ticket .row .card1,
+.event-ticket .row .card2,
+.event-ticket .row .card3 {
+    border: 1px solid rgb(187, 187, 187);
+    background: linear-gradient(to bottom, rgb(229, 228, 226), #FFFFFF);
+    padding: 20px;
+}
+/* .event-ticket .row .card1 a{
+    background: linear-gradient(to bottom, #ffd700, #FFFFFF);
+}
+
+.event-ticket .row .card2 a{
+    background: linear-gradient(to bottom, #ffd700, #FFFFFF);
+}
+
+.event-ticket .row .card3 a{
+    background: linear-gradient(to bottom, #C0C0C0, #FFFFFF);
+} */
+
+.event-ticket a{
+    width: 50%;
+}
+
+.event-detail .event-date{
+    margin-left: 10px;
+}
+
+.event-ticket a{
+    background-color: #3c5cff;
+    color: #fff;
+}
+
+@media (max-width: 576px){
+    .event-detail .card{
+        margin: 0;
+    
+    }
+    .event-detail .card img{
+        height: 100%;
+        width: 100%;
+        border-top-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    .event-image p{
+        font-size: 10px;
+    }
+    .event-desc{
+        font-size: 13px;
+    }
+    .event-ticket .card{
+        margin: 10px 5px;
+        justify-content: center;
+        font-size: 15px;
+    }   
+    
+}

@@ -10,7 +10,8 @@ class EventController extends Controller
     public function index(Request $request)
     {
         // Mengambil 4 event teratas
-        $events = Event::take(4)->get();
+        $events = Event::all();
+        // $events = Event::take(4)->get();
     
         return view('events.dashboard', compact('events'));
     }
@@ -34,7 +35,6 @@ class EventController extends Controller
     ];
 
     return view('events.create', compact('kategori'));
-        return view('events.create');
     }
 
     public function store(Request $request)
@@ -133,7 +133,8 @@ class EventController extends Controller
 
     public function EventPage()
     {
-        $events = Event::take(3)->get();
+        // $events = Event::take(3)->get();
+        $events = Event::all();
         return view('events.eventonly', compact('events'));
     }
     
