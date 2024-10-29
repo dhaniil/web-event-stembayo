@@ -15,10 +15,14 @@ h2 {
     transform: translateY(78px);
     position: relative;
     padding-bottom: 100px; 
+    min-height: 60vh;
 }
 
 
 @media (max-width: 576px) {
+    .navbar-brand{
+        font-size: 15px;
+    }
     .navbar-right {
         flex-direction: column;
     }

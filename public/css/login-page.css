@@ -56,6 +56,8 @@ form .input-group{
     font-size: 13px;
 }
 
+
+
 .input-group .form-control:focus,
 .form-group .form-check-input:focus{
     box-shadow: none;
@@ -67,12 +69,28 @@ form .input-group{
     font-size: 13px;
 }
 
-.input-group span .cihuy{
+.form-group .form-check-input{
+    border: 1px solid #5356FF;
+}
+
+.form-group .form-check-input:checked{
     background-color: #5356FF;
 }
 
 .form-group label{
     font-size: 13px;
+}
+
+.form-group a{
+    font-size: 13px;
+    color: #5356FF;
+    text-decoration: none;
+}
+
+.login-register p, .login-register a{
+    margin-top: 5px;
+    font-size: 13px;
+    text-decoration: none;
 }
 /* .form-group .form-check-input{
     border-radius: 50%;

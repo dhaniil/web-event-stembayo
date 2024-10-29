@@ -1,6 +1,7 @@
 <style>
     footer{
     background-color: #5356ff;
+    align-self: flex-end 
 }  
 
 footer .footer-logo i{

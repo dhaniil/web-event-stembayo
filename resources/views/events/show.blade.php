@@ -40,23 +40,6 @@
               </table>
             </div>
           </div>
-          <div class="event-ticket">
-            <div class="row">
-              <div class="card card1 col-lg-3 col-md-4 col-sm-6 col-12">
-                <h4>Ticket</h4>
-                <a class="btn" href="#">Pesan</a>
-              </div>
-              {{-- <div class="card card2 col-lg-3 col-md-4 col-sm-6 col-12">
-                <h4>Golden Ticket</h4>
-                <p class="harga">Rp. 50.000</p>
-                <a class="btn" href="#">Pesan</a>
-              </div>
-              <div class="card card3 col-lg-3 col-md-4 col-sm-6 col-12">
-                <h4>Silver Ticket</h4>
-                <p class="harga">Rp. 50.000</p>
-                <a class="btn" href="#">Pesan</a>
-              </div> --}}
-          </div>
         </div>
     </div>
   <section>

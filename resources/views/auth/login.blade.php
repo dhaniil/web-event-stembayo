@@ -16,40 +16,48 @@
                         <h1 class="login-title">Welcome!</h1>
                         <p>Event Stembayo</p>
                     </div>
-                    <!-- <h6 class="card-subtitle mb-2 text-body-secondary">Login dulu rek</h6> -->
-                    <form class="login">
+                    <!-- Form Login -->
+                    <form class="login" method="POST" action="{{ route('login') }}">
+                        @csrf
                         <div class="input-group">
                             <span class="input-group-text">
                                 <i class="bi bi-person"></i>
                             </span>
-                            <input type="email" placeholder="Email" class="form-control" required>
+                            <input type="email" name="email" placeholder="Email" class="form-control" required>
                         </div>
                         <div class="input-group">
                             <span class="input-group-text">
                                 <i class="bi bi-key"></i>
                             </span>
-                            <input :type="passwordFieldType" class="form-control" placeholder="Password" v-model="password" required>
+                            <input :type="passwordFieldType" name="password" class="form-control" placeholder="Password" v-model="password" required>
                             <span class="input-group-text cihuy" @click="togglePasswordVisibility">
                                 <i :class="passwordIcon"></i>
                             </span>
                         </div>
+                        <!-- Pesan Error jika Login Gagal -->
+                        @if($errors->any())
+                            <div class="alert alert-danger mt-2">
+                                {{ $errors->first() }}
+                            </div>
+                        @endif
                         <div class="form-group form-check d-flex justify-content-between">
-                            <input type="checkbox" class="form-check-input" id="remember">
-                            <label class="form-check-label" for="remember">Ingat Saya</label>
-                            <a href="#" class="forgot-password">Lupa Password?</a>
+                            <div class="checkbox">
+                                <input type="checkbox" name="remember" class="form-check-input" id="remember">
+                                <label class="form-check-label" for="remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
                         </div>
-                        <button type="submit" class="btn">Log In</button>
+                        <div class="login-register">
+                            <button type="submit" class="btn">Log In</button>
+                            <p class="text-center">Don't have an account yet? <br> <a href="{{ route('register') }}">Register</a> now!</p>  
+                        </div>
                     </form>
                 </div>
                 <div class="card right-card col-lg-6">
-                    <!-- <div class="img-bg">
-                        <img src="https://i.ibb.co.com/LhwSwy5/SOC02116.jpg">
-                    </div> -->
                     <div class="logo">
                         <img src="https://smkn2depoksleman.sch.id/utama/wp-content/uploads/2023/03/LOGO-SMK-N-2-DEPOK-SLEMAN-150x150.png" alt="Stembayo">
                         <h3>STEMBAYO</h3>
                     </div>
-                    
                 </div>
             </div>
         </div>
@@ -57,25 +65,25 @@
 
     <script>
         new Vue({
-        el: '#app',
-        data: {
-            password: '',
-            isPasswordVisible: false
-        },
-        computed: {
-            passwordFieldType() {
-                return this.isPasswordVisible ? 'text' : 'password';
+            el: '#app',
+            data: {
+                password: '',
+                isPasswordVisible: false
             },
-            passwordIcon() {
-                return this.isPasswordVisible ? 'bi bi-eye-slash' : 'bi bi-eye';
+            computed: {
+                passwordFieldType() {
+                    return this.isPasswordVisible ? 'text' : 'password';
+                },
+                passwordIcon() {
+                    return this.isPasswordVisible ? 'bi bi-eye-slash' : 'bi bi-eye';
+                }
+            },
+            methods: {
+                togglePasswordVisibility() {
+                    this.isPasswordVisible = !this.isPasswordVisible;
+                }
             }
-        },
-        methods: {
-            togglePasswordVisibility() {
-                this.isPasswordVisible = !this.isPasswordVisible;
-            }
-        }
-    });
+        });
     </script>
 </body>
 </html>

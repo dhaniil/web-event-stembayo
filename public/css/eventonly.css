@@ -8,6 +8,9 @@
     padding: 0px 20px;
 }
 
+.card-container .text-center{
+    padding-top: 30px;
+}
 .card{
     text-align: center;
     border-radius: 3%;

@@ -21,6 +21,7 @@
     display: flex;
     align-items: center;
     z-index: 100;
+    margin: 0;
     transition: all 200ms ease;
 }
 

@@ -16,25 +16,22 @@ class EventController extends Controller
         return view('events.dashboard', compact('events'));
     }
     
-
     public function create()
     {
-
         $kategori = [
-        'KTYME Islam',
-        'KTYME Kristiani',
-        'KBBP',
-        'KBPL',
-        'BPPK',
-        'KK',
-        'PAKS',
-        'KJDK',
-        'PPBN',
-        'HUMTIK',
-        
-    ];
+            'KTYME Islam',
+            'KTYME Kristiani',
+            'KBBP',
+            'KBPL',
+            'BPPK',
+            'KK',
+            'PAKS',
+            'KJDK',
+            'PPBN',
+            'HUMTIK',
+        ];
 
-    return view('events.create', compact('kategori'));
+        return view('events.create', compact('kategori'));
     }
 
     public function store(Request $request)
@@ -50,7 +47,6 @@ class EventController extends Controller
             'penyelenggara' => 'required|string|max:255', 
         ]);
 
-       
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
@@ -73,7 +69,7 @@ class EventController extends Controller
     public function edit($id)
     {
         $event = Event::findOrFail($id);
-    
+
         $kategori = [
             'KTYME Islam',
             'KTYME Kristiani',
@@ -86,10 +82,10 @@ class EventController extends Controller
             'PPBN',
             'HUMTIK',
         ];
-    
+
         return view('events.edit', compact('event', 'kategori'));
     }
-    
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -102,15 +98,15 @@ class EventController extends Controller
             'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK',
             'penyelenggara' => 'required|string|max:255',
         ]);
-    
+
         $event = Event::findOrFail($id);
-    
+
         // Cek apakah ada file gambar yang diunggah
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
             $event->image = $imagePath; // Simpan path gambar baru
         }
-    
+
         // Update data event
         $event->update([
             'name' => $request->name,
@@ -121,22 +117,41 @@ class EventController extends Controller
             'kategori' => $request->kategori,
             'penyelenggara' => $request->penyelenggara,
         ]);
-    
+
         return redirect()->route('events.dashboard')->with('success', 'Event berhasil diperbarui!');
     }
-    
+
     public function show($id)
     {
         $event = Event::findOrFail($id);
         return view('events.show', compact('event'));
     }
 
-    public function EventPage()
+    public function EventPage(Request $request)
     {
-        // $events = Event::take(3)->get();
-        $events = Event::all();
-        return view('events.eventonly', compact('events'));
-    }
+        // Ambil filter dari input request
+        $tanggal = $request->input('tanggal');
+        $kategori = $request->input('kategori');
     
+        // Mulai query
+        $query = Event::query();
+    
+        // Filter berdasarkan tanggal jika ada
+        if ($tanggal) {
+            $query->whereDate('start_date', '<=', $tanggal)
+                  ->whereDate('end_date', '>=', $tanggal);
+        }
+    
+        // Filter berdasarkan kategori jika ada
+        if ($kategori) {
+            $query->where('kategori', $kategori);
+        }
+    
+        // Dapatkan event berdasarkan filter atau semua data jika tidak ada filter
+        $events = $query->get();
+    
+        // Kirim data event dan filter yang diterapkan ke view
+        return view('events.eventonly', compact('events', 'tanggal', 'kategori'));
+    }
     
 }
