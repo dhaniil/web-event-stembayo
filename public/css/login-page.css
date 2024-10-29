@@ -1,99 +1,148 @@
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Montserrat', system-ui;
+    background: linear-gradient(to top, #c2c3ff, #f6f6ff);
+}
+
+.container-fluid{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #DFF5FF, #67C6E3);
+    width: 100%;
+}
+.container-fluid .row{
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
 }
 
-.login-container {
-    display: flex;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+.left-card{
+    width: 400px;
+    height: 450px;
+    padding: 30px;
+    background-color: #f6f6ff;
+    transform: translateX(20px);
+    border-radius: 30px;
+    border: none;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;   
 }
-
-.login-box {
-    padding: 40px;
-    width: 300px;
-}
-
-.login-box h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: 600;
+.left-card .judul{
     text-align: center;
+    margin: 50px 0 50px 0;
 }
 
-.input-group {
-    margin-bottom: 20px;
+.left-card h1{
+    font-weight: 800;
+    font-size: 45px;
+    color: #5356FF;
+    margin: 0;
+}
+
+.left-card p{
+    margin: 0;
+}
+
+form .input-group{
+    justify-content: center;
+    align-items: center;
     position: relative;
 }
 
-.input-group input {
-    width: 100%;
-    padding: 10px;
-    padding-left: 40px;
-    border: 1px solid #ccc;
+.input-group .form-control{
+    margin-bottom: 10px;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 13px;
 }
 
-.input-group i {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+.input-group .form-control:focus,
+.form-group .form-check-input:focus{
+    box-shadow: none;
 }
 
-.input-group input[type="password"] {
-    padding-right: 40px;
+.input-group span{
+    background-color: #fff;
+    margin-top: -10px;
+    font-size: 13px;
 }
 
-.input-group .toggle-password {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
+.input-group span .cihuy{
+    background-color: #5356FF;
 }
 
-.remember {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+.form-group label{
+    font-size: 13px;
 }
+/* .form-group .form-check-input{
+    border-radius: 50%;
+} */
 
-.remember input {
-    margin-right: 10px;
-}
-
-.login-btn {
+.left-card button{
+    margin-top: 20px;
     width: 100%;
-    padding: 10px;
-    background-color: #181C14;
+    background-color: #5356FF;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 50px;
+    transition: all 200ms ease-in-out;
+}
+.left-card button:hover{
+    background-color: #4043f9;
+    color: #fff;
+    box-shadow: 6px 6px 1px rgb(64, 67, 249, 0.2);
+    scale: 1.01;
+}
+
+.right-card{
+    width: 400px;
+    height: 500px;
+    padding: 10px 10px 10px 10px;
+    transform: translateX(-20px);   
+    border-radius: 30px;
+    background-color: #5356FF;
     border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
 }
 
-.right-box {
-    width: 300px;
-    background-color: #67C6E3;
-    border-radius: 0 10px 10px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.right-card .img-bg{
+    overflow: hidden;
+    position: relative;
 }
 
-.right-box .circle {
+.right-card .logo{
+    /* position: absolute; */
+    text-align: center;
+    padding-top: 10px;
+    z-index: 2;
+}
+
+.right-card h3{
+   font-weight: 700;
+   color: #fff;
+   margin-top: 10px;
+}
+ 
+.right-card .logo img{
     width: 100px;
     height: 100px;
-    background-color: #ccc;
-    border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    .right-card {
+        display: none;
+    }
+    .left-card{
+        transform: none;
+    }
+}
+
+@media (max-width: 992px) {
+    .right-card {
+        display: none;
+    }
+    .left-card{
+        transform: none;
+    }
 }

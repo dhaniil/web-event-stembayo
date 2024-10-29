@@ -104,6 +104,10 @@ border: 0;
     );
 } 
 
+/* .carousel-item{
+    transform: translate3d(0, 0, 0);
+} */
+
 .carousel-item img {
     height: 750px;
     object-fit: cover;
@@ -273,7 +277,7 @@ border: 0;
     position: absolute;
 } */
  
-.event .pagination .page-link{
+.event .page-link{
     cursor: pointer;
     margin-bottom: 2px;
 }

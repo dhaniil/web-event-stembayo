@@ -65,11 +65,14 @@
                 <p class="deskripsi">Pada saat tahun ajaran baru di bulan Januari 1972, Kompleks Sekolah yang terletak di dukuh Mrican, Caturtunggal, Depok, Sleman, Yogyakarta, belum selesai secara sempurna baik dari bangunan fisik dan peralatan belajar, sehingga awal penerimaan siswa pertama tidak dilakukan di Kampus STM pembangunan Mrican, akan tetapi dilakukan di STM Negeri 1 Jetis.</p>
                 <p class="deskripsi">Nama STEMBAYO tercetus pada tahun kedua sejak berdirinya sekolah yaitu tahun 1973. Untuk keperluan kegiatan ekstra kurikuler pada saat itu sekelompok siswa pecinta alam mendirikan perkumpulan Camille Papasektembayo (Putra Pecinta Alam STM Pembangunan Yogyakarta) yang selanjutnya secara lebih mudah mereka menyebut Pecinta Alam STEMBAYO. Nama ini diketahui oleh pengelola sekolah, sehingga istilah STEMBAYO lebih dikenal dan familiar untuk sebutan STM Pembangunan Yogyakarta hingga sekarang.</p>
                 <!-- <a href="#" class="btn btn-warning btn-lg">Get Started</a> -->
-            </div>
-        </section> 
+            {{-- </div>
+        </section>  --}}
 
         <!-- Event -->
         <section class="event" >
+                {{-- <a class="page-link" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span aria-hidden="true">&laquo;</span>
+                </a> --}}
             <div id="app" class="container">
                 <div class="card">
                     <div class="card-header">
@@ -91,27 +94,30 @@
                     <div class="card-body">
                         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="row">
-                                    @foreach($events as $event)
-                                        <div class="col-lg-3 col-md-4 col-sm-6 col-5" v-for="(card, index) in cards" :key="index">
-                                            <div class="card">
-                                                <a href="{{ route('events.show', $event->id) }}" class="img-href">
-                                                <img src="{{ asset('storage/' . $event->image) }}" alt="Image" class="card-img">
-                                                <div class="event-name d-flex flex-column">
-                                                    <figcaption>{{ $event->name }}</figcaption>
-                                                </a>
-                                                    <!-- <h5 class="card-title">[[ card.title ]]</h5> -->
-                                                    <!-- <p class="card-text">[[ card.description ]]</p> -->
+                                @php
+                                    $chunks = $events->chunk(4);
+                                @endphp
+                    
+                                @foreach($chunks as $chunkIndex => $chunk)
+                                    <div class="carousel-item {{ $chunkIndex == 0 ? 'active' : '' }}">
+                                        <div class="row">
+                                            @foreach($chunk as $event)
+                                                <div class="col-lg-3 col-md-4 col-sm-6 col-5">
+                                                    <div class="card">
+                                                        <a href="{{ route('events.show', $event->id) }}" class="img-href">
+                                                            <img src="{{ asset('storage/' . $event->image) }}" alt="Image" class="card-img" loading="lazy">
+                                                            <div class="event-name d-flex flex-column">
+                                                                <figcaption>{{ $event->name }}</figcaption>
+                                                            </div>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endforeach
                                         </div>
-                                    @endforeach
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                        </div>
-                    </div>
+
 
                 <div class="card-footer">
                     <nav aria-label="Page navigation">
