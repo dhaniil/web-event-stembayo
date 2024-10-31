@@ -7,10 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 class SidebarController extends Controller
 {
-    public function getUserInfo()
+    public function index()
     {
-        $user = Auth::user(); // Get the authenticated user
-
-        return view('events.create', compact('user')); // Pass user data to the view
+        $user = Auth::user();
+        return view('layout.sidebar', compact('user'));
     }
 }

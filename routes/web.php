@@ -9,10 +9,10 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Files;
 
-// Landing Page Route
+// Landing Page
 Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
 
-// Authentication Routes
+// Authentication bawaan breeze
 Route::middleware('auth')->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,7 +28,7 @@ Route::get('/event/only', [EventController::class, 'EventPage'])->name('events.e
 Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
 Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
 
-// Admin Only Route
+// Admin Only 
 Route::get('/tambah', function () {
     if (auth()->check() && auth()->user()->role === 'admin') {
         return app(EventController::class)->create();
@@ -36,7 +36,7 @@ Route::get('/tambah', function () {
     return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
 })->name('events.create');
 
-// User Management Routes
+// User Management 
 Route::prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('users.index');
     Route::get('/create', [UserController::class, 'create'])->name('users.create');
@@ -46,7 +46,7 @@ Route::prefix('users')->group(function () {
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 
-// Test Route
+// Test 
 Route::get('/ygy', function () {
     return view('cobaygy.iseng');
 });

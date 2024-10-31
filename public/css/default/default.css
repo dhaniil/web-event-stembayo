@@ -20,9 +20,6 @@ h2 {
 
 
 @media (max-width: 576px) {
-    .navbar-brand{
-        font-size: 15px;
-    }
     .navbar-right {
         flex-direction: column;
     }

@@ -58,6 +58,9 @@
                         <img src="https://smkn2depoksleman.sch.id/utama/wp-content/uploads/2023/03/LOGO-SMK-N-2-DEPOK-SLEMAN-150x150.png" alt="Stembayo">
                         <h3>STEMBAYO</h3>
                     </div>
+                    <div class="img-card">
+                        {{-- <img src="{{ asset('storage/images/3Z5sMVptiZHcIKQChuxRQFKB8NvyVawJs0y3ULmw.jpg') }}" class="card-img" alt="CardImage"> --}}
+                    </div>
                 </div>
             </div>
         </div>

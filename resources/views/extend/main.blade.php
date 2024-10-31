@@ -11,10 +11,14 @@
 </head>
 <body>
     {{-- Navbar --}}
-    @include('layout.navbar')
+    @include('layouts.navbar')
 
     {{-- Sidebar --}}
-    @include('layout.sidebar')
+    @include('layouts.sidebar', ['user' => $user])
+
+    {{-- <div class="content">
+        @yield('content') 
+    </div> --}}
 
     {{-- Content --}}
     <main>
@@ -22,7 +26,7 @@
     </main>
 
     {{-- Footer --}}
-    @include('layout.footer')
+    @include('layouts.footer')
       
 </body>
 </html>

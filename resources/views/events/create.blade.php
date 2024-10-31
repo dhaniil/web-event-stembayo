@@ -30,14 +30,31 @@
                 <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
             </div>
 
-            <div class="mb-3">
-                <label for="start_date" class="form-label">Tanggal Mulai</label>
-                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="start_date" class="form-label">Tanggal Mulai</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="jam_mulai" class="form-label">Jam Mulai</label>
+                    <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" value="{{ old('jam_mulai') }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="end_date" class="form-label">Tanggal Selesai</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="jam_selesai" class="form-label">Jam Selesai</label>
+                    <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" value="{{ old('jam_selesai') }}" required>
+                </div>
             </div>
 
             <div class="mb-3">
-                <label for="end_date" class="form-label">Tanggal Selesai</label>
-                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
+                <label for="tempat" class="form-label">Tempat</label>
+                <input type="text" class="form-control" id="tempat" name="tempat" value="{{ old('tempat') }}" required>
             </div>
 
             <div class="mb-3">
@@ -69,7 +86,7 @@
                     <option value="KJDK">KJDK</option>
                     <option value="PPBN">PPBN</option>
                     <option value="HUMTIK">HUMTIK</option>
-                    <option value="HUMTIK">-</option>
+                    <option value="-">-</option>
                 </select>
             </div>
 
@@ -81,5 +98,7 @@
             <button type="submit" class="btn btn-primary">Tambah Event</button>
         </form>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
