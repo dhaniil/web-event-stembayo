@@ -10,9 +10,9 @@ class EventController extends Controller
 {
     public function index(Request $request)
     {
-        // Mengambil 4 event teratas
+
         $events = Event::all();
-        // $events = Event::take(4)->get();
+        // $events = Event::take(4)->get(); // ambil 4 teratas
     
         return view('events.dashboard', compact('events'));
     }
@@ -53,7 +53,7 @@ class EventController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+            $imagePath = $request->file('image')->store('images', 'public'); // simpan gambar /app/public/images
         }
 
         Event::create([
@@ -70,10 +70,10 @@ class EventController extends Controller
             'penyelenggara' => $request->penyelenggara,
         ]);
 
-        return redirect()->route('events.dashboard')->with('success', 'Event berhasil ditambahkan!');
+        return redirect()->route('events.dashboard')->with('success');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) //edit data event
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -109,16 +109,16 @@ class EventController extends Controller
             'penyelenggara' => $request->penyelenggara,
         ]);
 
-        return redirect()->route('events.dashboard')->with('success', 'Event berhasil diperbarui!');
+        return redirect()->route('events.dashboard')->with('success', 'Data berhasil diperbarui!');
     }
 
-    public function show($id)
+    public function show($id) // 1 page event
     {
         $event = Event::findOrFail($id);
         return view('events.show', compact('event'));
     }
 
-    public function storeReview(Request $request, $eventId)
+    public function storeReview(Request $request, $eventId) //review
     {
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
@@ -134,41 +134,33 @@ class EventController extends Controller
         ]);
 
         return redirect()->route('events.show', $eventId)
-            ->with('success', 'Review berhasil ditambahkan');
+            ->with('success');
     }
     
-    public function EventPage(Request $request)
+    public function EventPage(Request $request) //Filter
     {
-        // Ambil filter dari input request
         $tanggal = $request->input('tanggal');
         $kategori = $request->input('kategori');
     
-        // Mulai query
         $query = Event::query();
     
-        // Filter berdasarkan tanggal jika ada
+        // Filter tanggal
         if ($tanggal) {
             $query->whereDate('start_date', '<=', $tanggal)
                   ->whereDate('end_date', '>=', $tanggal);
         }
     
-        // Filter berdasarkan kategori jika ada
+        // Filter sekbid
         if ($kategori) {
             $query->where('kategori', $kategori);
         }
     
-        // Dapatkan event berdasarkan filter atau semua data jika tidak ada filter
         $events = $query->get();
     
         $user = Auth::user();
 
-        // Kirim data event dan filter yang diterapkan ke view
         return view('events.eventonly', compact('user', 'events', 'tanggal', 'kategori'));
         return view('layout.sidebar', compact('user'));
     }
 
-    public function SidebarInfo()
-    {
-
-    }
 }

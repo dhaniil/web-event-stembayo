@@ -14,13 +14,12 @@ Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
 
 // Authentication bawaan breeze
 Route::middleware('auth')->group(function () {
-    // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Event Routes
+// Event 
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
 Route::post('/events/{id}/review', [EventController::class, 'storeReview'])->name('events.storeReview');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
@@ -55,5 +54,4 @@ Route::get('/coba', function () {
     return view('tickets.cart');
 });
 
-// Include Authentication Routes
 require __DIR__.'/auth.php';
