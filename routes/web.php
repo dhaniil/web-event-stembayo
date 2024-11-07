@@ -2,21 +2,19 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\TicketController;
 use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
-use App\Files;
 
 // Landing Page
 Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
 
 // Authentication bawaan breeze
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [UserController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/update-password', [UserController::class, 'updatePassword'])->name('profile.update.password');
 });
 
 // Event 
@@ -54,4 +52,10 @@ Route::get('/coba', function () {
     return view('tickets.cart');
 });
 
+Route::get('/gabut', function () {
+    return view('cobaygy.anime');
+});
+
 require __DIR__.'/auth.php';
+
+// Sidebar

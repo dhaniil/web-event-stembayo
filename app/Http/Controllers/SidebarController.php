@@ -10,6 +10,6 @@ class SidebarController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('layout.sidebar', compact('user'));
+        return view('layouts.sidebar', compact('user'));
     }
 }

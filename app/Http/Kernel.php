@@ -11,3 +11,5 @@ class Kernel extends HttpKernel
         'sekbid' => \App\Http\Middleware\SekbidMiddleware::class,
     ];
 }
+
+

@@ -128,6 +128,46 @@
         border-radius: 10px;
         color: #fff;
     }
+
+    .menu-items {
+        padding-bottom: 60px;
+    }
+
+    .logout-button {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: calc(100% - 40px);
+    }
+
+    .btn-logout {
+        background: none;
+        border: none;
+        color: #595959;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        cursor: pointer;
+        gap: 7px;
+        width: 100%;
+        text-align: right;
+        transition: all 100ms ease-in;
+    }
+
+    .btn-logout:hover {
+        background-color: #5356ff;
+        border-radius: 10px;
+        color: #fff;
+    }
+    
+    .user-info-link {
+    text-decoration: none;
+    color: inherit;
+    }
+    .user-info-link:hover {
+    color: inherit;
+    }
+
 </style>
 
 <div id="app">
@@ -141,21 +181,24 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="user-info d-flex">
-                @if($user)
-                    <div class="user-profile">
-                        <img src="https://i.pinimg.com/550x/e5/0e/0a/e50e0a63feb8687dc41e632d7e61d830.jpg" alt="User Profile">
-                    </div>
-                    <div class="user-name">
-                        <h5>{{ $user->name }}</h5>
-                        <p>{{ $user->email }}</p>
-                    </div>
-                @else
-                    <div class="user-name">
-                        <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
-                    </div>
-                @endif
-            </div>
+            <a href="{{ route('profile.edit') }}" class="user-info-link">
+                <div class="user-info d-flex">
+                    @if($user)
+                        <div class="user-profile">
+                            <img src="https://i.pinimg.com/550x/e5/0e/0a/e50e0a63feb8687dc41e632d7e61d830.jpg" alt="User Profile">
+                        </div>
+                        <div class="user-name">
+                            <h5>{{ $user->name }}</h5>
+                            <p>{{ $user->email }}</p>
+                        </div>
+                    @else
+                        <div class="user-name">
+                            <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                        </div>
+                    @endif
+                </div>
+            </a>
+            
             @if($user)
                 <div class="menu" id="sidebar">
                     <ul class="menu-items">
@@ -176,7 +219,7 @@
                         </li>
                         <li :class="{ active: currentRoute === 'tickets' }">
                             <a href="#" @click="setCurrentRoute('tickets')">
-                                <i class="bi bi-ticket-perforated"></i>Ticket
+                                <i class="bi bi-bookmark"></i>Bookmark
                             </a>
                         </li>
                         <li :class="{ active: currentRoute === 'settings' }">
@@ -196,24 +239,33 @@
                         </li>
                     </ul>
                 </div>
+                <div class="logout-button">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn-logout">
+                            <i class="bi bi-box-arrow-right"></i> Log Out
+                        </button>
+                    </form>
+                </div>
             @endif
         </div>
     </div>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                isSidebarVisible: false,
-                currentRoute: 'events.eventonly' //     route default
-            },
-            methods: {
-                toggleSidebar() {
-                    this.isSidebarVisible = !this.isSidebarVisible;
-                },
-                setCurrentRoute(route) {
-                    this.currentRoute = route; // Set route saat ini
-                }
-            }
-        });
-    </script>
 </div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            isSidebarVisible: false,
+            currentRoute: 'events.eventonly' // Set default route
+        },
+        methods: {
+            toggleSidebar() {
+                this.isSidebarVisible = !this.isSidebarVisible;
+            },
+            setCurrentRoute(route) {
+                this.currentRoute = route;
+            }
+        }
+    });
+</script>

@@ -151,15 +151,21 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <div class="navbar-right ">
+                            @if($user)
                             <div class="search-container ">
-                                        <input type="text" class="search-bar" placeholder="Search">
-                                <!-- <i class="bi bi-search search-icon"></i> -->
-                                        <button class="search-btn"><i class="bi bi-search"></i></button>
+                                <input type="text" class="search-bar" placeholder="Search">
+                                <button class="search-btn"><i class="bi bi-search"></i></button>
+                            </div>
+                            @else
+                            <div class="search-container ">
+                                <input type="text" class="search-bar" placeholder="Search">
+                                <button class="search-btn"><i class="bi bi-search"></i></button>
                             </div>
                             <div class="login-container">
-                                        <a href="#" class="login-btn">Log In</a>
-                                        <a href="#" class="signup-btn">Sign Up</a>
+                                <a href="{{ route('login') }}" class="login-btn">Log In</a>
+                                <a href="{{ route('register') }}" class="signup-btn">Sign Up</a>
                             </div>
+                            @endif
                         </div>
                     </ul>
                 </div>

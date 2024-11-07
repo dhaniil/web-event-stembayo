@@ -62,7 +62,7 @@ footer .col-md-6{
         <div class="col-md-6">
             <h5>About Us</h5>
             <p>
-              We are 3L Lazer Limleye Lmx
+            3L Lazer Limleye Lmx
             <li>Lazer (Ahmad Hanaffi Rahamdhani)</li>
             <li>Limleye (Farcha Amalia Nugrahaini)</li>
             <li>Lmx (Laurentius Daviano Maximus Antara)</li>

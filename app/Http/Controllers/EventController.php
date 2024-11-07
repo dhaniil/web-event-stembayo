@@ -115,6 +115,10 @@ class EventController extends Controller
     public function show($id) // 1 page event
     {
         $event = Event::findOrFail($id);
+        $user = Auth::user();
+        return view('events.show', compact('event', 'user'));
+        return view('layout.sidebar', compact('user'));
+        return view('layout.navbar', compact('user'));
         return view('events.show', compact('event'));
     }
 
@@ -161,6 +165,7 @@ class EventController extends Controller
 
         return view('events.eventonly', compact('user', 'events', 'tanggal', 'kategori'));
         return view('layout.sidebar', compact('user'));
+
     }
 
 }

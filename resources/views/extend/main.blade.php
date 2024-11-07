@@ -11,7 +11,7 @@
 </head>
 <body>
     {{-- Navbar --}}
-    @include('layouts.navbar')
+    @include('layouts.navbar', ['user' => $user])
 
     {{-- Sidebar --}}
     @include('layouts.sidebar', ['user' => $user])

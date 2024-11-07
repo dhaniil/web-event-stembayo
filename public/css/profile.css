@@ -1,0 +1,187 @@
+/* 
+body{
+    background-color: #f6f6ff;
+    font-family: 'Montserrat', system-ui;    
+} */
+
+@keyframes fadeIn{
+    from {
+        opacity: 0;
+        scale: 0.95;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.main-content .row{
+    justify-content: center;
+    /* align-items: center; */
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.form-control{
+    border-radius: 10px;
+    font-size: 13px;
+    border: 1px solid #5356ff39;
+    background-color: rgba(124, 126, 255, 0.1);
+}
+.form-control:focus{
+    box-shadow: none;
+    border: 1.5px solid #5356FF;
+}
+
+label{
+    font-weight: 500;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.input-group .input-group-text {
+    background-color: #5356FF;
+}
+.input-group i{
+    color: #fff;
+}
+
+.left-card{
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    animation: fadeIn 1s ease forwards;
+}
+.left-card h1{
+    font-size: 35px;
+    font-weight: 650;
+    color: #5356FF;
+}
+
+.left-card .img-profile{
+    text-align: center;
+    /* justify-content: center; */
+}
+.left-card img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    object-fit: cover;
+}
+
+.left-card .img-option{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+}
+
+.left-card .img-option .btn1{
+    background-color: #5356FF;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    border-radius: 7px;
+    font-weight: 500;
+    font-size: 13px;
+    text-decoration: none;
+    padding: 6px 10px;
+}
+
+.left-card .img-option .btn2{
+    background-color: none;
+    border: 2px solid #5356FF;
+    color: #5356FF;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 6px 10px;
+}
+
+.left-card .input-profile .d-flex{
+    gap: 10px;
+}
+
+.left-card select option {
+    background-color: #000; /* Warna latar belakang default untuk opsi */
+}
+
+.left-card select option:hover{    
+    background-color:#5356FF ;
+}
+.left-card .btn-profile button{
+    margin-top: 30px;
+    width: 200px;
+    background-color: #5356FF;
+    font-weight: 500;
+}
+
+.left-card .btn-profile, .btn-pw{
+    text-align: center;
+}
+
+.right-card{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.right-card .view-card{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    animation: fadeIn 1s ease forwards;
+
+}
+
+.right-card .view-card img{
+    text-align: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+}
+
+.right-card .view-card h3{
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.right-card .view-card p{
+    margin: 0;
+    font-size: 15px;
+    font-weight: 550;
+    color:#5356FF
+}
+
+.right-card .view-card h4{
+    font-size: 13px;
+}
+
+.right-card .pw-card{
+    margin-top: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    animation: fadeIn 1s ease forwards;
+
+}
+
+.right-card .pw-card h4{
+    font-weight: 650;
+    color: #5356FF;
+}
+.right-card .input-pw{
+    text-align: start;
+}
+
+.right-card .btn-pw button{
+    margin-top: 5px;
+    color: #fff;
+    width: 150px;
+    background-color: #5356FF;
+    font-weight: 500;
+    font-size: 15px;
+
+}

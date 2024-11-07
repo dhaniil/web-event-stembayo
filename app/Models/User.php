@@ -16,6 +16,7 @@ class User extends Authenticatable
         'password',
         'role',
         'profile_picture',
+        'nomer',
     ];
 
     protected $hidden = [
@@ -23,14 +24,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'role' => 'string',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'role' => 'string',
+    ];
 
     public static $roles = [
         'admin',
@@ -41,6 +38,7 @@ class User extends Authenticatable
     {
         return in_array($role, self::$roles);
     }
+
     /**
      * Check if the user has admin role.
      *
