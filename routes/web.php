@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SidebarController;
@@ -9,17 +10,19 @@ use Illuminate\Support\Facades\Route;
 // Landing Page
 Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
 
-// Authentication bawaan breeze
+// Profile
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [UserController::class, 'editProfile'])->name('profile.edit');
-    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
-    Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
-    Route::post('/profile/update-password', [UserController::class, 'updatePassword'])->name('profile.update.password');
+    Route::get('/profile', [ProfileController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
+    Route::post('/profile/update-picture', [ProfileController::class, 'updateProfilePicture'])->name('profile.update.picture');
+    Route::post('/profile/delete-picture', [ProfileController::class, 'deleteProfilePicture'])->name('profile.delete.picture');
 });
 
 // Event 
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
-Route::post('/events/{id}/review', [EventController::class, 'storeReview'])->name('events.storeReview');
+Route::post('/events/{id}/review', [ReviewController::class, 'store'])->name('events.storeReview');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 Route::get('/event/only', [EventController::class, 'EventPage'])->name('events.eventonly');
 Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
@@ -57,5 +60,3 @@ Route::get('/gabut', function () {
 });
 
 require __DIR__.'/auth.php';
-
-// Sidebar

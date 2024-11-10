@@ -61,11 +61,14 @@
     }
 
     .sidebar .user-info img {
-        width: 60px;
-        height: 60px;
+        width: 62px;
+        height: 62px;
         border-radius: 50%;
         margin-bottom: 10px;
         margin-top: 10px;
+        object-fit: cover;
+        padding: 2px;
+        border: 2px solid #d6d6d6;
     }
 
     .sidebar .user-info h5 {
@@ -185,7 +188,7 @@
                 <div class="user-info d-flex">
                     @if($user)
                         <div class="user-profile">
-                            <img src="https://i.pinimg.com/550x/e5/0e/0a/e50e0a63feb8687dc41e632d7e61d830.jpg" alt="User Profile">
+                            <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar">
                         </div>
                         <div class="user-name">
                             <h5>{{ $user->name }}</h5>

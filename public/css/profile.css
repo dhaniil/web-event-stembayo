@@ -53,7 +53,7 @@ label{
     animation: fadeIn 1s ease forwards;
 }
 .left-card h1{
-    font-size: 35px;
+    font-size: 30px;
     font-weight: 650;
     color: #5356FF;
 }
@@ -105,7 +105,7 @@ label{
 }
 
 .left-card select option {
-    background-color: #000; /* Warna latar belakang default untuk opsi */
+    background-color: #fff; /* Warna latar belakang default untuk opsi */
 }
 
 .left-card select option:hover{    
@@ -140,12 +140,15 @@ label{
     width: 100px;
     height: 100px;
     border-radius: 50px;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .right-card .view-card h3{
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 600;
-    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 0;
 }
 
 .right-card .view-card p{
@@ -183,5 +186,11 @@ label{
     background-color: #5356FF;
     font-weight: 500;
     font-size: 15px;
+}
 
+@media (max-width: 576px) {
+    .left-card .img-profile{
+        text-align: center;
+        justify-content: center;
+    }
 }

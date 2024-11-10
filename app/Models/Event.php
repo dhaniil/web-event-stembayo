@@ -37,4 +37,9 @@ class Event extends Model
         }
         return 'https://via.placeholder.com/300x200';
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

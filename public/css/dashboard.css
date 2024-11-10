@@ -160,6 +160,36 @@ border: 0;
 }
 
 /* EVENT */
+/* Prev Next Button */
+.event .carosel-event{
+    justify-content: center;
+}
+.event .col {
+    padding: 0;
+    font-size: 50px;
+}
+
+.event .prev-next .page-link{
+    align-items: center;
+}
+
+.event .col .prev{
+    color: #5356ff;
+    text-align: end;
+    width: 5px;
+}
+
+.event .prev i{
+    height: 100px;
+    width: 1px;
+}
+
+.event .col .next{
+    color: #5356ff;
+    text-align: start;
+    width: 5px;
+}
+
 .card{
     margin-top: 40px;
     margin-bottom: 40px;

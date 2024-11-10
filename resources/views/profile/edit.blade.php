@@ -13,11 +13,17 @@
                     <div class="left-card">
                         <h1> User Profile</h1>
                             <div class="img-profile d-flex mb-3">
-                                <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" class="avatar">
+                                <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar">
                                 <div class="img-option">
-                                    <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" style="display: none;" />
-                                    <a class="btn1" onclick="document.getElementById('profile_picture').click();">Upload</a>
-                                    <a class="btn2" href="#">Delete</a>
+                                    <form action="{{ route('profile.update.picture') }}" method="POST" enctype="multipart/form-data" style="display: inline;">
+                                        @csrf
+                                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" style="display: none;" onchange="this.form.submit()">
+                                        <a class="btn1" onclick="document.getElementById('profile_picture').click();">Upload</a>
+                                    </form>
+                                    <form action="{{ route('profile.delete.picture') }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn2">Delete</button>
+                                    </form>
                                 </div>
                             </div>
                             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
@@ -109,7 +115,7 @@
                 <div class="col-lg-3">
                     <div class="right-card">
                         <div class="view-card">
-                            <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" class="avatar">
+                            <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar">
                             <h3>{{ $user->name }}</h3>
                             <p>{{ $user->email }}</p>
                             <hr>

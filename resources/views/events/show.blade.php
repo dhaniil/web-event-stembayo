@@ -42,5 +42,28 @@
           </div>
         </div>
     </div>
+
+    <!-- Form untuk memberi review -->
+    <div class="review-form">
+        <h3>Berikan Review</h3>
+        <form action="{{ route('events.storeReview', $event->id) }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="rating">Rating:</label>
+                <select name="rating" id="rating" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comment">Komentar:</label>
+                <textarea name="comment" id="comment" rows="4" required></textarea>
+            </div>
+            <button type="submit">Kirim Review</button>
+        </form>
+    </div>
   <section>
 @endsection
