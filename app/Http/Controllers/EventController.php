@@ -4,19 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
+
+    // Fungsi untuk menampilkan halaman dashboard
     public function index(Request $request)
     {
-
         $events = Event::all();
-        // $events = Event::take(4)->get(); // ambil 4 teratas
-    
         return view('events.dashboard', compact('events'));
     }
-    
+
+    // Fungsi untuk menampilkan form create event
     public function create()
     {
         $kategori = [
@@ -30,11 +31,12 @@ class EventController extends Controller
             'KJDK',
             'PPBN',
             'HUMTIK',
+            '-',
         ];
-
         return view('events.create', compact('kategori'));
     }
 
+    // Fungsi untuk menyimpan event baru
     public function store(Request $request)
     {
         $request->validate([
@@ -47,7 +49,7 @@ class EventController extends Controller
             'tempat' => 'required|string|max:255',
             'type' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
-            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK',
+            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK,-',
             'penyelenggara' => 'required|string|max:255',
         ]);
 
@@ -73,7 +75,35 @@ class EventController extends Controller
         return redirect()->route('events.dashboard')->with('success');
     }
 
-    public function update(Request $request, $id) //edit data event
+    // Fungsi untuk menampilkan halaman edit event
+    public function edit($id)
+    {
+        $event = Event::findOrFail($id);
+
+        // Pastikan user yang login adalah admin
+        if (Gate::denies('admin-access')) {
+            return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+        }
+
+        $kategori = [
+            'KTYME Islam',
+            'KTYME Kristiani',
+            'KBBP',
+            'KBPL',
+            'BPPK',
+            'KK',
+            'PAKS',
+            'KJDK',
+            'PPBN',
+            'HUMTIK',
+            '-',
+        ];
+
+        return view('events.edit', compact('event', 'kategori'));
+    }
+
+    // Fungsi untuk memperbarui event
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -85,7 +115,7 @@ class EventController extends Controller
             'tempat' => 'required|string|max:255',
             'type' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
-            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK',
+            'kategori' => 'required|in:KTYME Islam,KTYME Kristiani,KBBP,KBPL,BPPK,KK,PAKS,KJDK,PPBN,HUMTIK,-',
             'penyelenggara' => 'required|string|max:255',
         ]);
 
@@ -112,17 +142,16 @@ class EventController extends Controller
         return redirect()->route('events.dashboard')->with('success', 'Data berhasil diperbarui!');
     }
 
-    public function show($id) // 1 page event
+    // Fungsi untuk menampilkan detail event
+    public function show($id)
     {
         $event = Event::findOrFail($id);
         $user = Auth::user();
         return view('events.show', compact('event', 'user'));
-        return view('layout.sidebar', compact('user'));
-        return view('layout.navbar', compact('user'));
-        return view('events.show', compact('event'));
     }
 
-    public function storeReview(Request $request, $eventId) //review
+    // Fungsi untuk menyimpan review
+    public function storeReview(Request $request, $eventId)
     {
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
@@ -140,8 +169,9 @@ class EventController extends Controller
         return redirect()->route('events.show', $eventId)
             ->with('success');
     }
-    
-    public function EventPage(Request $request) //Filter
+
+    // Fungsi untuk halaman event dengan filter
+    public function EventPage(Request $request)
     {
         $tanggal = $request->input('tanggal');
         $kategori = $request->input('kategori');
@@ -154,7 +184,7 @@ class EventController extends Controller
                   ->whereDate('end_date', '>=', $tanggal);
         }
     
-        // Filter sekbid
+        // Filter kategori
         if ($kategori) {
             $query->where('kategori', $kategori);
         }
@@ -164,8 +194,5 @@ class EventController extends Controller
         $user = Auth::user();
 
         return view('events.eventonly', compact('user', 'events', 'tanggal', 'kategori'));
-        return view('layout.sidebar', compact('user'));
-
     }
-
 }

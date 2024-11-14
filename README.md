@@ -35,7 +35,7 @@ Bursa Event Sekolah adalah aplikasi web yang dibangun dengan Laravel untuk memud
 
 ## Teknologi yang Digunakan
 
-- **Backend**: Laravel, Express.js
+- **Backend**: Laravel, Filament
 - **Frontend**: Blade, Bootstrap, Vue.js HTML, dan CSS
 - **Database**: MariaDB
 

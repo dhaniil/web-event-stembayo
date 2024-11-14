@@ -63,14 +63,11 @@
                
             <div id="app">
                 <div class="carousel-event position-relative">
-                    <div class="row justify-content-center">
-                        <div class="col">
-                            <div class="prev">
-                                <a class="page-link" data-bs-target="#carouselExample" data-bs-slide="prev">
-                                    <span><i class="bi bi-caret-left"></i>
-                                    </span>
-                                </a>
-                            </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="col prev">
+                            <span data-bs-target="#carouselExample" data-bs-slide="prev">
+                                <i class="fas fa-chevron-left"></i>
+                            </span>
                         </div>
 
                         <div class="col-10">
@@ -137,13 +134,10 @@
                             </div>
                         </div>
 
-                        <div class="col">
-                            <div class="next">
-                                <a class="page-link" data-bs-target="#carouselExample" data-bs-slide="next">
-                                    <span><i class="bi bi-caret-right"></i>
-                                    </span>
-                                </a>
-                            </div>  
+                        <div class="col next">
+                            <span data-bs-target="#carouselExample" data-bs-slide="next">
+                                <i class="fas fa-chevron-right"></i>
+                            </span>
                         </div>
                     </div>
                 </div> 

@@ -44,26 +44,37 @@
     </div>
 
     <!-- Form untuk memberi review -->
-    <div class="review-form">
-        <h3>Berikan Review</h3>
+    <div class="container review-form">
+        <h3>Review</h3>
         <form action="{{ route('events.storeReview', $event->id) }}" method="POST">
             @csrf
-            <div class="form-group">
-                <label for="rating">Rating:</label>
-                <select name="rating" id="rating" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
+            <div class="form-group d-flex">
+              <label for="rating">Rating:</label>
+              <div class="star-rating">
+                  <input type="radio" id="star5" name="rating" value="5" required />
+                  <label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+                  <input type="radio" id="star4" name="rating" value="4" />
+                  <label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                  <input type="radio" id="star3" name="rating" value="3" />
+                  <label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                  <input type="radio" id="star2" name="rating" value="2" />
+                  <label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                  <input type="radio" id="star1" name="rating" value="1" />
+                  <label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+              </div>
+          </div>
             <div class="form-group">
                 <label for="comment">Komentar:</label>
                 <textarea name="comment" id="comment" rows="4" required></textarea>
             </div>
-            <button type="submit">Kirim Review</button>
+            <div class="submit-btn">
+              <button class="btn" type="submit">Kirim</button>
+            </div>
         </form>
+    </div>
+
+    <div class="tes">
+      {{-- <a href=" {{ route('events.edit') }}"></a>   --}}
     </div>
   <section>
 @endsection

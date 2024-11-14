@@ -31,6 +31,16 @@
         </div>
 
         <div class="form-group">
+            <label for="jam_mulai">Jam Mulai</label>
+            <input type="time" name="jam_mulai" class="form-control" value="{{ old('jam_mulai', $event->jam_mulai) }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="jam_selesai">Jam Selesai</label>
+            <input type="time" name="jam_selesai" class="form-control" value="{{ old('jam_selesai', $event->jam_selesai) }}" required>
+        </div>
+
+        <div class="form-group">
             <label for="description">Deskripsi</label>
             <textarea name="description" class="form-control" required>{{ old('description', $event->description) }}</textarea>
         </div>
@@ -52,6 +62,11 @@
         <div class="form-group">
             <label for="penyelenggara">Penyelenggara</label>
             <input type="text" name="penyelenggara" class="form-control" value="{{ old('penyelenggara', $event->penyelenggara) }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="tempat">Tempat</label>
+            <input type="text" name="tempat" class="form-control" value="{{ old('tempat', $event->tempat) }}" required>
         </div>
 
         <div class="form-group">

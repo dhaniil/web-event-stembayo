@@ -20,6 +20,8 @@ class User extends Authenticatable
         'role',
         'profile_picture',
         'nomer',
+        'kelas',
+        'jurusan',
     ];
 
     protected $hidden = [
