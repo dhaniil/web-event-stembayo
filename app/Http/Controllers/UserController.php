@@ -36,8 +36,11 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'role' => 'required|in:admin,sekbid', // Only admin or sekbid
+            'role' => 'required|in:admin,sekbid',
+            'password' => 'required|min:6',
         ]);
+    
+        $validatedData['password'] = bcrypt($validatedData['password']);
 
         User::create($validatedData);
 

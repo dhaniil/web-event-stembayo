@@ -1,0 +1,89 @@
+body {
+    font-family: 'Montserrat', system-ui;
+    background: linear-gradient(to top, #c2c3ff, #f6f6ff);
+}
+
+.container-fluid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.regist-form .regist-card{
+    width: 400px;
+    height: 450px;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+    background-color: #f6f6ff;
+    border-radius: 30px;
+    padding: 30px;
+    animation: FadeIn 800ms ease forwards;
+}
+
+.regist-card .judul{
+    text-align: center;
+    margin: 25px 0 35px 0;
+}
+
+
+.regist-card h1{
+    font-weight: 800;
+    font-size: 45px;
+    color: #5356FF;
+    margin: 0;
+}
+
+form .input-group{
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.input-group .form-control{
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.input-group .form-control:focus,
+.form-group .form-check-input:focus{
+    box-shadow: none;
+}
+
+.input-group span{
+    background-color: #fff;
+    margin-top: -10px;
+    font-size: 13px;
+}
+.login-register button{
+    margin-top: 10px;
+    width: 100%;
+    background-color: #5356FF;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 50px;
+    transition: all 200ms ease-in-out;
+}
+
+.login-register button:hover{
+    background-color: #4043f9;
+    color: #fff;
+    box-shadow: 6px 6px 1px rgb(64, 67, 249, 0.2);
+    scale: 1.01;
+}
+
+.login-register p, .login-register a{
+    margin-top: 5px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+@keyframes FadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

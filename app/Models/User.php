@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
@@ -67,6 +68,11 @@ class User extends Authenticatable
     public function reviews()
     {
         return $this->hasMany(Review::class);
-    }   
+    }  
+    
+    public function favourites()
+    {
+        return $this->belongsToMany(Event::class, 'favourites', 'user_id', 'events_id'); // Menggunakan nama kolom yang benar
+    }
 }
 

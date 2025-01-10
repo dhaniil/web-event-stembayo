@@ -1,14 +1,26 @@
-import './bootstrap';
+import { createApp } from 'vue';
 
-import Alpine from 'alpinejs';
-import Vue from 'vue';
-import EditProfile from './components/EditProfile.vue';
-
-window.Alpine = Alpine;
-Alpine.start();
-
-Vue.component('edit-profile', EditProfile);
-const app = new Vue({
-    el: '#app',
+const app = createApp({
+    data() {
+        return {
+            password: '',
+            isPasswordVisible: false
+        };
+    },
+    computed: {
+        passwordFieldType() {
+            return this.isPasswordVisible ? 'text' : 'password';
+        },
+        passwordIcon() {
+            return this.isPasswordVisible ? 'bi bi-eye-slash' : 'bi bi-eye';
+        }
+    },
+    methods: {
+        togglePasswordVisibility() {
+            this.isPasswordVisible = !this.isPasswordVisible;
+        }
+    }
 });
 
+// Mount ke elemen dengan ID #app
+app.mount('#app');

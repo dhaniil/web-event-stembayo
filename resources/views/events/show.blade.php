@@ -43,9 +43,12 @@
         </div>
     </div>
 
+
     <!-- Form untuk memberi review -->
     <div class="container review-form">
+      <div class="review-title">
         <h3>Review</h3>
+      </div>
         <form action="{{ route('events.storeReview', $event->id) }}" method="POST">
             @csrf
             <div class="form-group d-flex">
@@ -73,8 +76,19 @@
         </form>
     </div>
 
+    <div class="favourite-buttons">
+        <form action="{{ route('favourite.add', $event->id) }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit" class="btn btn-primary">Add to Favourites</button>
+        </form>
+        <form action="{{ route('favourite.remove', $event->id) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Remove from Favourites</button>
+        </form>
+    </div>
+
     <div class="tes">
-      {{-- <a href=" {{ route('events.edit') }}"></a>   --}}
     </div>
   <section>
 @endsection

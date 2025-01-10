@@ -42,4 +42,9 @@ class Event extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function favouritedBy()
+    {
+        return $this->belongsToMany(User::class, 'favourites');
+    }
 }   

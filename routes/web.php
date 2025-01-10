@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FavouriteController;
 use Illuminate\Support\Facades\Route;
 
 // Landing Page
@@ -45,6 +46,11 @@ Route::prefix('users')->group(function () {
     Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });
+
+// Favourite
+Route::post('/favourite/{eventId}', [FavouriteController::class, 'favourite'])->middleware('auth')->name('favourite.add');
+Route::delete('/favourite/{eventId}', [FavouriteController::class, 'unfavourite'])->middleware('auth')->name('favourite.remove');
+Route::get('/favourites', [FavouriteController::class, 'favouriteEvents'])->middleware('auth')->name('favourites');
 
 // Test 
 Route::get('/ygy', function () {

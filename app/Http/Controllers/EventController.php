@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
-
     // Fungsi untuk menampilkan halaman dashboard
     public function index(Request $request)
     {
@@ -55,7 +54,7 @@ class EventController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public'); // simpan gambar /app/public/images
+            $imagePath = $request->file('image')->store('images', 'public');
         }
 
         Event::create([
@@ -72,7 +71,7 @@ class EventController extends Controller
             'penyelenggara' => $request->penyelenggara,
         ]);
 
-        return redirect()->route('events.dashboard')->with('success');
+        return redirect()->route('events.dashboard')->with('success', 'Event berhasil dibuat!');
     }
 
     // Fungsi untuk menampilkan halaman edit event
@@ -80,7 +79,6 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        // Pastikan user yang login adalah admin
         if (Gate::denies('admin-access')) {
             return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
@@ -121,12 +119,7 @@ class EventController extends Controller
 
         $event = Event::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $event->image = $imagePath;
-        }
-
-        $event->update([
+        $event->fill([
             'name' => $request->name,
             'start_date' => $request->start_date,
             'jam_mulai' => $request->jam_mulai,
@@ -138,6 +131,13 @@ class EventController extends Controller
             'kategori' => $request->kategori,
             'penyelenggara' => $request->penyelenggara,
         ]);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $event->image = $imagePath;
+        }
+
+        $event->save();
 
         return redirect()->route('events.dashboard')->with('success', 'Data berhasil diperbarui!');
     }
@@ -160,14 +160,12 @@ class EventController extends Controller
 
         $event = Event::findOrFail($eventId);
 
-        // Menyimpan review ke database
         $event->reviews()->create([
             'rating' => $request->input('rating'),
             'comment' => $request->input('comment'),
         ]);
 
-        return redirect()->route('events.show', $eventId)
-            ->with('success');
+        return redirect()->route('events.show', $eventId)->with('success', 'Review berhasil disimpan!');
     }
 
     // Fungsi untuk halaman event dengan filter
@@ -178,13 +176,11 @@ class EventController extends Controller
     
         $query = Event::query();
     
-        // Filter tanggal
         if ($tanggal) {
             $query->whereDate('start_date', '<=', $tanggal)
                   ->whereDate('end_date', '>=', $tanggal);
         }
     
-        // Filter kategori
         if ($kategori) {
             $query->where('kategori', $kategori);
         }

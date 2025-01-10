@@ -23,7 +23,7 @@
                         @csrf
                         <div class="input-group">
                             <span class="input-group-text">
-                                <i class="bi bi-person"></i>
+                                <i class="bi bi-envelope"></i>
                             </span>
                             <input type="email" name="email" placeholder="Email" class="form-control" required>
                         </div>
@@ -68,27 +68,8 @@
         </div>
     </section>
 
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                password: '',
-                isPasswordVisible: false
-            },
-            computed: {
-                passwordFieldType() {
-                    return this.isPasswordVisible ? 'text' : 'password';
-                },
-                passwordIcon() {
-                    return this.isPasswordVisible ? 'bi bi-eye-slash' : 'bi bi-eye';
-                }
-            },
-            methods: {
-                togglePasswordVisibility() {
-                    this.isPasswordVisible = !this.isPasswordVisible;
-                }
-            }
-        });
+    <script type="module" src="{{ asset('') }}">
+
     </script>
 </body>
 </html>
