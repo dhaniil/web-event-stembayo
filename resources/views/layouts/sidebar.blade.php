@@ -220,9 +220,9 @@
                                 <i class="bi bi-newspaper"></i>Berita Acara
                             </a>
                         </li>
-                        <li :class="{ active: currentRoute === 'tickets' }">
-                            <a href="#" @click="setCurrentRoute('tickets')">
-                                <i class="bi bi-bookmark"></i>Bookmark
+                        <li :class="{ active: currentRoute === 'favourites' }">
+                            <a href="{{ route('favourites') }}" @click="setCurrentRoute('favourites')">
+                                <i class="bi bi-bookmark-fill"></i>Bookmark
                             </a>
                         </li>
                         <li :class="{ active: currentRoute === 'settings' }">

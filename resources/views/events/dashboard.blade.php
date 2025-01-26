@@ -6,7 +6,11 @@
     <title>Stembayo Events</title>
     {{-- ambil dari assets/asset --}}
     @include('assets/asset')
+
+    @vite('resources/css/app.css')
+
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" /> 
+
 </head>
 <style>
     /* css di public/css/dashboard.css */
@@ -43,11 +47,11 @@
     <div class="gambar-awal">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="https://i.ibb.co.com/LhwSwy5/SOC02116.jpg" class="d-block w-100" alt="...">
+    <img src="https://i.ibb.co.com/LhwSwy5/SOC02116.jpg" class="d-block w-100" alt="..." draggable="false">
       <!-- https://smkn2depoksleman.sch.id/utama/wp-content/uploads/2024/03/DSC_0003-4.jpg -->
       <div class="carousel-caption">
-        <h4 class="judul">Website Event Stembayo</h4>
-        <p>Selamat Datang Anggap Saja Sekolah Sendiri</p>
+        <h4 class="judul ">Selamat Datang di Website Event Stembayo</h4>
+        <p class="underline ">Cihuy</p>
         <!-- <input type="text" class="search-bar form-control" placeholder="Search Event" aria-label="Search"> -->
         <!-- <a class="button" type="submit">See More</a> -->
       </div>

@@ -10,7 +10,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -32,12 +32,14 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'role' => 'string',
+        
     ];
 
     public static $roles = [
+        'superadmin',
         'admin',
         'sekbid',
+        'pengunjung',
     ];
 
     public static function isValidRole($role)
@@ -65,14 +67,34 @@ class User extends Authenticatable
         return $this->role === 'sekbid';
     }
 
+    public function isSuperadmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
+
+    public function isPengunjung(): bool
+    {
+        return $this->role === 'pengunjung';
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }  
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return in_array($this->role, ['superadmin', 'admin', 'sekbid']) && $this->role !== 'pengunjung';
+    }
     
     public function favourites()
     {
         return $this->belongsToMany(Event::class, 'favourites', 'user_id', 'events_id'); // Menggunakan nama kolom yang benar
     }
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
 }
 

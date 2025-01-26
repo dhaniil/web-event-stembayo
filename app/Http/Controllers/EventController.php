@@ -79,10 +79,6 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        if (Gate::denies('admin-access')) {
-            return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
-        }
-
         $kategori = [
             'KTYME Islam',
             'KTYME Kristiani',
@@ -143,10 +139,10 @@ class EventController extends Controller
     }
 
     // Fungsi untuk menampilkan detail event
-    public function show($id)
-    {
-        $event = Event::findOrFail($id);
+    public function show(Event $event)
+    {   
         $user = Auth::user();
+        $event->load('ulasan.user');
         return view('events.show', compact('event', 'user'));
     }
 

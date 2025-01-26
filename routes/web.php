@@ -21,36 +21,23 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/delete-picture', [ProfileController::class, 'deleteProfilePicture'])->name('profile.delete.picture');
 });
 
+//Ulasan
+Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
+Route::delete('/ulasan/{ulasan}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
+
 // Event 
-Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::post('/events/{id}/review', [ReviewController::class, 'store'])->name('events.storeReview');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 Route::get('/event/only', [EventController::class, 'EventPage'])->name('events.eventonly');
 Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
 Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
 
-// Admin Only 
-Route::get('/tambah', function () {
-    if (auth()->check() && auth()->user()->role === 'admin') {
-        return app(EventController::class)->create();
-    }
-    return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
-})->name('events.create');
-
-// User Management 
-Route::prefix('users')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('users.index');
-    Route::get('/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/', [UserController::class, 'store'])->name('users.store');
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-});
 
 // Favourite
 Route::post('/favourite/{eventId}', [FavouriteController::class, 'favourite'])->middleware('auth')->name('favourite.add');
 Route::delete('/favourite/{eventId}', [FavouriteController::class, 'unfavourite'])->middleware('auth')->name('favourite.remove');
-Route::get('/favourites', [FavouriteController::class, 'favouriteEvents'])->middleware('auth')->name('favourites');
+Route::get('/favourites', [FavouriteController::class, 'favouriteEvents'])->name('favourites');
 
 // Test 
 Route::get('/ygy', function () {
@@ -59,10 +46,6 @@ Route::get('/ygy', function () {
 
 Route::get('/coba', function () {
     return view('tickets.cart');
-});
-
-Route::get('/gabut', function () {
-    return view('cobaygy.anime');
 });
 
 require __DIR__.'/auth.php';

@@ -65,7 +65,9 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'role' => 'required|in:admin,sekbid',
+            'password' => 'nullable|min:6',
         ]);
+            $validatedData['password'] = bcrypt($validatedData['password']);
 
         $user = User::findOrFail($id);
         $user->update($validatedData);
@@ -81,7 +83,4 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
         return redirect()->route('users.index');
     }
-
-
-
 }

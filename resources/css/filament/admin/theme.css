@@ -1,0 +1,39 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+/* Custom Theme CSS */
+
+/* Palet warna */
+:root {
+    --warna-biru-tua: #5356FF;
+    --warna-biru-muda: #378CE7;
+    --warna-biru-pastel: #67C6E3;
+    --warna-putih: #DFF5FF;
+    --warna-hitam: #181C14;
+    --warna-background: #e6f2ff;
+}
+
+/* Global Styling */
+body {
+    background-color: var(--warna-background);
+    color: var(--warna-hitam);
+    font-family: 'Roboto', sans-serif;
+}
+
+a {
+    color: var(--warna-biru-tua);
+}
+
+button {
+    background-color: var(--warna-biru-muda);
+    color: var(--warna-putih);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--warna-biru-tua);
+}

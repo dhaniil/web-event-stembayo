@@ -25,12 +25,21 @@ return [
     */
     'panels' => [
         'default' => [
-            'path' => 'admin', // Path akses panel Filament, misalnya "admin"
+            'path' => 'admin',
             'resources' => [],
             'pages' => [],
             'widgets' => [],
         ],
     ],
+    'brand' => 'Admin Panel Sekolahku', 
+    'title' => 'Dashboard Admin Sekolahku', // Title di tab browser
+    'middleware' => [
+    'auth',
+    'filament', // Middleware bawaan Filament
+    'filament-access', // Middleware untuk mengecek role
+],
+
+
 
     'broadcasting' => [
 

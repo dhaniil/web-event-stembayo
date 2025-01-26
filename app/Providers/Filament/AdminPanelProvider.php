@@ -10,6 +10,9 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use App\Filament\Widgets\EventOverviewWidget;
+use App\Filament\Widgets\ChartPengunjung;
+use App\Filament\Widgets\UserStatsWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -27,18 +30,31 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Stembayo')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
+                'secondary' => Color::Gray,
+                'background' => Color::Slate,   
+                'text' => Color::Gray,
+                'accent' => Color::Blue,
+                'highlight' => Color::Blue,
+                'error' => Color::Red,
+                'success' => Color::Green,
+                'info' => Color::Blue,
+                'warning' => Color::Yellow,
+
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                UserStatsWidget::class,
+                EventOverviewWidget::class, 
+                ChartPengunjung::class,
             ])
             ->middleware([
                 EncryptCookies::class,
