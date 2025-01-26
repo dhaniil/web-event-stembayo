@@ -18,6 +18,6 @@ class Ulasan extends Model
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'events_id');
+        return $this->belongsTo(Event::class);
     }
 }

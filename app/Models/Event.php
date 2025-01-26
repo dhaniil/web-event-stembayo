@@ -38,13 +38,14 @@ class Event extends Model
         return 'https://via.placeholder.com/300x200';
     }
 
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
     public function favouritedBy()
     {
         return $this->belongsToMany(User::class, 'favourites');
     }
+
+    public function ulasan()
+    {
+        return $this->hasMany(Ulasan::class);
+    }
+
 }   

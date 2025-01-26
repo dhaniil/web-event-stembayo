@@ -7,6 +7,7 @@ use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavouriteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UlasanController;
 
 // Landing Page
 Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
@@ -22,8 +23,10 @@ Route::middleware('auth')->group(function () {
 });
 
 //Ulasan
-Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
-Route::delete('/ulasan/{ulasan}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
+    Route::delete('/ulasan/{id}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
+});
 
 // Event 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
