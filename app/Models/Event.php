@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+
 
 class Event extends Model
 {
     use HasFactory;
 
     protected $table = 'events';
+    protected $appends = ['image_url'];
 
     protected $fillable = [
         'name',
@@ -17,6 +20,7 @@ class Event extends Model
         'jam_mulai',
         'end_date',
         'jam_selesai',
+        'status',
         'description',
         'tempat',
         'type',
@@ -24,7 +28,7 @@ class Event extends Model
         'kategori',
         'penyelenggara',
         'created_at',
-        'updated_at',   
+        'updated_at',
     ];
 
     const CREATED_AT = 'created_at';
@@ -32,11 +36,13 @@ class Event extends Model
 
     public function getImageUrlAttribute()
     {
-        if ($this->image) {
-            return 'data:image/jpeg;base64,' . base64_encode($this->image);
-        }
-        return 'https://via.placeholder.com/300x200';
+        return cache()->rememberForever("event-image-url-{$this->id}", function () {
+            return $this->image
+                ? Storage::url('events/' . $this->image)
+                : 'https://via.placeholder.com/300x200';
+        });
     }
+
 
     public function favouritedBy()
     {
@@ -48,4 +54,4 @@ class Event extends Model
         return $this->hasMany(Ulasan::class);
     }
 
-}   
+}

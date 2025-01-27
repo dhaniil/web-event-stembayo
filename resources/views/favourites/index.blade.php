@@ -34,7 +34,7 @@
         <div class="card-container">
             <div class="row">
                 @if($favourites->isEmpty())
-                    <p class="text-center">Belum ada event yang difavoritkan</p>
+                    <p class="text-center">Belum ada event yang ditandai</p>
                 @else
                     @foreach($favourites as $favourite)
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">

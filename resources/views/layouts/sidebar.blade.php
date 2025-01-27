@@ -171,6 +171,17 @@
     color: inherit;
     }
 
+    .admin-restricted a {
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    }
+
+    .admin-restricted a:hover {
+        background-color: rgba(255, 193, 7, 0.1);
+    }   
+
 </style>
 
 <div id="app">
@@ -225,11 +236,16 @@
                                 <i class="bi bi-bookmark-fill"></i>Bookmark
                             </a>
                         </li>
-                        <li :class="{ active: currentRoute === 'settings' }">
-                            <a href="#" @click="setCurrentRoute('settings')">
-                                <i class="bi bi-gear"></i>Settings
+                        <li :class="{ active: currentRoute === 'profile' }">
+                            <a href="{{ route('profile.edit') }}" @click="setCurrentRoute('profile')">
+                                <i class="bi bi-person"></i>Profile
                             </a>
                         </li>
+                            <!-- <li :class="{ active: currentRoute === 'settings' }">
+                                <a href="#" @click="setCurrentRoute('settings')">
+                                    <i class="bi bi-gear"></i>Settings
+                                </a>
+                            </li> -->
                         <li :class="{ active: currentRoute === 'support' }">
                             <a href="#" @click="setCurrentRoute('support')">
                                 <i class="fas fa-headset"></i>Help & Support
@@ -240,6 +256,15 @@
                                 <i class="bi bi-arrow-left-short"></i>Back
                             </a>
                         </li>
+                        
+                        @if(auth()->check() && in_array(auth()->user()->role, ['sekbid', 'admin', 'superadmin']))
+                        <li :class="{ active: currentRoute === 'admin' }" class="admin-restricted">
+                            <a href="/admin" @click="setCurrentRoute('admin')" class="text-warning">
+                                <i class="bi bi-shield-lock"></i>Admin Panel
+                                <span class="badge bg-warning text-dark ms-2">Restricted</span>
+                            </a>
+                        </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="logout-button">

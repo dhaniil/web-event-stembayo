@@ -11,6 +11,7 @@ class Kernel extends HttpKernel
         // Middleware lainnya
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'filament-admin' => \App\Http\Middleware\FilamentAdminAccess::class,
+        'track-pengunjung' => \App\Http\Middleware\TrackPengunjung::class,
     ];
     
     

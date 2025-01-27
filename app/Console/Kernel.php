@@ -8,12 +8,20 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
+     * The Artisan commands provided by your application.
+     *
+     * @var array
+     */
+    protected $commands = [
+        Commands\UpdateEventStatus::class
+    ];
+
+    /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
-        // Tambahkan jadwal command artisan di sini, jika ada
-        // Contoh: $schedule->command('inspire')->hourly();
+        $schedule->command('events:update-status')->everyMinute();
     }
 
     /**
@@ -25,11 +33,4 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
-
-    /**
-     * Daftarkan custom commands.
-     */
-    protected $commands = [
-        \App\Console\Commands\MakeCustomWidget::class, // Tambahkan command custom Anda di sini
-    ];
 }

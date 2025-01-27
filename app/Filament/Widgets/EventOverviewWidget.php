@@ -21,10 +21,10 @@ class EventOverviewWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-clock')
                 ->color('success'),
                 
-            Stat::make('Event Lewat', Event::where('end_date', '<', now())->count())
-                ->description('Event Selesai')
-                ->descriptionIcon('heroicon-m-archive-box')
-                ->color('danger'),
+            Stat::make('Event Terdekat', Event::where('start_date', '>', now())->orderBy('start_date', 'asc')->first()?->name ?? 'Tidak ada')
+                ->description('Event terdekat')
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->color('warning'),
         ];
     }
 }

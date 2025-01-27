@@ -3,24 +3,32 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\EventResource\RelationManagers;
 use App\Models\Event;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Enums\ThemeMode;
+use Filament\Forms\Components\Tabs;
+use Illuminate\Http\UploadedFile;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Spatie\Image\Image;
 
+
+use Illuminate\Support\Facades\Storage;
 
 class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
     protected static ?string $navigationGroup = 'Manajemen Event';
-
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     protected static array $kategoriOptions = [
@@ -32,61 +40,140 @@ class EventResource extends Resource
         'KK' => 'KK',
         'PAKS' => 'PAKS',
         'KJDK' => 'KJDK',
-        'PPBN' => 'PPBN', 
+        'PPBN' => 'PPBN',
         'HUMTIK' => 'HUMTIK',
         '-' => '-'
     ];
 
+    /**
+     * @throws \Exception
+     */
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')->label('Name')->required(),
-                Forms\Components\FileUpload::make('image')
-                    ->label('Image')
-                    ->image()
-                    ->directory('events')
-                    ->required(),
-                Forms\Components\RichEditor::make('description')->label('Description')->required(),
-                Forms\Components\DatePicker::make('start_date')->label('Start Date')->required(),
-                Forms\Components\TimePicker::make('jam_mulai')->label('Start Time')->required(),
-                Forms\Components\DatePicker::make('end_date')->label('End Date')->required(),
-                Forms\Components\TimePicker::make('jam_selesai')->label('End Time')->required(),
-                Forms\Components\TextInput::make('tempat')->label('Location')->required(),
-                Forms\Components\Select::make('kategori')
-                    ->label('Kategori')
-                    ->options(self::$kategoriOptions)
-                    ->required(),
-                Forms\Components\TextInput::make('type')
-                    ->label('Tipe')
-                    ->required(),
-                Forms\Components\TextInput::make('penyelenggara')
-                    ->label('Penyelenggara')
-                    ->required(),
-        ]);
+                Grid::make(1)
+                    ->schema([
+                        Tabs::make('Detail Event')
+                            ->tabs([
+                                Tabs\Tab::make('Informasi Event')
+                                    ->schema([
+                                        Grid::make(2)
+                                            ->schema([
+                                                TextInput::make('name')
+                                                    ->label('Name')
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                DatePicker::make('start_date')
+                                                    ->label('Start Date')
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                TimePicker::make('jam_mulai')
+                                                    ->label('Start Time')
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                DatePicker::make('end_date')
+                                                    ->label('End Date')
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                TimePicker::make('jam_selesai')
+                                                    ->label('End Time')
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                Select::make('status')
+                                                    ->label('Status')
+                                                    ->options([
+                                                        'selesai' => 'Selesai',
+                                                        'sedang berlangsung' => 'Sedang Berlangsung',
+                                                        'dibatalkan' => 'Dibatalkan',
+                                                        'ditunda' => 'Ditunda',
+                                                        'belum mulai' => 'Belum Mulai',
+                                                    ])
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                TextInput::make('tempat')
+                                                    ->label('Location')
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                TextInput::make('type')
+                                                    ->label('Tipe')
+                                                    ->required()
+                                                    ->columnSpan(1),
+
+                                                TextInput::make('penyelenggara')
+                                                    ->label('Penyelenggara')
+                                                    ->required()
+                                                    ->columnSpan(2),
+                                            ]),
+                                    ]),
+
+                                Tabs\Tab::make('Deskripsi dan Media')
+                                    ->schema([
+                                        RichEditor::make('description')
+                                            ->label('Description')
+                                            ->required()
+                                            ->columnSpan('1'),
+
+                                        FileUpload::make('image')
+                                            ->label('Image')
+                                            ->image()
+                                            ->directory('events')
+                                            ->preserveFilenames()
+                                            ->required()
+                                            ->panelLayout('integrated')
+                                            ->removeUploadedFileButtonPosition('right')
+                                            ->loadingIndicatorPosition('right')
+                                            ->previewable(true)
+                                            ->uploadButtonPosition('left')
+                                            ->uploadProgressIndicatorPosition('left')
+                                            ->columnSpan('full')
+                                            ->imageEditor()
+                                            ->uploadingMessage('Mengupload gambar...')
+                                            ->imageEditorMode(2)
+                                            ->progressIndicatorPosition('right'),
+                                    ]),
+
+
+                                Tabs\Tab::make('kategori dan Organisi')
+                                    ->schema([
+                                        Select::make('kategori')
+                                            ->label('Kategori')
+                                            ->options(static::$kategoriOptions)
+                                            ->required()
+                                            ->columnSpan('full'),
+                                    ]),
+                            ]),
+                    ]),
+            ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('ID')->sortable(),
                 TextColumn::make('name')->label('Name')->searchable(),
-                TextColumn::make('description')
-                    ->label('Description')
-                    ->searchable()
-                    ->limit(100),   
-                TextColumn::make('date')->label('Date')->searchable(),
-                TextColumn::make('kategori')
-                    ->label('Kategori')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('start_date')->label('Tanggal Mulai')->searchable(),
+                TextColumn::make('tempat')->label('Tempat')->searchable(),
+                TextColumn::make('status')->label('Status')->sortable()->searchable(),
+                TextColumn::make('kategori')->label('Kategori')->searchable()->sortable(),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Event Image')
+                    ->url(fn ($record) => Storage::url('events/' . $record->image)),
+
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

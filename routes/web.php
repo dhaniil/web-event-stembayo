@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavouriteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UlasanController;
+use App\Http\Middleware\TrackPengunjung;
 
 // Landing Page
 Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
@@ -27,6 +28,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
     Route::delete('/ulasan/{id}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
 });
+
+Route::get('/', [EventController::class, 'index'])
+    ->middleware(TrackPengunjung::class)
+    ->name('events.dashboard');
 
 // Event 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
