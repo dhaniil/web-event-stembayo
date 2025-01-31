@@ -3,3 +3,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --primary-color: #5356FF;
+    --secondary-color: #378CE7;
+}
+
+body {
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

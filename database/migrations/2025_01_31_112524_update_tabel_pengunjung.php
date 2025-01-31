@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('pengunjung', function (Blueprint $table) {
@@ -15,14 +18,17 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->timestamp('visited_at')->index();
             $table->timestamps();
-
+    
             // Add composite index for faster queries
             $table->index(['event_id', 'ip_address', 'visited_at']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('pengunjung');
+        //
     }
 };

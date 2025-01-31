@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\StatEventPalingRame;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -13,6 +14,8 @@ use Filament\Widgets;
 use App\Filament\Widgets\EventOverviewWidget;
 use App\Filament\Widgets\ChartPengunjung;
 use App\Filament\Widgets\UserStatsWidget;
+use App\Filament\Widgets\TopStatsWidget;
+use App\Filament\Widgets\DailyStatsWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -34,7 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
                 'secondary' => Color::Gray,
-                'background' => Color::Slate,   
+                'background' => Color::Slate,
                 'text' => Color::Gray,
                 'accent' => Color::Blue,
                 'highlight' => Color::Blue,
@@ -53,8 +56,11 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 // Widgets\AccountWidget::class,
                 UserStatsWidget::class,
-                EventOverviewWidget::class, 
-                ChartPengunjung::class,
+                TopStatsWidget::class,
+                // ChartPengunjung::class,
+                StatEventPalingRame::class,
+                DailyStatsWidget::class,
+                EventOverviewWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

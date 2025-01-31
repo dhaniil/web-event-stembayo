@@ -5,24 +5,26 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
 use App\Models\Pengunjung;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class ChartPengunjung extends ChartWidget
 {
-    protected static ?string $heading = 'Pengunjung Website (7 Hari Terakhir)';
-    protected static ?string $maxHeight = '400px';
+    protected static ?string $heading = 'Chart pengunjung web 1 minggu';
+    // protected static ?string $maxHeight = '400px';
     protected static ?string $pollingInterval = '10s';
     // protected static ?string $maxWidth = '100%';
-    protected int | string | array $columnSpan = 2;
+    // protected int | string | array $columnSpan = 3;
+    // protected static ?int $sort = 2; // Urutan tampil
 
     protected function getData(): array
     {
         $days = collect(range(6, 0))->map(fn ($day) => Carbon::today()->subDays($day));
 
-        $visitors = $days->map(fn ($date) => 
+        $visitors = $days->map(fn ($date) =>
             Pengunjung::whereDate('visited_at', $date)->count()
         )->toArray();
 
-        $labels = $days->map(fn ($date) => 
+        $labels = $days->map(fn ($date) =>
             $date->format('d M')
         )->toArray();
 
@@ -49,6 +51,7 @@ class ChartPengunjung extends ChartWidget
             'labels' => $labels
         ];
     }
+
 
     protected function getType(): string
     {

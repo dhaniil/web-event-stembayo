@@ -29,12 +29,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/ulasan/{id}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
 });
 
-Route::get('/', [EventController::class, 'index'])
-    ->middleware(TrackPengunjung::class)
-    ->name('events.dashboard');
-
 // Event 
-Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event}', [EventController::class, 'show'])
+    ->name('events.show')
+    ->middleware(TrackPengunjung::class);
 Route::post('/events/{id}/review', [ReviewController::class, 'store'])->name('events.storeReview');
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 Route::get('/event/only', [EventController::class, 'EventPage'])->name('events.eventonly');
@@ -43,8 +41,8 @@ Route::put('/events/{id}', [EventController::class, 'update'])->name('events.upd
 
 
 // Favourite
-Route::post('/favourite/{eventId}', [FavouriteController::class, 'favourite'])->middleware('auth')->name('favourite.add');
-Route::delete('/favourite/{eventId}', [FavouriteController::class, 'unfavourite'])->middleware('auth')->name('favourite.remove');
+Route::post('/favourite/{event}', [FavouriteController::class, 'favourite'])->name('favourite.add');
+Route::delete('/favourite/{event}', [FavouriteController::class, 'unfavourite'])->name('favourite.remove');
 Route::get('/favourites', [FavouriteController::class, 'favouriteEvents'])->name('favourites');
 
 // Test 

@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('events:update-status')->everyMinute();
+        $schedule->command('events:send-notifications')->dailyAt('09:00');
     }
 
     /**

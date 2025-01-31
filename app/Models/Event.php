@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -27,26 +28,30 @@ class Event extends Model
         'image',
         'kategori',
         'penyelenggara',
+        'visit_count',
         'created_at',
         'updated_at',
     ];
 
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
 
     public function getImageUrlAttribute()
     {
-        return cache()->rememberForever("event-image-url-{$this->id}", function () {
-            return $this->image
-                ? Storage::url('events/' . $this->image)
-                : 'https://via.placeholder.com/300x200';
-        });
+        if (!$this->image) {
+            return 'https://via.placeholder.com/300x200';
+        }
+
+        // Gunakan URL lengkap
+        $baseUrl = config('app.url');
+        return $baseUrl . '/storage/' . $this->image;
     }
 
-
+    public function pengunjung()
+    {
+        return $this->hasMany(Pengunjung::class);
+    }
     public function favouritedBy()
     {
-        return $this->belongsToMany(User::class, 'favourites');
+        return $this->belongsToMany(User::class, 'favourites', 'events_id', 'user_id');
     }
 
     public function ulasan()

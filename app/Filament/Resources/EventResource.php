@@ -121,27 +121,26 @@ class EventResource extends Resource
                                             ->required()
                                             ->columnSpan('1'),
 
-                                        FileUpload::make('image')
+                                            FileUpload::make('image')
                                             ->label('Image')
                                             ->image()
-                                            ->directory('events')
+                                            ->disk('public')
+                                            ->directory('images')
                                             ->preserveFilenames()
                                             ->required()
                                             ->panelLayout('integrated')
-                                            ->removeUploadedFileButtonPosition('right')
-                                            ->loadingIndicatorPosition('right')
-                                            ->previewable(true)
-                                            ->uploadButtonPosition('left')
-                                            ->uploadProgressIndicatorPosition('left')
-                                            ->columnSpan('full')
+                                            ->visibility('public')
+                                            ->maxSize(5120)
+                                            ->acceptedFileTypes(['image/*'])
                                             ->imageEditor()
-                                            ->uploadingMessage('Mengupload gambar...')
-                                            ->imageEditorMode(2)
-                                            ->progressIndicatorPosition('right'),
+                                            ->imagePreviewHeight('250')
+                                            ->loadingIndicatorPosition('left')
+                                            ->removeUploadedFileButtonPosition('right'),    
+
                                     ]),
 
 
-                                Tabs\Tab::make('kategori dan Organisi')
+                                Tabs\Tab::make('Kategori dan Organisi')
                                     ->schema([
                                         Select::make('kategori')
                                             ->label('Kategori')

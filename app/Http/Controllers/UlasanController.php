@@ -15,18 +15,18 @@ class UlasanController extends Controller
         $validated = $request->validate([
             'event_id' => 'required|exists:events,id',
             'rating' => 'required|integer|min:1|max:5',
-            'komentar' => 'required|string'
+            'komentar' => 'required|string|max:255'
         ]);
 
         DB::beginTransaction();
         try {
-            // Cetak data sebelum menyimpan
-            \Log::info('Data yang akan disimpan:', [
-                'user_id' => Auth::id(),
-                'event_id' => $request->event_id,
-                'rating' => $request->rating,
-                'komentar' => $request->komentar
-            ]);
+            // // Cetak data sebelum menyimpan
+            // \Log::info('Data yang akan disimpan:', [
+            //     'user_id' => Auth::id(),
+            //     'event_id' => $request->event_id,
+            //     'rating' => $request->rating,
+            //     'komentar' => $request->komentar
+            // ]);
 
             $ulasan = new Ulasan();
             $ulasan->user_id = Auth::id();
@@ -40,7 +40,7 @@ class UlasanController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             \Log::error('Error saat menyimpan ulasan: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal menambahkan ulasan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menambahkan ulasan');
         }
     }
 }

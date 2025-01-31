@@ -6,6 +6,8 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -13,7 +15,10 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $events = Event::all();
-        return view('events.dashboard', compact('events'));
+        $user = Auth::user();
+        return view('events.dashboard', compact('events',"user"));
+
+        
     }
 
     // Fungsi untuk menampilkan form create event
@@ -140,10 +145,35 @@ class EventController extends Controller
 
     // Fungsi untuk menampilkan detail event
     public function show(Event $event)
-    {   
-        $user = Auth::user();
-        $event->load('ulasan.user');
-        return view('events.show', compact('event', 'user'));
+    {
+        try {
+            $user = Auth::user();
+            $event->load(['ulasan.user', 'favouritedBy']);
+            
+            // Debug
+            \Log::info('Loading event:', [
+                'id' => $event->id,
+                'name' => $event->name,
+                'image' => $event->image
+            ]);
+
+            $startDate = Carbon::parse($event->start_date)->locale('id')->isoFormat('dddd, D MMMM YYYY');
+            $endDate = Carbon::parse($event->end_date)->locale('id')->isoFormat('dddd, D MMMM YYYY');
+            $jamMulai = Carbon::parse($event->jam_mulai)->format('H:i');
+            $jamSelesai = Carbon::parse($event->jam_selesai)->format('H:i');
+
+            return view('events.show', compact(
+                'event', 
+                'startDate', 
+                'endDate', 
+                'jamMulai', 
+                'jamSelesai', 
+                'user'
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Error showing event: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menampilkan event.');
+        }
     }
 
     // Fungsi untuk menyimpan review
@@ -169,20 +199,20 @@ class EventController extends Controller
     {
         $tanggal = $request->input('tanggal');
         $kategori = $request->input('kategori');
-    
+
         $query = Event::query();
-    
+
         if ($tanggal) {
             $query->whereDate('start_date', '<=', $tanggal)
                   ->whereDate('end_date', '>=', $tanggal);
         }
-    
+
         if ($kategori) {
             $query->where('kategori', $kategori);
         }
-    
+
         $events = $query->get();
-    
+
         $user = Auth::user();
 
         return view('events.eventonly', compact('user', 'events', 'tanggal', 'kategori'));
