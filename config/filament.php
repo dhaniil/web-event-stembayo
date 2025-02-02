@@ -27,7 +27,9 @@ return [
         'default' => [
             'path' => 'admin',
             'resources' => [],
-            'pages' => [],
+                    'pages' => [
+            'register' => [],
+        ],
             'widgets' => [],
         ],
     ],

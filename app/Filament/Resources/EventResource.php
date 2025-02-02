@@ -24,6 +24,14 @@ use Spatie\Image\Image;
 
 
 use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\TagsInput;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Awcodes\Curator\Components\Forms\CuratorPicker;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Support\Enums\ActionSize;
 
 class EventResource extends Resource
 {
@@ -54,100 +62,111 @@ class EventResource extends Resource
             ->schema([
                 Grid::make(1)
                     ->schema([
-                        Tabs::make('Detail Event')
-                            ->tabs([
-                                Tabs\Tab::make('Informasi Event')
+                        Section::make('Detail Event')
+                            ->description('Informasi dasar event')
+                            ->icon('heroicon-o-information-circle')
+                            ->collapsible()
+                            ->schema([
+                                Grid::make(2)
                                     ->schema([
-                                        Grid::make(2)
-                                            ->schema([
-                                                TextInput::make('name')
-                                                    ->label('Name')
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                DatePicker::make('start_date')
-                                                    ->label('Start Date')
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                TimePicker::make('jam_mulai')
-                                                    ->label('Start Time')
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                DatePicker::make('end_date')
-                                                    ->label('End Date')
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                TimePicker::make('jam_selesai')
-                                                    ->label('End Time')
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                Select::make('status')
-                                                    ->label('Status')
-                                                    ->options([
-                                                        'selesai' => 'Selesai',
-                                                        'sedang berlangsung' => 'Sedang Berlangsung',
-                                                        'dibatalkan' => 'Dibatalkan',
-                                                        'ditunda' => 'Ditunda',
-                                                        'belum mulai' => 'Belum Mulai',
-                                                    ])
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                TextInput::make('tempat')
-                                                    ->label('Location')
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                TextInput::make('type')
-                                                    ->label('Tipe')
-                                                    ->required()
-                                                    ->columnSpan(1),
-
-                                                TextInput::make('penyelenggara')
-                                                    ->label('Penyelenggara')
-                                                    ->required()
-                                                    ->columnSpan(2),
-                                            ]),
-                                    ]),
-
-                                Tabs\Tab::make('Deskripsi dan Media')
-                                    ->schema([
-                                        RichEditor::make('description')
-                                            ->label('Description')
+                                        TextInput::make('name')
+                                            ->label('Nama Event')
                                             ->required()
-                                            ->columnSpan('1'),
+                                            ->live(onBlur: true)
+                                            ->maxLength(100),
 
-                                            FileUpload::make('image')
-                                            ->label('Image')
-                                            ->image()
-                                            ->disk('public')
-                                            ->directory('images')
-                                            ->preserveFilenames()
-                                            ->required()
-                                            ->panelLayout('integrated')
-                                            ->visibility('public')
-                                            ->maxSize(5120)
-                                            ->acceptedFileTypes(['image/*'])
-                                            ->imageEditor()
-                                            ->imagePreviewHeight('250')
-                                            ->loadingIndicatorPosition('left')
-                                            ->removeUploadedFileButtonPosition('right'),    
-
-                                    ]),
-
-
-                                Tabs\Tab::make('Kategori dan Organisi')
-                                    ->schema([
                                         Select::make('kategori')
                                             ->label('Kategori')
                                             ->options(static::$kategoriOptions)
+                                            ->searchable()
+                                            ->required(),
+
+                                        DatePicker::make('start_date')
+                                            ->label('Tanggal Mulai')
                                             ->required()
-                                            ->columnSpan('full'),
+                                            ->native(false)
+                                            ->displayFormat('d/m/Y'),
+
+                                        TimePicker::make('jam_mulai')
+                                            ->label('Jam Mulai')
+                                            ->required()
+                                            ->native(false)
+                                            ->displayFormat('H:i'),
+
+                                        DatePicker::make('end_date')
+                                            ->label('Tanggal Selesai')
+                                            ->required()
+                                            ->native(false)
+                                            ->displayFormat('d/m/Y')
+                                            ->after('start_date'),
+
+                                        TimePicker::make('jam_selesai')
+                                            ->label('Jam Selesai')
+                                            ->required()
+                                            ->native(false)
+                                            ->displayFormat('H:i'),
                                     ]),
+                            ]),
+
+                        Section::make('Lokasi & Status')
+                            ->description('Informasi lokasi dan status event')
+                            ->icon('heroicon-o-map-pin')
+                            ->collapsible()
+                            ->schema([
+                                Grid::make(2)
+                                    ->schema([
+                                        TextInput::make('tempat')
+                                            ->label('Lokasi')
+                                            ->required(),
+
+                                        Select::make('status')
+                                            ->label('Status')
+                                            ->options([
+                                                'selesai' => 'Selesai',
+                                                'sedang berlangsung' => 'Sedang Berlangsung',
+                                                'dibatalkan' => 'Dibatalkan',
+                                                'ditunda' => 'Ditunda',
+                                                'belum mulai' => 'Belum Mulai',
+                                            ])
+                                            ->required()
+                                            ->searchable(),
+
+                                        TextInput::make('penyelenggara')
+                                            ->label('Penyelenggara')
+                                            ->required(),
+
+                                        // TagsInput::make('tags')
+                                        //     ->label('Tags')
+                                        //     ->separator(','),
+                                    ]),
+                            ]),
+
+                        Section::make('Konten')
+                            ->description('Deskripsi dan media event')
+                            ->icon('heroicon-o-photo')
+                            ->collapsible()
+                            ->schema([
+                                RichEditor::make('description')
+                                    ->label('Deskripsi')
+                                    ->required()
+                                    ->toolbarButtons([
+                                        'bold',
+                                        'italic',
+                                        'link',
+                                        'bulletList',
+                                        'orderedList',
+                                        'h2',
+                                        'h3',
+                                    ]),
+
+                                    FileUpload::make('image')
+                                    ->label('Gambar Event')
+                                    ->required()
+                                    ->image()
+                                    ->maxSize(5120)
+                                    ->directory('events')
+                                    ->preserveFilenames()
+                                    ->imageEditor(),
                             ]),
                     ]),
             ]);
@@ -157,28 +176,74 @@ class EventResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Name')->searchable(),
-                TextColumn::make('start_date')->label('Tanggal Mulai')->searchable(),
-                TextColumn::make('tempat')->label('Tempat')->searchable(),
-                TextColumn::make('status')->label('Status')->sortable()->searchable(),
-                TextColumn::make('kategori')->label('Kategori')->searchable()->sortable(),
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('Event Image')
-                    ->url(fn ($record) => Storage::url('events/' . $record->image)),
+                    ->label('Gambar')
+                    ->circular()
+                    ->size(40),
+                
+                TextColumn::make('name')
+                    ->label('Nama Event')
+                    ->searchable()
+                    ->sortable()
+                    ->description(fn ($record) => $record->tempat),
 
+                TextColumn::make('start_date')
+                    ->label('Waktu')
+                    ->sortable()
+                    ->formatStateUsing(fn ($record) => 
+                        date('d/m/Y', strtotime($record->start_date)) . ' ' . $record->jam_mulai
+                    ),
+
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'selesai' => 'success',
+                        'sedang berlangsung' => 'primary',
+                        'dibatalkan' => 'danger',
+                        'ditunda' => 'warning',
+                        'belum mulai' => 'info',
+                    }),
+
+                TextColumn::make('kategori')
+                    ->badge()
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('visit_count')
+                    ->label('Pengunjung')
+                    ->sortable()
+                    ->alignCenter(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options([
+                        'selesai' => 'Selesai',
+                        'sedang berlangsung' => 'Sedang Berlangsung',
+                        'dibatalkan' => 'Dibatalkan',
+                        'ditunda' => 'Ditunda',
+                        'belum mulai' => 'Belum Mulai',
+                    ]),
+                
+                SelectFilter::make('kategori')
+                    ->options(static::$kategoriOptions),
+
+                Filter::make('popular')
+                    ->query(fn ($query) => $query->where('visit_count', '>', 100))
+                    ->label('Event Populer'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

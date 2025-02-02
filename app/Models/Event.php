@@ -37,12 +37,18 @@ class Event extends Model
     public function getImageUrlAttribute()
     {
         if (!$this->image) {
-            return 'https://via.placeholder.com/300x200';
+            return asset('images/placeholder.jpg'); // Pastikan ada gambar placeholder
         }
-
-        // Gunakan URL lengkap
-        $baseUrl = config('app.url');
-        return $baseUrl . '/storage/' . $this->image;
+        
+        // Jika image adalah URL lengkap
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+        
+        // Jika image disimpan di storage
+        return Storage::disk('public')->exists($this->image) 
+            ? Storage::disk('public')->url($this->image)
+            : asset('images/placeholder.jpg');
     }
 
     public function pengunjung()
@@ -58,5 +64,11 @@ class Event extends Model
     {
         return $this->hasMany(Ulasan::class);
     }
+
+    public function berita()
+    {
+        return $this->hasOne(Berita::class);
+    }
+
 
 }

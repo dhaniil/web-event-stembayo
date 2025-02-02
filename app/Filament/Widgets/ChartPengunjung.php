@@ -7,14 +7,19 @@ use Illuminate\Support\Carbon;
 use App\Models\Pengunjung;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+
+
 class ChartPengunjung extends ChartWidget
 {
+    
     protected static ?string $heading = 'Chart pengunjung web 1 minggu';
     // protected static ?string $maxHeight = '400px';
     protected static ?string $pollingInterval = '10s';
     // protected static ?string $maxWidth = '100%';
-    // protected int | string | array $columnSpan = 3;
-    // protected static ?int $sort = 2; // Urutan tampil
+    // protected static ?int $sort = 2;
+    protected int | string | array $columnSpan = 1;
+
 
     protected function getData(): array
     {
@@ -57,4 +62,5 @@ class ChartPengunjung extends ChartWidget
     {
         return 'line';
     }
+
 }

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UlasanController;
 use App\Http\Middleware\TrackPengunjung;
 
+use App\Http\Controllers\BeritaController;
+
 // Landing Page
 Route::get('/', [EventController::class, 'index'])->name('events.dashboard');
 
@@ -44,6 +46,10 @@ Route::put('/events/{id}', [EventController::class, 'update'])->name('events.upd
 Route::post('/favourite/{event}', [FavouriteController::class, 'favourite'])->name('favourite.add');
 Route::delete('/favourite/{event}', [FavouriteController::class, 'unfavourite'])->name('favourite.remove');
 Route::get('/favourites', [FavouriteController::class, 'favouriteEvents'])->name('favourites');
+
+
+Route::resource('berita', BeritaController::class);
+
 
 // Test 
 Route::get('/ygy', function () {

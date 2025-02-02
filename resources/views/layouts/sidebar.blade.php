@@ -218,7 +218,7 @@
                     <ul class="menu-items">
                         <li :class="{ active: currentRoute === 'events.dashboard' }">
                             <a href="{{ route('events.dashboard') }}" @click="setCurrentRoute('events.dashboard')">
-                                <i class="bi bi-house-fill"></i>Dashboard
+                                <i class="bi bi-house"></i>Dashboard
                             </a>
                         </li>
                         <li :class="{ active: currentRoute === 'events.eventonly' }">
@@ -226,14 +226,14 @@
                                 <i class="bi bi-calendar"></i>Agenda Acara
                             </a>
                         </li>
-                        <li :class="{ active: currentRoute === 'news' }">
-                            <a href="#" @click="setCurrentRoute('news')">
+                        <li :class="{ active: currentRoute === 'berita.index' }">
+                            <a href="#" @click="setCurrentRoute('berita.index')">
                                 <i class="bi bi-newspaper"></i>Berita Acara
                             </a>
                         </li>
                         <li :class="{ active: currentRoute === 'favourites' }">
                             <a href="{{ route('favourites') }}" @click="setCurrentRoute('favourites')">
-                                <i class="bi bi-bookmark-fill"></i>Bookmark
+                                <i class="bi bi-heart"></i>Favourite
                             </a>
                         </li>
                         <li :class="{ active: currentRoute === 'profile' }">

@@ -11,8 +11,8 @@ use phpDocumentor\Reflection\DocBlock\Description;
 class StatEventPalingRame extends BaseWidget
 {
     // protected static ?string $maxHeight = '400px';
-    // protected static ?int $sort = 2;
-    // protected int | string | array $columnSpan = 1;
+    // protected static ?int $sort = 3;
+    protected int | string | array $columnSpan = 3;
 
     protected function getStats(): array
     {
@@ -23,4 +23,5 @@ class StatEventPalingRame extends BaseWidget
                 ->color('danger'),
         ];
     }
+    
 }

@@ -100,9 +100,34 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col">
-                                            <h4 class="title text-center">Events</h4>
+                                            <h4 class="title">Events</h4>
                                         </div>
                                         <div class="option col-12 col-md-auto d-flex justify-content-center align-items-center flex-wrap">
+                                        <div class="filter-container mb-4">
+                                                <form action="{{ route('events.eventonly') }}" method="GET" class="d-flex align-items-center">
+                                                    <input type="text" name="tanggal" id="datepicker" class="form-control me-2 tanggal" placeholder="Pilih Tanggal" readonly>
+                                            
+                                                    <!-- Ikon Kalender -->
+                                                    {{-- <i class="fas fa-calendar-alt" id="calendar-icon" style="position: absolute; right: 10px; cursor: pointer; font-size: 20px;"></i> --}}
+                                                    
+                                                    <select name="kategori" class="form-control me-2 filter">
+                                                        <option value="">Pilih Kategori</option>
+                                                        <option value="KTYME Islam" {{ request('kategori') == 'KTYME Islam' ? 'selected' : '' }}>KTYME Islam</option>
+                                                        <option value="KTYME Kristiani" {{ request('kategori') == 'KTYME Kristiani' ? 'selected' : '' }}>KTYME Kristiani</option>
+                                                        <option value="KBBP" {{ request('kategori') == 'KBBP' ? 'selected' : '' }}>KBBP</option>
+                                                        <option value="KBPL" {{ request('kategori') == 'KBPL' ? 'selected' : '' }}>KBPL</option>
+                                                        <option value="BPPK" {{ request('kategori') == 'BPPK' ? 'selected' : '' }}>BPPK</option>
+                                                        <option value="KK" {{ request('kategori') == 'KK' ? 'selected' : '' }}>KK</option>
+                                                        <option value="PAKS" {{ request('kategori') == 'PAKS' ? 'selected' : '' }}>PAKS</option>
+                                                        <option value="KJDK" {{ request('kategori') == 'KJDK' ? 'selected' : '' }}>KJDK</option>
+                                                        <option value="PPBN" {{ request('kategori') == 'PPBN' ? 'selected' : '' }}>PPBN</option>
+                                                        <option value="HUMTIK" {{ request('kategori') == 'HUMTIK' ? 'selected' : '' }}>HUMTIK</option>
+                                                    </select>
+
+                                                    <button type="submit" class="btn me-2">Filter</button>
+                                                    <a href="{{ route('events.eventonly') }}" class="btn">Reset</a>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
