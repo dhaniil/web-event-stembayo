@@ -92,11 +92,4 @@ class BeritaResource extends Resource
             'edit' => Pages\EditBerita::route('/{record}/edit'),
         ];
     }
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return auth()->user()->role === 'admin' 
-            || auth()->user()->role === 'superadmin'
-            || auth()->user()->role === 'sekbid';
-    }
 }

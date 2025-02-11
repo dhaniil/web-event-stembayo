@@ -17,21 +17,10 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\Tabs;
-use Illuminate\Http\UploadedFile;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Spatie\Image\Image;
-
-
-use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\TagsInput;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
-use Awcodes\Curator\Components\Forms\CuratorPicker;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Support\Enums\ActionSize;
+
 
 class EventResource extends Resource
 {

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -38,9 +39,14 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
-            'role' => 'pengunjung   ',
+            'password' => Hash::make($request->password),
         ]);
+
+        // Assign default Pengunjung role
+        $pengunjungRole = Role::where('name', 'Pengunjung')->first();
+        if ($pengunjungRole) {
+            $user->assignRole($pengunjungRole);
+        }
 
         event(new Registered($user));
 

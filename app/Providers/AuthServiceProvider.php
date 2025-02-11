@@ -15,9 +15,18 @@ class AuthServiceProvider extends ServiceProvider
     
     public function boot(): void
     {
-        // Define a gate for admin access
+        $this->registerPolicies();
+
+        // Define a gate for admin access using Spatie roles
         Gate::define('admin-access', function (User $user) {
-            return $user->role === 'admin' || $user->role === 'superadmin';
+            return $user->hasAnyRole(['Super Admin', 'Admin']) || $user->hasRole('Sekbid');
+        });
+
+        // Super Admin can do everything
+        Gate::before(function (User $user) {
+            if ($user->hasRole('Super Admin')) {
+                return true;
+            }
         });
     }
 }

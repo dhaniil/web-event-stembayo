@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <!--Logo -->
 <link rel="stylesheet" href="{{ asset('css/assets/asset.css') }}">
-<link rel="icon" href="https://smkn2depoksleman.sch.id/utama/wp-content/uploads/2024/09/cropped-Untitled-design-5-3.png" type="image/icon"> 
+<link rel="icon" href="https://i.ibb.co.com/P5Lyxyc/stmby.png" type="image/icon"> 
 
 <div class="content">
     @yield('asset')

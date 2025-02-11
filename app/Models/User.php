@@ -8,17 +8,28 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
-
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, HasRoles, Notifiable;
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->useLogName('user')
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role',
         'profile_picture',
         'nomer',
         'kelas',
@@ -32,69 +43,59 @@ class User extends Authenticatable implements FilamentUser
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        
     ];
 
-    public static $roles = [
-        'superadmin',
-        'admin',
-        'sekbid',
-        'pengunjung',
-    ];
-
-    public static function isValidRole($role)
+    public function canAccessPanel(Panel $panel): bool
     {
-        return in_array($role, self::$roles);
-    }
+        if ($this->hasRole('Super Admin')) {
+            return true;
+        }
+        if ($this->hasAnyRole(['Admin', 'Sekbid'])) {
+            return $this->hasAnyPermission([
+                'view_admin',
+                'view_sekbid',
+                'view_event',
+                'view_berita',
+                'view_ulasan',
+                'view_activity_log'
+            ]);
+        }
 
-    /**
-     * Check if the user has admin role.
-     *
-     * @return bool
-     */
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
-
-    /**
-     * Check if the user has sekbid role.
-     *
-     * @return bool
-     */
-    public function isSekbid(): bool
-    {
-        return $this->role === 'sekbid';
+        return false;
     }
 
     public function isSuperadmin(): bool
     {
-        return $this->role === 'superadmin';
+        return $this->hasRole('Super Admin');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('Admin');
+    }
+
+    public function isSekbid(): bool
+    {
+        return $this->hasRole('Sekbid');
     }
 
     public function isPengunjung(): bool
     {
-        return $this->role === 'pengunjung';
+        return $this->hasRole('Pengunjung');
     }
 
     public function reviews()
     {
         return $this->hasMany(Review::class);
-    }  
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return in_array($this->role, ['superadmin', 'admin', 'sekbid']) && $this->role !== 'pengunjung';
     }
-    
+
     public function favourites()
     {
-        return $this->belongsToMany(Event::class, 'favourites', 'user_id', 'events_id'); // Menggunakan nama kolom yang benar
+        return $this->belongsToMany(Event::class, 'favourites', 'user_id', 'events_id');
     }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
     }
-
 }
-

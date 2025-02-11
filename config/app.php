@@ -117,6 +117,10 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
+    // 'providers' => [
+    // // ...
+    // App\Providers\FilamentThemeServiceProvider::class,
+    // ],
 
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),

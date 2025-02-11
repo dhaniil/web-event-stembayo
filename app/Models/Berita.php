@@ -12,15 +12,10 @@ class Berita extends Model
     protected $table = 'berita';
 
     protected $fillable = [
-        'event_id',
         'judul',
         'isi',
     ];
 
-    public function event(): BelongsTo
-    {
-        return $this->belongsTo(Event::class);
-    }
 
     public function galleries()
     {

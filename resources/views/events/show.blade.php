@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="event-description">
+            <div class="event-description p-4">
                 <h2>Tentang Event</h2>
                 <p>{{ $event->description }}</p>
             </div>

@@ -46,8 +46,8 @@ class Event extends Model
         }
         
         // Jika image disimpan di storage
-        return Storage::disk('public')->exists($this->image) 
-            ? Storage::disk('public')->url($this->image)
+        return Storage::disk('public')->exists($this->image)
+            ? asset(Storage::url($this->image))
             : asset('images/placeholder.jpg');
     }
 
@@ -69,6 +69,9 @@ class Event extends Model
     {
         return $this->hasOne(Berita::class);
     }
-
+    public function banners()
+    {
+        return $this->hasMany(EventBanner::class);
+    }
 
 }

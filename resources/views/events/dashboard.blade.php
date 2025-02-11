@@ -67,29 +67,41 @@
     <section id="sorotan-event" class="flex m-6 justify-center">
         <div class="carousel relative w-full max-w-6xl mx-auto overflow-hidden rounded-2xl shadow-lg">
             <div class="slides flex transition-transform duration-500 ease-in-out">
-              <div class="slide w-full flex-shrink-0">
-                <img src="https://i.ibb.co.com/QCKD2xz/banner.png" alt="Slide1 1458x325" class="w-full h-full object-cover" />
-              </div>
-              <div class="slide w-full flex-shrink-0 object">
-                <img src="https://i.ibb.co.com/QCKD2xz/banner.png" alt="Slide2 1458x325" class="w-full  h-full object-cover" />
-              </div>
-              <div class="slide w-full flex-shrink-0">
-                <img src="https://i.ibb.co.com/QCKD2xz/banner.png" alt="Slide3 1458x325" class="w-full h-full object-cover" />
-              </div>
+                @php
+                    $banners = App\Models\EventBanner::all();
+                @endphp
+                @if(count($banners) > 0)
+                    @foreach($banners as $banner)
+                        <div class="slide w-full flex-shrink-0">
+                            @if($banner->image && file_exists(public_path('storage/' . $banner->image)))
+                                <img src="{{ asset('storage/' . $banner->image) }}" alt="Banner" class="w-full h-full object-cover" />
+                            @else
+                                <p>No image found.</p>
+                            @endif
+                        </div>
+                    @endforeach
+                @else
+                    <div class="slide w-full flex-shrink-0">
+                        <p>No banners found.</p>
+                    </div>
+                @endif
             </div>
             <div class="indicators absolute left-1/2  flex z-30 justify-center gap-3 h-4 p-2 transform -translate-x-1/2 -translate-y-[30px]  items-center rounded-t-lg">
-                <button class="indicator w-1 h-1 sm:w-1 sm:h-1 md:w-2 md:h-2 lg:w-2 lg:h-2  bg-gray-300 rounded-full"></button>
-                <button class="indicator w-1 h-1 sm:w-1 sm:h-1 md:w-2 md:h-2 lg:w-2 lg:h-2  bg-gray-300 rounded-full"></button>
-                <button class="indicator w-1 h-1 sm:w-1 sm:h-1 md:w-2 md:h-2 lg:w-2 lg:h-2  bg-gray-300 rounded-full"></button>
+                @if(count($banners) > 0)
+                    @foreach($banners as $index => $banner)
+                        <button class="indicator w-1 h-1 sm:w-1 sm:h-1 md:w-2 md:h-2 lg:w-2 lg:h-2  bg-gray-300 rounded-full"></button>
+                    @endforeach
+                @endif
             </div>
         </div>
-        
+
     </section>
 
     
       
+    @include('layouts.sidebar')
 
-    <main class="main-content">
+    <main class="main-content bg-transparent p-0">
         <!-- Event -->
         <section id="event" class="event" >
             <div id="app">
@@ -133,33 +145,29 @@
                                 </div>
 
 
-                                <div class="card-body">
-                                    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-                                        <div class="carousel-inner">
+                                <div class="body-card">
                                             <!-- @php
                                                 $chunks = $events->chunk(4);
                                             @endphp
                                 
                                             @foreach($chunks as $chunkIndex => $chunk) -->
-                                                <div class="carousel-item {{ $chunkIndex == 0 ? 'active' : '' }}">
-                                                    <div class="row">
+                                                    <div class="atasan-card flex justify-center items-center gap-4 p-4 ">
                                                         <!-- @foreach($chunk as $event) -->
-                                                            <div class="col-lg-3 col-md-4 col-sm-6 col-5">
-                                                                <div class="card">
-                                                                    <a href="{{ route('events.show', $event->id) }}" class="img-href">
-                                                                        <img src="{{ asset('storage/' . $event->image) }}" alt="Image" class="card-img" loading="lazy">
-                                                                        <div class="event-name d-flex flex-column">
-                                                                            <figcaption>{{ $event->name }}</figcaption>
+                                                                <div class="kard transition-all rounded-xl">
+                                                                    <a href="{{ route('events.show', $event->id) }}" class="img-href no-underline">
+                                                                        <div class="p-2 bg-white flex flex-col rounded-xl justify-center items-center">
+                                                                            <img src="{{ asset('storage/' . $event->image) }}" alt="Image" class="card-img" loading="lazy">
+                                                                            <div class="flex flex-col items-center text-center w-full">
+                                                                                <h1 class="head text-lg max-w-sm text-center text-black w-full">{{ $event->name }}</h1>
+                                                                                <p class="desc max-w-sm w-full">{{ $event->description }}</p>
+                                                                                <!-- <figcaption>{{ $event->name }}</figcaption> -->
+                                                                            </div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
-                                                            </div>
                                                         <!-- @endforeach -->
                                                     </div>
-                                                </div>
                                             <!-- @endforeach -->
-                                        </div>
-                                    </div>
                                 </div>
 
                                  <!-- <div class="card-footer">

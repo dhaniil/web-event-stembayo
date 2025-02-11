@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: laravel_octane
+    working_dir: /var/www/event
+    volumes:
+      - .:/var/www/event
+    ports:
+      - "80:80"       # Laravel diakses di port 80
+      - "2020:2020"   # Admin port untuk FrankenPHP
+    environment:
+      OCTANE_SERVER: frankenphp
+      APP_ENV: production
+      APP_DEBUG: "true"
+      APP_KEY: base64:7JR4AcLOilwGrZcIo+laf+vrcXWDkMZZ2cxAwkyMenM=
+    restart: always

@@ -184,7 +184,7 @@
 
 </style>
 
-<div id="app">
+
     <a class="sidebar-toggler" @click="toggleSidebar" aria-label="Toggle Sidebar">
         <i class="bi bi-caret-right-fill"></i>
     </a>
@@ -195,73 +195,77 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <a href="{{ route('profile.edit') }}" class="user-info-link">
-                <div class="user-info d-flex">
-                    @if($user)
-                        <div class="user-profile">
-                            <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar">
-                        </div>
-                        <div class="user-name">
-                            <h5>{{ $user->name }}</h5>
-                            <p>{{ $user->email }}</p>
-                        </div>
-                    @else
-                        <div class="user-name">
-                            <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
-                        </div>
-                    @endif
-                </div>
-            </a>
             
-            @if($user)
+            @auth
+                <a href="{{ route('profile.edit') }}" class="user-info-link">
+                    <div class="user-info d-flex align-items-center">
+                        <div class="user-profile">
+                            @if(Auth::user()->profile_picture)
+                                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Avatar" class="avatar">
+                            @else
+                                <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Avatar" class="avatar">
+                            @endif
+                        </div>
+                        <div class="user-name">
+                            <h5>{{ Auth::user()->name }}</h5>
+                            <p>{{ Auth::user()->email }}</p>
+                        </div>
+                    </div>
+                </a>
+            @else
+                <div class="user-info d-flex justify-content-center align-items-center flex-column" style="padding: 20px;">
+                    <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Guest" class="avatar mb-3">
+                    <h5 class="text-center mb-3">Welcome, Guest!</h5>
+                    <p class="text-center text-muted mb-4">Please login to access all features</p>
+                    <a href="{{ route('login') }}" class="btn btn-primary mb-2" style="width: 200px;">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline-primary" style="width: 200px;">Register</a>
+                </div>
+            @endauth
+            
+
                 <div class="menu" id="sidebar">
                     <ul class="menu-items">
-                        <li :class="{ active: currentRoute === 'events.dashboard' }">
-                            <a href="{{ route('events.dashboard') }}" @click="setCurrentRoute('events.dashboard')">
-                                <i class="bi bi-house"></i>Dashboard
+                        <li :class="{ active: request()->routeIs('events.dashboard') }">
+                            <a href="{{ route('events.dashboard') }}">
+                                <i class="bi bi-house"></i> Dashboard
                             </a>
                         </li>
-                        <li :class="{ active: currentRoute === 'events.eventonly' }">
-                            <a href="{{ route('events.eventonly') }}" @click="setCurrentRoute('events.eventonly')">
-                                <i class="bi bi-calendar"></i>Agenda Acara
+                        <li :class="{ active: request()->routeIs('events.eventonly') }">
+                            <a href="{{ route('events.eventonly') }}">
+                                <i class="bi bi-calendar"></i> Agenda Acara
                             </a>
                         </li>
-                        <li :class="{ active: currentRoute === 'berita.index' }">
-                            <a href="#" @click="setCurrentRoute('berita.index')">
-                                <i class="bi bi-newspaper"></i>Berita Acara
+                        <li :class="{ active: request()->routeIs('berita.index') }">
+                            <a href="{{ route('berita.index') }}">
+                                <i class="bi bi-newspaper"></i> Berita Acara
                             </a>
                         </li>
-                        <li :class="{ active: currentRoute === 'favourites' }">
-                            <a href="{{ route('favourites') }}" @click="setCurrentRoute('favourites')">
-                                <i class="bi bi-heart"></i>Favourite
+                        <li :class="{ active: request()->routeIs('favourites') }">
+                            <a href="{{ route('favourites') }}">
+                                <i class="bi bi-heart"></i> Favourite
                             </a>
                         </li>
-                        <li :class="{ active: currentRoute === 'profile' }">
-                            <a href="{{ route('profile.edit') }}" @click="setCurrentRoute('profile')">
-                                <i class="bi bi-person"></i>Profile
-                            </a>
-                        </li>
-                            <!-- <li :class="{ active: currentRoute === 'settings' }">
-                                <a href="#" @click="setCurrentRoute('settings')">
-                                    <i class="bi bi-gear"></i>Settings
-                                </a>
-                            </li> -->
-                        <li :class="{ active: currentRoute === 'support' }">
-                            <a href="#" @click="setCurrentRoute('support')">
-                                <i class="fas fa-headset"></i>Help & Support
-                            </a>
-                        </li>
-                        <li :class="{ active: currentRoute === 'back' }">
-                            <a href="{{ route('events.dashboard') }}" @click="setCurrentRoute('back')">
-                                <i class="bi bi-arrow-left-short"></i>Back
+                        <li :class="{ active: request()->routeIs('profile.edit') }">
+                            <a href="{{ route('profile.edit') }}">
+                                <i class="bi bi-person"></i> Profile
                             </a>
                         </li>
                         
-                        @if(auth()->check() && in_array(auth()->user()->role, ['sekbid', 'admin', 'superadmin']))
-                        <li :class="{ active: currentRoute === 'admin' }" class="admin-restricted">
-                            <a href="/admin" @click="setCurrentRoute('admin')" class="text-warning">
-                                <i class="bi bi-shield-lock"></i>Admin Panel
-                                <span class="badge bg-warning text-dark ms-2">Restricted</span>
+                        <li :class="{ active: request()->routeIs('support') }">
+                            <a href="#">
+                                <i class="fas fa-headset"></i> Help & Support
+                            </a>
+                        </li>
+                        <li :class="{ active: request()->routeIs('back') }">
+                            <a href="{{ route('events.dashboard') }}">
+                                <i class="bi bi-arrow-left-short"></i> Back
+                            </a>
+                        </li>
+                        
+                        @if(Auth::check() && Auth::user()->hasAnyRole(['Sekbid', 'Admin', 'Super Admin']))
+                        <li :class="{ active: request()->routeIs('admin') }">
+                            <a href="/admin"  class="text-warning">
+                                <i class="bi bi-shield-lock"></i> Admin Panel
                             </a>
                         </li>
                         @endif
@@ -275,25 +279,6 @@
                         </button>
                     </form>
                 </div>
-            @endif
+           
         </div>
     </div>
-</div>
-
-<script>
-    new Vue({
-        el: '#app',
-        data: {
-            isSidebarVisible: false,
-            currentRoute: 'events.eventonly' // Set default route
-        },
-        methods: {
-            toggleSidebar() {
-                this.isSidebarVisible = !this.isSidebarVisible;
-            },
-            setCurrentRoute(route) {
-                this.currentRoute = route;
-            }
-        }
-    });
-</script>

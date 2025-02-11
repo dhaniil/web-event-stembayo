@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\StatEventPalingRame;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -34,26 +35,21 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-
+            // ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
-                'danger' => Color::Red,
-                'gray' => Color::Gray,
-                'info' => Color::Blue,
                 'primary' => [
-                    50 => '#eef2ff',
-                    100 => '#e0e7ff',
-                    200 => '#c7d2fe', 
-                    300 => '#a5b4fc',
-                    400 => '#818cf8',
-                    500 => '#5356FF',
-                    600 => '#4f46e5',
-                    700 => '#4338ca',
-                    800 => '#3730a3',
-                    900 => '#312e81',
-                    950 => '#1e1b4b',
+                    50  => '235,248,255',
+                    100 => '210,240,255',
+                    200 => '175,225,255',
+                    300 => '140,210,255',
+                    400 => '105,195,255',
+                    500 => '70,180,255',
+                    600 => '55,160,230',
+                    700 => '45,140,200',
+                    800 => '35,120,170',
+                    900 => '25,100,140',
+                    950 => '15,80,110',
                 ],
-                'success' => Color::Green,
-                'warning' => Color::Yellow,
             ])
             ->id('admin')
             ->path('admin')
@@ -79,13 +75,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // // Widgets\AccountWidget::class,
-                // UserStatsWidget::class,
-                // TopStatsWidget::class,
-                // ChartPengunjung::class,
-                // StatEventPalingRame::class,
-                // // DailyStatsWidget::class,
-                // EventOverviewWidget::class,
+                
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -97,6 +87,9 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->plugins([
+                FilamentShieldPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,

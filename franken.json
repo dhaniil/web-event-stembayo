@@ -1,0 +1,12 @@
+{
+    "workers": [
+      {
+        "script": "public/index.php",
+        "pool": {
+          "max": 10,
+          "idle": 2
+        }
+      }
+    ]
+  }
+  
