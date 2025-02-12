@@ -18,40 +18,46 @@ class EventBannerResource extends Resource
     protected static ?string $model = EventBanner::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
-    protected static ?string $navigationGroup = 'Events';
+    protected static ?string $navigationGroup = 'Manajemen Event';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('image')
-                    ->label('Image')
+                    ->label('Banner Image')
                     ->image()
                     ->imageEditor()
                     ->imageEditorMode(2)
-                    ->nullable(),
-            ]);
+                    ->helperText('Recommended resolution: 1920x1080px (16:9)')
+                    ->required()
+                    ->maxSize(5120)
+                    ->directory('event-banners')
+                    ->columnSpanFull(),
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->contentGrid([
+                'md' => 2,
+                'lg' => 3,
+            ])
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('Image')
-
-            ])
-            ->filters([
-                //
+                    ->label('Banner')
+                    ->height(200)
+                    ->extraImgAttributes(['class' => 'object-cover w-full rounded-lg shadow-md'])
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton(),
+                Tables\Actions\DeleteAction::make()
+                    ->iconButton(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array

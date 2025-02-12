@@ -1,4 +1,5 @@
 <style>
+
     .sidebar-toggler {
         border: none;
         color: #fff;
@@ -164,34 +165,34 @@
     }
     
     .user-info-link {
-    text-decoration: none;
-    color: inherit;
+        text-decoration: none;
+        color: inherit;
     }
     .user-info-link:hover {
-    color: inherit;
+        color: inherit;
     }
 
     .admin-restricted a {
-    border: 1px solid #ffc107;
-    border-radius: 4px;
-    padding: 8px 12px;
-    margin: 4px 0;
+        border: 1px solid #ffc107;
+        border-radius: 4px;
+        padding: 8px 12px;
+        margin: 4px 0;
     }
 
     .admin-restricted a:hover {
         background-color: rgba(255, 193, 7, 0.1);
     }   
-
 </style>
 
 
-    <a class="sidebar-toggler" @click="toggleSidebar" aria-label="Toggle Sidebar">
+<div x-data="sidebarState">
+    <button type="button" class="sidebar-toggler" x-on:click="toggleSidebar" aria-label="Toggle Sidebar">
         <i class="bi bi-caret-right-fill"></i>
-    </a>
+    </button>
     <div class="d-flex">
-        <div class="sidebar" :class="{ show: isSidebarVisible }">
+        <div class="sidebar" :class="{ 'show': isSidebarVisible }" x-init="initSidebar">
             <div class="close-sidebar mt-5">
-                <button type="button" @click="toggleSidebar" aria-label="Close">
+                <button type="button" x-on:click="toggleSidebar" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -221,64 +222,98 @@
                     <a href="{{ route('register') }}" class="btn btn-outline-primary" style="width: 200px;">Register</a>
                 </div>
             @endauth
-            
 
-                <div class="menu" id="sidebar">
-                    <ul class="menu-items">
-                        <li :class="{ active: request()->routeIs('events.dashboard') }">
-                            <a href="{{ route('events.dashboard') }}">
-                                <i class="bi bi-house"></i> Dashboard
-                            </a>
-                        </li>
-                        <li :class="{ active: request()->routeIs('events.eventonly') }">
-                            <a href="{{ route('events.eventonly') }}">
-                                <i class="bi bi-calendar"></i> Agenda Acara
-                            </a>
-                        </li>
-                        <li :class="{ active: request()->routeIs('berita.index') }">
-                            <a href="{{ route('berita.index') }}">
-                                <i class="bi bi-newspaper"></i> Berita Acara
-                            </a>
-                        </li>
-                        <li :class="{ active: request()->routeIs('favourites') }">
-                            <a href="{{ route('favourites') }}">
-                                <i class="bi bi-heart"></i> Favourite
-                            </a>
-                        </li>
-                        <li :class="{ active: request()->routeIs('profile.edit') }">
-                            <a href="{{ route('profile.edit') }}">
-                                <i class="bi bi-person"></i> Profile
-                            </a>
-                        </li>
-                        
-                        <li :class="{ active: request()->routeIs('support') }">
-                            <a href="#">
-                                <i class="fas fa-headset"></i> Help & Support
-                            </a>
-                        </li>
-                        <li :class="{ active: request()->routeIs('back') }">
-                            <a href="{{ route('events.dashboard') }}">
-                                <i class="bi bi-arrow-left-short"></i> Back
-                            </a>
-                        </li>
-                        
-                        @if(Auth::check() && Auth::user()->hasAnyRole(['Sekbid', 'Admin', 'Super Admin']))
-                        <li :class="{ active: request()->routeIs('admin') }">
-                            <a href="/admin"  class="text-warning">
-                                <i class="bi bi-shield-lock"></i> Admin Panel
-                            </a>
-                        </li>
-                        @endif
-                    </ul>
-                </div>
-                <div class="logout-button">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-logout">
-                            <i class="bi bi-box-arrow-right"></i> Log Out
-                        </button>
-                    </form>
-                </div>
-           
+            <div class="menu" id="sidebar">
+                <ul class="menu-items">
+                    <li :class="{ active: request()->is('home') }">
+                        <a href="/home">
+                            <i class="bi bi-house"></i> Dashboard
+                        </a>
+                    </li>
+                    <li :class="{ active: request()->routeIs('berita.index') }">
+                        <a href="{{ route('berita.index') }}">
+                            <i class="bi bi-newspaper"></i> Berita Acara
+                        </a>
+                    </li>
+                    <li :class="{ active: request()->routeIs('favourites') }">
+                        <a href="{{ route('favourites') }}">
+                            <i class="bi bi-heart"></i> Favourite
+                        </a>
+                    </li>
+                    <li :class="{ active: request()->routeIs('profile.edit') }">
+                        <a href="{{ route('profile.edit') }}">
+                            <i class="bi bi-person"></i> Profile
+                        </a>
+                    </li>
+                    <li :class="{ active: request()->routeIs('back') }">
+                        <a href="javascript:void(0)" onclick="goBack()">
+                            <i class="bi bi-arrow-left-short"></i> Back
+                        </a>
+                    </li>
+                    
+                    @if(Auth::check() && Auth::user()->hasAnyRole(['Sekbid', 'Admin', 'Super Admin']))
+                    <li :class="{ active: request()->routeIs('admin') }">
+                        <a href="/admin"  class="text-warning">
+                            <i class="bi bi-shield-lock"></i> Admin Panel
+                        </a>
+                    </li>
+                    @endif
+                </ul>
+            </div>
+
+            <div class="logout-button">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn-logout">
+                        <i class="bi bi-box-arrow-right"></i> Log Out
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
+</div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('sidebarState', () => ({
+            isSidebarVisible: localStorage.getItem('sidebarVisible') === 'true',
+            
+            initSidebar() {
+                // Set initial state from localStorage
+                this.isSidebarVisible = localStorage.getItem('sidebarVisible') === 'true';
+
+                // Save scroll position before unload
+                window.addEventListener('beforeunload', () => {
+                    localStorage.setItem('scrollPosition', window.scrollY);
+                });
+
+                // Restore scroll position
+                if (performance.navigation.type === 1) { // If page was reloaded
+                    const scrollPosition = localStorage.getItem('scrollPosition');
+                    if (scrollPosition) {
+                        window.scrollTo(0, parseInt(scrollPosition));
+                    }
+                }
+            },
+
+            toggleSidebar() {
+                this.isSidebarVisible = !this.isSidebarVisible;
+                localStorage.setItem('sidebarVisible', this.isSidebarVisible);
+            }
+        }));
+    });
+
+    function goBack() {
+        const scrollPosition = window.scrollY;
+        localStorage.setItem('scrollPosition', scrollPosition);
+        window.history.back();
+    }
+
+    // Handle scroll position restoration after navigation
+    window.addEventListener('popstate', function() {
+        const scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition));
+        }
+    });
+</script>

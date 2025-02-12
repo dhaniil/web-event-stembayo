@@ -3,46 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
-use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $berita = Berita::with('event')->latest()->get();
-        return view('berita.index', compact('berita'));
+        $query = Berita::where('status', 'published')
+            ->when($request->has('category'), function ($q) use ($request) {
+                return $q->where('category', $request->category);
+            })
+            ->when($request->has('tanggal'), function ($q) use ($request) {
+                return $q->whereDate('published_at', $request->tanggal);
+            })
+            ->orderBy('published_at', 'desc');
+
+        $beritas = $query->get();
+        $user = Auth::user();
+
+        return view('berita.index', compact('beritas', 'user'));
     }
 
     public function show(Berita $berita)
     {
-        // Mendapatkan event lain dari penyelenggara yang sama
-        $eventTerkait = Event::where('penyelenggara', $berita->event->penyelenggara)
-                            ->where('id', '!=', $berita->event_id)
-                            ->with('berita')
-                            ->limit(5)
-                            ->get();
-    
-        return view('berita.show', compact('berita', 'eventTerkait'));
-    }
+        if ($berita->status !== 'published') {
+            abort(404);
+        }
 
-    public function create()
-    {
-        $events = Event::where('end_date', '<', now())->get(); // Hanya event yang sudah selesai
-        return view('berita.create', compact('events'));
-    }
+        $berita->incrementViews();
+        $user = Auth::user();
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'event_id' => 'required|exists:events,id',
-            'judul' => 'required|string|max:255',
-            'isi' => 'required',
-        ]);
-
-        Berita::create($request->all());
-
-        return redirect()->route('berita.index')->with('success', 'Berita event berhasil ditambahkan!');
+        return view('berita.show', compact('berita', 'user'));
     }
 }
-

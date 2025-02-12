@@ -37,48 +37,35 @@ class UserResource extends Resource
         $pengunjungRole = Role::where('name', 'Pengunjung')->first();
 
         // Get available roles based on current user's role
-        $roleOptions = [];
-        if ($user && $user->isSuperadmin()) {
-            // Super Admin can assign any role except Super Admin (use SuperAdminResource for that)
-            $roleOptions = Role::where('name', '!=', 'Super Admin')
-                ->pluck('name', 'id')
-                ->toArray();
-        } elseif ($user && $user->isAdmin()) {
-            $roleOptions = Role::whereIn('name', ['Sekbid', 'Pengunjung'])
-                ->pluck('name', 'id')
-                ->toArray();
-        } else {
-            $roleOptions = [$pengunjungRole->id => $pengunjungRole->name];
-        }
+        $roleOptions = Role::when($user?->isSuperadmin(), function ($query) {
+            return $query->where('name', '!=', 'Super Admin');
+        })
+        ->when($user?->isAdmin(), function ($query) {
+            return $query->whereIn('name', ['Sekbid', 'Pengunjung']);
+        })
+        ->pluck('name', 'id')
+        ->toArray();
 
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Name')
-                    ->required(),
-                TextInput::make('email')
-                    ->label('Email')
                     ->required()
+                    ->maxLength(255),
+                TextInput::make('email')
                     ->email()
-                    ->unique(ignorable: fn ($record) => $record),
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('password')
-                    ->label('Password')
                     ->password()
-                    ->required(fn ($component, $get, $record) => ! $record)
                     ->minLength(8)
-                    ->same('password_confirmation')
-                    ->dehydrateStateUsing(fn ($state) => filled($state) ? Hash::make($state) : null),
-                TextInput::make('password_confirmation')
-                    ->label('Confirm Password')
-                    ->password()
-                    ->required(fn ($component, $get, $record) => ! $record)
-                    ->minLength(8),
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->required(fn ($context) => $context === 'create'),
                 Select::make('roles')
                     ->label('Roles')
                     ->multiple()
+                    ->relationship('roles', 'name')
                     ->options($roleOptions)
-                    ->default([$pengunjungRole->id ?? null])
-                    ->required(),
+                    ->default([$pengunjungRole?->id]),
                 Select::make('kelas')
                     ->label('Kelas')
                     ->options([
@@ -148,27 +135,12 @@ class UserResource extends Resource
                     ->options(Role::whereNotIn('name', ['Super Admin'])->pluck('name', 'name')),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->after(function (User $record, array $data) {
-                        if (isset($data['roles'])) {
-                            $record->syncRoles($data['roles']);
-                        }
-                    })
-                    ->visible(fn (User $record): bool => !$record->hasRole('Super Admin')),
-
-                Tables\Actions\DeleteAction::make()
-                    ->visible(fn (User $record): bool => !$record->hasRole('Super Admin')),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->action(function ($records) {
-                            $records->each(function ($record) {
-                                if (!$record->hasRole('Super Admin')) {
-                                    $record->delete();
-                                }
-                            });
-                        }),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

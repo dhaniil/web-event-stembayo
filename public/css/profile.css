@@ -19,6 +19,7 @@ body{
     /* align-items: center; */
     gap: 30px;
     margin-bottom: 50px;
+    margin-top: 50px;
 }
 
 .form-control{

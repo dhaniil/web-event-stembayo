@@ -6,7 +6,7 @@
 
 @section('content')
 <section class="profile-page">
-    <div class="main-content">
+    <div class="main-content mt-16">
         <div class="container">
             <div class="row">
                 <div class="col-lg-7">
@@ -129,13 +129,28 @@
                                 @csrf
                                 <div class="input-pw">
                                     <div class="mb-3">
+                                        <label for="current_password" class="form-label">Current Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-key-fill"></i>
+                                            </span>
+                                            <input type="password" class="form-control" id="current_password" name="current_password" required>
+                                        </div>
+                                        @error('current_password')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="password" class="form-label">New Password</label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-lock"></i>
                                             </span>
-                                        <input type="password" class="form-control" id="password" name="password" required>
+                                            <input type="password" class="form-control" id="password" name="password" required>
                                         </div>
+                                        @error('password')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label for="password_confirmation" class="form-label">Confirm Password</label>
@@ -143,12 +158,12 @@
                                             <span class="input-group-text">
                                                 <i class="bi bi-shield-lock-fill"></i>
                                             </span>
-                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="btn-pw">
-                                    <button type="submit" class="btn ">Change</button>
+                                    <button type="submit" class="btn">Change</button>
                                 </div>
                             </form>
                         </div>

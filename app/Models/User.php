@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Spatie\Permission\Traits\HasRoles;
@@ -14,13 +13,16 @@ use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory;
+    use HasRoles;
+    use Notifiable;
     use LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logAll()
+            ->logOnly(['name', 'email', 'nomer', 'kelas', 'jurusan', 'profile_picture'])
+            ->setDescriptionForEvent(fn(string $eventName) => "User telah {$eventName}")
             ->useLogName('user')
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -96,6 +98,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = bcrypt($value);
+        if (str_starts_with($value, '$2y$')) {
+            $this->attributes['password'] = $value;
+        } else {
+            $this->attributes['password'] = bcrypt($value);
+        }
     }
 }

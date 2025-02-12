@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,26 +33,64 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', 'min:8', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'nomer' => ['required', 'string', 'max:13'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'kelas' => ['nullable', 'string', 'max:255'],
+            'jurusan' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+                'nomer' => $request->nomer,
+                'kelas' => $request->kelas,
+                'jurusan' => $request->jurusan,
+            ]);
 
-        // Assign default Pengunjung role
-        $pengunjungRole = Role::where('name', 'Pengunjung')->first();
-        if ($pengunjungRole) {
-            $user->assignRole($pengunjungRole);
+            // Assign default Pengunjung role
+            $pengunjungRole = Role::where('name', 'Pengunjung')->first();
+            if ($pengunjungRole) {
+                $user->assignRole($pengunjungRole);
+            }
+
+            // Log registration success
+            activity()
+                ->useLog('authentication')
+                ->causedBy($user)
+                ->event('register')
+                ->withProperties([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'kelas' => $user->kelas,
+                    'jurusan' => $user->jurusan,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ])
+                ->log('User baru berhasil registrasi');
+
+            event(new Registered($user));
+
+            Auth::login($user);
+
+            return redirect(RouteServiceProvider::HOME);
+
+        } catch (\Exception $e) {
+            // Log registration failure
+            activity()
+                ->useLog('authentication')
+                ->event('register_failed')
+                ->withProperties([
+                    'email' => $request->email,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'error' => $e->getMessage()
+                ])
+                ->log('Registrasi user gagal');
+
+            throw $e;
         }
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('events.dashboard', absolute: false));
     }
 }

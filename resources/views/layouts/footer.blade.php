@@ -143,7 +143,7 @@
         <!-- Footer Bottom -->
         <div class="footer-bottom text-center">
             <p class="mb-0">&copy; {{ date('Y') }} Stembayo Events. All rights reserved.</p>
-            <small>Developed with ❤️ by 3L Team</small>
+            <small>Developed with by </small>
         </div>
     </div>
 </footer>

@@ -3,122 +3,42 @@ body {
     background: linear-gradient(to top, #c2c3ff, #f6f6ff);
 }
 
-.container-fluid{
+.container-fluid {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     width: 100%;
 }
-.container-fluid .row{
+
+.container-fluid .row {
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
     width: 100%;
+    position: relative;
 }
 
-.left-card{
+.left-card {
     width: 400px;   
-    height: 450px;
+    min-height: 480px;
     padding: 30px;
     background-color: #f6f6ff;
-    transform: translateX(20px);
     border-radius: 30px;
     border: none;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
     opacity: 0;
     animation: fadeInLeft 800ms ease forwards;
-    z-index: 10;   
-}
-.left-card .judul{
-    text-align: center;
-    margin: 50px 0 50px 0;
-}
-
-.left-card h1{
-    font-weight: 800;
-    font-size: 45px;
-    color: #5356FF;
-    margin: 0;
+    z-index: 2;
+    position: absolute;
+    left: calc(50% - 200px);
+    transform: translateX(-35px);
 }
 
-.left-card p{
-    margin: 0;
-}
-
-form .input-group{
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.input-group .form-control{
-    margin-bottom: 10px;
-    border-radius: 5px;
-    font-size: 13px;
-}
-
-
-
-.input-group .form-control:focus,
-.form-group .form-check-input:focus{
-    box-shadow: none;
-}
-
-.input-group span{
-    background-color: #fff;
-    margin-top: -10px;
-    font-size: 13px;
-}
-
-.form-group .form-check-input{
-    border: 1px solid #5356FF;
-}
-
-.form-group .form-check-input:checked{
-    background-color: #5356FF;
-}
-
-.form-group label{
-    font-size: 13px;
-}
-
-.form-group a{
-    font-size: 13px;
-    color: #5356FF;
-    text-decoration: none;
-}
-
-.login-register p, .login-register a{
-    margin-top: 5px;
-    font-size: 13px;
-    text-decoration: none;
-}
-/* .form-group .form-check-input{
-    border-radius: 50%;
-} */
-
-.left-card button{
-    margin-top: 20px;
-    width: 100%;
-    background-color: #5356FF;
-    font-weight: 500;
-    color: #fff;
-    border-radius: 50px;
-    transition: all 200ms ease-in-out;
-}
-.left-card button:hover{
-    background-color: #4043f9;
-    color: #fff;
-    box-shadow: 6px 6px 1px rgb(64, 67, 249, 0.2);
-    scale: 1.01;
-}
-
-.right-card{
+.right-card {
     width: 400px;
-    height: 500px;
+    min-height: 500px;
     padding: 40px;
-    transform: translateX(-20px);   
     border-radius: 30px;
     background-position: center;
     background-size: cover;
@@ -128,9 +48,145 @@ form .input-group{
     opacity: 0;
     animation: fadeInRight 800ms ease forwards;
     z-index: 1;
+    position: absolute;
+    left: calc(50% - 200px);
+    transform: translateX(35px);
 }
 
-.right-card::after{
+.left-card .judul {
+    text-align: center;
+    margin: 30px 0 40px 0;
+}
+
+.left-card h1 {
+    font-weight: 800;
+    font-size: 45px;
+    color: #5356FF;
+    margin: 0;
+}
+
+.left-card p {
+    margin: 0;
+}
+
+form .input-group {
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group .form-control {
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+.input-group .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(83, 86, 255, 0.25);
+    border-color: #5356FF;
+}
+
+.input-group span {
+    background-color: #fff;
+    font-size: 14px;
+    border-color: #ced4da;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.input-group span:hover {
+    background-color: #f8f9fa;
+}
+
+.input-group .invalid-feedback {
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    font-size: 12px;
+}
+
+.form-group .form-check-input {
+    border: 1px solid #5356FF;
+    cursor: pointer;
+}
+
+.form-group .form-check-input:checked {
+    background-color: #5356FF;
+    border-color: #5356FF;
+}
+
+.form-group .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(83, 86, 255, 0.25);
+}
+
+.form-group label {
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.form-group a {
+    font-size: 13px;
+    color: #5356FF;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.form-group a:hover {
+    color: #4043f9;
+    text-decoration: underline;
+}
+
+.login-register {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.login-register p, .login-register a {
+    margin-top: 5px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.login-register a {
+    color: #5356FF;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.login-register a:hover {
+    color: #4043f9;
+    text-decoration: underline;
+}
+
+.left-card button {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #5356FF;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 50px;
+    padding: 12px;
+    transition: all 200ms ease-in-out;
+    position: relative;
+}
+
+.left-card button:hover {
+    background-color: #4043f9;
+    color: #fff;
+    box-shadow: 6px 6px 1px rgb(64, 67, 249, 0.2);
+    scale: 1.01;
+}
+
+.left-card button:disabled {
+    background-color: #b4b5ff;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.right-card::after {
     content: "";
     position: absolute;    
     border-radius: 30px;
@@ -145,68 +201,137 @@ form .input-group{
     );
 }
 
-.right-card .logo{
-    /* position: absolute; */
+.right-card .logo {
     text-align: center;
     padding-top: 10px;
     z-index: 2;
+    position: relative;
 }
 
-.right-card h3{
-   font-weight: 700;
-   color: #fff;
-   margin-top: 10px;
+.right-card h3 {
+    font-weight: 700;
+    color: #fff;
+    margin-top: 10px;
+    position: relative;
+    z-index: 2;
 }
  
-.right-card .logo img{
+.right-card .logo img {
     width: 100px;
     height: 100px;
+    position: relative;
+    z-index: 2;
 }
 
-.right-card .img-card{
+.right-card .img-card {
     justify-content: center;
     text-align: center;
     width: 100%;
+    position: relative;
+    z-index: 2;
 }
 
-.right-card .img-card img{
+.right-card .img-card img {
     justify-content: center;
     text-align: center;
     width: 250px;
+}
 
+.alert {
+    font-size: 13px;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 15px 0;
+    border: none;
+}
+
+.alert-danger {
+    background-color: #ffe5e5;
+    color: #ff3333;
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 
 @keyframes fadeInLeft {
     0% {
         opacity: 0;
-        transform: translateX(-20px);
+        transform: translateX(-135px);
     }
     100% {
         opacity: 1;
-        transform: translateX(20px); 
+        transform: translateX(-35px); 
     }
 }
 
 @keyframes fadeInRight {
     0% {
         opacity: 0;
-        transform: translateX(20px);
+        transform: translateX(135px);
     }
     100% {
         opacity: 1;
-        transform: translateX(-20px); 
+        transform: translateX(35px); 
     }
 }
 
+[v-cloak] {
+    display: none;
+}
+
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 @media (max-width: 768px) {
+    .container-fluid .row {
+        padding: 0 20px;
+    }
     .right-card {
         display: none;
     }
-    .left-card{
+    .left-card {
+        position: relative;
         transform: none;
-        animation: none;
-
+        left: 0;
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        animation: fadeIn 800ms ease forwards;
+        min-height: auto;
+        padding-bottom: 40px;
+    }
+    .login-register {
+        padding-bottom: 0;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 }
 
@@ -214,10 +339,30 @@ form .input-group{
     .right-card {
         display: none;
     }
-    .left-card{
+    .left-card {
+        position: relative;
         transform: none;
-        animation: none;
+        left: 0;
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        animation: fadeIn 800ms ease forwards;
         opacity: 1;
+        min-height: auto;
+        padding-bottom: 40px;
+    }
+    .login-register {
+        padding-bottom: 0;
+    }
+}
 
+@media (max-height: 700px) {
+    .left-card {
+        min-height: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    .left-card .judul {
+        margin: 20px 0 30px 0;
     }
 }

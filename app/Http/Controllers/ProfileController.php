@@ -2,158 +2,147 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
-
-
-        // Menambahkan metode untuk mengedit profil pengguna yang login
-        public function updateProfile(Request $request)
-        {
-            $user = auth()->user();
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email,' . $user->id,
-                'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-                'kelas' => 'required|integer|between:10,13',
-                'jurusan' => 'required|string|max:255',
-                'nomer' => 'required|string|max:15',
-            ]);
-        
-            // Kalau ada file PP baru maka diganti
-            if ($request->hasFile('profile_picture')) {
-                $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-                $validatedData['profile_picture'] = $imagePath;
-            }
-        
-            // Update data pengguna
-            $user->name = $validatedData['name'];
-            $user->email = $validatedData['email'];
-            $user->kelas = $validatedData['kelas'];
-            $user->jurusan = $validatedData['jurusan'];
-            $user->nomer = $validatedData['nomer'];
-        
-            // Kalau ada PP baru disimpan 
-            if (isset($validatedData['profile_picture'])) {
-                $user->profile_picture = $validatedData['profile_picture'];
-            }
-        
-            $user->save();
-        
-            \Log::info('User profile updated:', $user->toArray());
-        
-            return redirect()->route('profile.edit')->with('success', 'Profile updated successfully');
-        }
-        
-        
-        
-        public function updatePassword(Request $request)
-        {
-            $user = auth()->user();
-            $validatedData = $request->validate([
-                'password' => 'required|min:6|confirmed',
-            ]);
-        
-            $user->update([
-                'password' => bcrypt($validatedData['password']),
-            ]);
-        
-            \Log::info('User password updated:', ['user_id' => $user->id]);
-        
-            return redirect()->route('profile.edit')->with('success', 'Password updated successfully');
-        }
-        
-        
-        public function editProfile()
+    /**
+     * Menampilkan form edit profile
+     */
+    public function editProfile()
     {
-        $user = auth()->user();
-        return view('profile.edit', compact('user'));
+        return view('profile.edit', [
+            'user' => Auth::user()
+        ]);
     }
 
     /**
-     * Update the user's profile information.
+     * Update data profile user
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function updateProfile(Request $request)
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'nomer' => ['nullable', 'string', 'max:15'],
+            'kelas' => ['required', 'numeric', 'min:10', 'max:13'],
+            'jurusan' => ['required', 'string', 'max:255']
         ]);
 
-        $user = $request->user();
+        try {
+            foreach ($validated as $key => $value) {
+                $user->$key = $value;
+            }
+            $user->save();
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+            return redirect()->back()
+                        ->with('success', 'Data profile Anda berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                        ->with('error', 'Maaf, terjadi kesalahan saat memperbarui profile. Silakan coba lagi.');
+        }
     }
 
     /**
-     * Update the user's profile picture.
+     * Update foto profile
      */
     public function updateProfilePicture(Request $request)
     {
         $request->validate([
-            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_picture' => ['required', 'image', 'max:2048']
         ]);
 
-        $user = auth()->user();
+        try {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
 
-        // Delete old profile picture if exists
-        if ($user->profile_picture) {
-            Storage::disk('public')->delete($user->profile_picture);
+            if ($user->profile_picture) {
+                Storage::disk('public')->delete($user->profile_picture);
+            }
+
+            $path = $request->file('profile_picture')->store('profile-pictures', 'public');
+            
+            $user->profile_picture = $path;
+            $user->save();
+
+            return redirect()->back()
+                        ->with('success', 'Foto profile Anda berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                        ->with('error', 'Maaf, terjadi kesalahan saat memperbarui foto profile. Silakan coba lagi.');
         }
-
-        // Store new profile picture in public storage
-        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-
-        // Update user profile picture path
-        $user->profile_picture = $path;
-        $user->save();
-
-        return redirect()->route('profile.edit')->with('success', 'Profile picture updated successfully');
     }
 
     /**
-     * Delete the user's profile picture.
+     * Hapus foto profile
      */
     public function deleteProfilePicture()
     {
-        $user = auth()->user();
+        try {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
 
-        // Delete profile picture if exists
-        if ($user->profile_picture) {
-            Storage::delete($user->profile_picture);
-            $user->profile_picture = null;
-            $user->save();
+            if ($user->profile_picture) {
+                Storage::disk('public')->delete($user->profile_picture);
+                
+                $user->profile_picture = null;
+                $user->save();
+            }
+
+            return redirect()->back()
+                        ->with('success', 'Foto profile Anda berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                        ->with('error', 'Maaf, terjadi kesalahan saat menghapus foto profile. Silakan coba lagi.');
         }
+    }
 
-        return redirect()->route('profile.edit')->with('success', 'Profile picture deleted successfully');
+    /**
+     * Update password user
+     */
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => ['required'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        try {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            
+            // Verify current password
+            if (!Hash::check($validated['current_password'], $user->password)) {
+                return redirect()->back()
+                            ->withErrors(['current_password' => 'Password saat ini tidak sesuai'])
+                            ->withInput();
+            }
+
+            // Update password - will be encrypted by setPasswordAttribute mutator
+            $user->password = $validated['password'];
+            $user->save();
+
+            return redirect()->back()
+                        ->with('success', 'Password Anda berhasil diperbarui. Gunakan password baru untuk login selanjutnya.');
+
+        } catch (\Exception $e) {
+            Log::error('Password update failed', [
+                'user_id' => $user->id ?? null,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->back()
+                        ->with('error', 'Maaf, terjadi kesalahan saat memperbarui password. Silakan coba lagi.');
+        }
     }
 }

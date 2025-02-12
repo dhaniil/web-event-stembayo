@@ -7,7 +7,17 @@ use Carbon\Carbon;
 
 class EventObserver
 {
+    public function creating(Event $event)
+    {
+        $this->updateEventStatus($event);
+    }
+
     public function updating(Event $event)
+    {
+        $this->updateEventStatus($event);
+    }
+
+    private function updateEventStatus(Event $event)
     {
         $now = Carbon::now();
         $startDateTime = Carbon::parse($event->start_date . ' ' . $event->jam_mulai);
@@ -15,7 +25,7 @@ class EventObserver
 
         if ($now->gt($endDateTime)) {
             $event->status = 'selesai';
-        } elseif ($now->between($startDateTime, $endDateTime)) {
+        } elseif ($now->gte($startDateTime) && $now->lte($endDateTime)) {
             $event->status = 'sedang berlangsung';
         } else {
             $event->status = 'belum mulai';

@@ -22,14 +22,10 @@ class EditUser extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        // Only update password if provided
-        if (isset($data['password']) && filled($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
+        // Update user data
+        if (isset($data['password']) && !filled($data['password'])) {
             unset($data['password']);
         }
-
-        // Update user data
         $record->update($data);
 
         // Sync roles

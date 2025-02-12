@@ -14,14 +14,29 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\TextInput;
+use App\Policies\SuperAdminPolicy;
+use Illuminate\Support\Facades\Auth;
 
 class SuperAdminResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static ?string $navigationLabel = 'Super Admin';
     protected static ?string $modelLabel = 'Super Admin';
+    protected static ?string $navigationLabel = 'Super Admin';
+    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static ?string $navigationGroup = 'Manajemen User';
+    protected static ?int $navigationSort = 0;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getPolicy(): string
+    {
+        return SuperAdminPolicy::class;
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        return $user && $user->hasRole('Super Admin');
+    }
 
     public static function form(Form $form): Form
     {
@@ -39,16 +54,15 @@ class SuperAdminResource extends Resource
                     ->minLength(8)
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn ($context) => $context === 'create'),
-
-
-                    Forms\Components\Select::make('roles')
+                Forms\Components\Select::make('roles')
                     ->label('Role')
                     ->multiple()
                     ->relationship('roles', 'name')
-                    ->options(Role::where('name', 'Super Admin')->pluck('name', 'id'))  // Changed: using id as value
+                    ->options(Role::where('name', 'Super Admin')->pluck('name', 'id'))
                     ->default(function () {
-                        return Role::where('name', 'Super Admin')->first()?->id;  // Changed: returning role ID
-                    }),
+                        return Role::where('name', 'Super Admin')->first()?->id;
+                    })
+                    ->required(),
             ]);
     }
 
@@ -57,7 +71,6 @@ class SuperAdminResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email')
@@ -69,6 +82,7 @@ class SuperAdminResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -95,7 +109,7 @@ class SuperAdminResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent ::getEloquentQuery()->whereHas('roles', function ($query) {
+        return parent::getEloquentQuery()->whereHas('roles', function ($query) {
             $query->where('name', 'Super Admin');
         });
     }

@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ActivityLogPolicy
+class SuperAdminPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +14,15 @@ class ActivityLogPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['Super Admin', 'Admin']);
+        return $user->hasRole('Super Admin');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ActivityLog $activityLog): bool
+    public function view(User $user, User $model): bool
     {
-        return $user->hasAnyRole(['Super Admin', 'Admin']);
+        return $user->hasRole('Super Admin');
     }
 
     /**
@@ -31,22 +30,22 @@ class ActivityLogPolicy
      */
     public function create(User $user): bool
     {
-        return false; // Activity logs cannot be created manually
+        return $user->hasRole('Super Admin');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ActivityLog $activityLog): bool
+    public function update(User $user, User $model): bool
     {
-        return false; // Activity logs cannot be updated
+        return $user->hasRole('Super Admin');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ActivityLog $activityLog): bool
+    public function delete(User $user, User $model): bool
     {
-        return false; // Activity logs cannot be deleted
+        return $user->hasRole('Super Admin');
     }
 }

@@ -52,6 +52,6 @@ class SendEventNotifications extends Command
         };
 
         // Broadcast event untuk notifikasi browser
-        broadcast(new EventNotification($message));
+        broadcast(new EventNotification(['message' => $message]));
     }
 }

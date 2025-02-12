@@ -7,9 +7,7 @@
 
 @section('content')
 <section class="event">
-    <div class="main-content">
-        <h2>MY FAVORITES</h2>
-    
+    <div class="main-content mt-16">
         <div class="filter-container mb-4">
             <form action="{{ route('favourites') }}" method="GET" class="d-flex align-items-center">
                 <select name="kategori" class="form-control me-2 filter">
@@ -34,7 +32,7 @@
         <div class="card-container">
             <div class="row">
                 @if($favourites->isEmpty())
-                    <p class="text-center">Belum ada event yang ditandai</p>
+                    <p class="text-center">Silahkan favoritkan event yang ada</p>
                 @else
                     @foreach($favourites as $favourite)
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">

@@ -4,84 +4,160 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BeritaResource\Pages;
 use App\Models\Berita;
-use App\Models\BeritaGallery;
 use Filament\Forms;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Repeater;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\Select;
-use App\Models\Event;
-
 
 class BeritaResource extends Resource
 {
     protected static ?string $model = Berita::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-    protected static ?int $navigationSort = 2;
-    protected static ?string $modelLabel = 'Berita';
-    protected static ?string $pluralModelLabel = 'Berita';
-    
-    public static function form(Forms\Form $form): Forms\Form
+
+    protected static ?string $navigationGroup = 'Content';
+
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('judul')
-                    ->label('Judul Berita')
-                    ->required()
-                    ->maxLength(255),
-
-                RichEditor::make('isi')
-                    ->label('Isi Berita')
-                    ->required(),
-
-                Repeater::make('galleries')
-                    ->label('Gallery Event')
-                    ->relationship('galleries') 
+                Forms\Components\Section::make('Basic Information')
                     ->schema([
-                        FileUpload::make('image_path')
-                            ->label('Upload Gambar')
+                        Forms\Components\TextInput::make('title')
+                            ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'create') {
+                                    $set('slug', Str::slug($state));
+                                }
+                            }),
+
+                        Forms\Components\TextInput::make('slug')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(Berita::class, 'slug', ignoreRecord: true),
+
+                        FileUpload::make('image')
                             ->image()
-                            ->directory('berita-gallery')   
-                            ->required(),
-                    ])
-                    ->collapsible()
-                    ->columns(2),
+                            ->imageEditor()
+                            ->imageEditorMode(2)
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ])
+                            ->imageEditorViewportWidth('1920')
+                            ->imagePreviewHeight(250)
+                            ->helperText('Recommended resolution: 1920x1080px (16:9)')
+                            ->directory('berita')
+                            ->maxSize(5120) // 5MB
+                            ->columnSpanFull(),
+
+                        Forms\Components\Select::make('category')
+                            ->required()
+                            ->options([
+                                'umum' => 'Umum',
+                                'teknologi' => 'Teknologi',
+                                'budaya' => 'Budaya',
+                                'pendidikan' => 'Pendidikan',
+                                'kesehatan' => 'Kesehatan',
+                            ]),
+
+                        Forms\Components\Select::make('status')
+                            ->required()
+                            ->options([
+                                'draft' => 'Draft',
+                                'published' => 'Published',
+                            ])
+                            ->default('draft'),
+
+                        Forms\Components\DateTimePicker::make('published_at')
+                            ->nullable(),
+
+                        Forms\Components\Select::make('author_id')
+                            ->relationship('author', 'name')
+                            ->required()
+                            ->searchable()
+                            ->preload(),
+                    ])->columns(2),
+
+                Forms\Components\Section::make('Content')
+                    ->schema([
+                        Forms\Components\Textarea::make('excerpt')
+                            ->nullable()
+                            ->maxLength(500)
+                            ->columnSpanFull(),
+
+                        RichEditor::make('content')
+                            ->required()
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 
-    public static function table(Tables\Table $table): Tables\Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('judul')->sortable()->searchable(),
+                ImageColumn::make('image')
+                    ->circular(),
 
-            
-                ImageColumn::make('galleries.image_path')->label('Gallery')->limit(3),
-                TextColumn::make('event.name')->label('Event Terkait'),
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('category')
+                    ->sortable()
+                    ->badge(),
+
+                TextColumn::make('status')
+                    ->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'published' => 'success',
+                        'draft' => 'gray',
+                    }),
+
+                TextColumn::make('published_at')
+                    ->dateTime()
+                    ->sortable(),
+
+                TextColumn::make('author.name')
+                    ->sortable(),
+
+                TextColumn::make('views')
+                    ->sortable()
+                    ->alignRight(),
             ])
             ->filters([
-                // Hanya menampilkan berita dari event yang sudah selesai
-                Tables\Filters\Filter::make('Hanya Event Selesai')
-                    ->query(fn (Builder $query) => $query->whereHas('event', function ($query) {
-                        $query->where('status', 'selesai');
-                    })),
+                Tables\Filters\SelectFilter::make('category'),
+                Tables\Filters\SelectFilter::make('status'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array

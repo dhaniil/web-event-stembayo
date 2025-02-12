@@ -6,12 +6,68 @@
     @include('assets/asset')
     <link rel="stylesheet" href="{{ asset('css/login-page.css') }}"> 
     <title>Login</title>
-    <!-- Tambahkan Vue.js CDN -->
+    <!-- Vue.js dan animasi -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.5s;
+        }
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
+        }
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+        .loading:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .input-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+            border-color: #80bdff;
+        }
+        .alert {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        @media (max-width: 768px) {
+            .right-card {
+                display: none;
+            }
+            .left-card {
+                width: 100% !important;
+                padding: 2rem !important;
+            }
+        }
+    </style>
 </head>
 <body>
-    <section class="login-form">
-        <div id="app" class="container-fluid">
+    <section class="login-form animate__animated animate__fadeIn">
+        <div id="app" class="container-fluid" v-cloak>
             <div class="row">
                 <div class="card left-card col-lg-6">
                     <div class="judul">
@@ -25,7 +81,18 @@
                             <span class="input-group-text">
                                 <i class="bi bi-envelope"></i>
                             </span>
-                            <input type="email" name="email" placeholder="Email" class="form-control" required>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                v-model="email"
+                                placeholder="Email" 
+                                class="form-control" 
+                                :class="{'is-invalid': emailError}"
+                                @input="validateEmail"
+                                required>
+                            <div class="invalid-feedback" v-if="emailError">
+                                @{{ emailError }}
+                            </div>
                         </div>
                         <div class="input-group">
                             <span class="input-group-text">
@@ -47,10 +114,12 @@
                                 <input type="checkbox" name="remember" class="form-check-input" id="remember">
                                 <label class="form-check-label" for="remember">Remember me</label>
                             </div>
-                            <a href="#" class="forgot-password">Forgot Password?</a>
+                            <!-- <a href="#" class="forgot-password">Forgot Password?</a> -->
                         </div>
                         <div class="login-register">
-                            <button type="submit" class="btn">Log In</button>
+                            <button type="submit" class="btn" :class="{'loading': isLoading}" :disabled="isLoading || !isFormValid">
+                                @{{ isLoading ? 'Loading...' : 'Log In' }}
+                            </button>
                             <p class="text-center">Don't have an account yet? <br> <a href="{{ route('register') }}">Register</a> now!</p>  
                         </div>
                     </form>
@@ -68,8 +137,47 @@
         </div>
     </section>
 
-    <script type="module" src="{{ asset('') }}">
-
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                email: '',
+                password: '',
+                passwordFieldType: 'password',
+                isLoading: false,
+                emailError: '',
+                passwordIcon: 'bi bi-eye-slash'
+            },
+            computed: {
+                isFormValid() {
+                    return this.email && this.password && !this.emailError;
+                }
+            },
+            methods: {
+                togglePasswordVisibility() {
+                    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+                    this.passwordIcon = this.passwordFieldType === 'password' ? 'bi bi-eye-slash' : 'bi bi-eye';
+                },
+                validateEmail() {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!this.email) {
+                        this.emailError = 'Email is required';
+                    } else if (!emailRegex.test(this.email)) {
+                        this.emailError = 'Please enter a valid email address';
+                    } else {
+                        this.emailError = '';
+                    }
+                }
+            },
+            mounted() {
+                const form = document.querySelector('form');
+                form.addEventListener('submit', () => {
+                    if (this.isFormValid) {
+                        this.isLoading = true;
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

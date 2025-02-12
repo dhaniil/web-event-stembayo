@@ -18,7 +18,7 @@ class CreateUser extends CreateRecord
         $record = static::getModel()::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
             'kelas' => $data['kelas'] ?? null,
             'jurusan' => $data['jurusan'] ?? null,
         ]);

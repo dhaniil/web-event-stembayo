@@ -150,12 +150,6 @@ class EventController extends Controller
             $user = Auth::user();
             $event->load(['ulasan.user', 'favouritedBy']);
             
-            // Debug
-            \Log::info('Loading event:', [
-                'id' => $event->id,
-                'name' => $event->name,
-                'image' => $event->image
-            ]);
 
             $startDate = Carbon::parse($event->start_date)->locale('id')->isoFormat('dddd, D MMMM YYYY');
             $endDate = Carbon::parse($event->end_date)->locale('id')->isoFormat('dddd, D MMMM YYYY');
@@ -171,7 +165,6 @@ class EventController extends Controller
                 'user'
             ));
         } catch (\Exception $e) {
-            \Log::error('Error showing event: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menampilkan event.');
         }
     }

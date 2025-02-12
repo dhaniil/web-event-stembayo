@@ -1,24 +1,10 @@
 @extends('extend.main')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stembayo Events</title>
-    @include('assets/asset')
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
+@endsection
 
-    @vite('resources/css/app.css')
-
-    @section('styles')
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
-    @endsection
-
-</head>
-<style>
-    /* css di public/css/dashboard.css */
-</style>
-<body>
+@section('content')
     <!-- Navbar -->
     <!-- <nav class="navbar sticky-top navbar-expand-lg ">
         <div class="container p-4">
@@ -99,7 +85,6 @@
 
     
       
-    @include('layouts.sidebar')
 
     <main class="main-content bg-transparent p-0">
         <!-- Event -->
@@ -198,7 +183,8 @@
     </main>     
 
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>  -->
-    <script src="{{ asset('js/filament/dashboard/move.js') }}"></script>
-</body>
-</html>
+@endsection
+
+@section('scripts')
+<script src="{{ asset('js/filament/dashboard/move.js') }}"></script>
+@endsection

@@ -20,13 +20,7 @@ class UlasanController extends Controller
 
         DB::beginTransaction();
         try {
-            // // Cetak data sebelum menyimpan
-            // \Log::info('Data yang akan disimpan:', [
-            //     'user_id' => Auth::id(),
-            //     'event_id' => $request->event_id,
-            //     'rating' => $request->rating,
-            //     'komentar' => $request->komentar
-            // ]);
+
 
             $ulasan = new Ulasan();
             $ulasan->user_id = Auth::id();
@@ -39,8 +33,7 @@ class UlasanController extends Controller
             return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollback();
-            \Log::error('Error saat menyimpan ulasan: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal menambahkan ulasan');
+
         }
     }
 }

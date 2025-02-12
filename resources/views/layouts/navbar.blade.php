@@ -137,10 +137,8 @@
         }
     }
     </style>
-    <body>
-        
-        <nav class="navbar navbar-expand-lg ">
-            <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg">
+            <!-- <div class="container-fluid"> -->
             <a class="navbar-brand" href="{{ route('events.dashboard') }}">
                 <img src="https://i.ibb.co.com/P5Lyxyc/stmby.png" alt="Logo" width="80" height="80" class="d-inline-block align-middle">
                 EVENT STEMBAYO
@@ -151,12 +149,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <div class="navbar-right ">
-                            @if($user)
+                            @auth
                             <div class="search-container ">
                                 <input type="text" class="search-bar" placeholder="Search">
                                 <button class="search-btn"><i class="bi bi-search"></i></button>
                             </div>
-                            @else
+                            @endauth
+                            @guest
                             <div class="search-container ">
                                 <input type="text" class="search-bar" placeholder="Search">
                                 <button class="search-btn"><i class="bi bi-search"></i></button>
@@ -165,13 +164,17 @@
                                 <a href="{{ route('login') }}" class="login-btn">Log In</a>
                                 <a href="{{ route('register') }}" class="signup-btn">Sign Up</a>
                             </div>
-                            @endif
+                            @endguest
                         </div>
                     </ul>
                 </div>
             </div>
-        </nav>
-        <script>
+    </nav>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script>
             document.addEventListener('click', function(e) {
                   const navbar = document.querySelector('.navbar-collapse');
                   const navbarToggler = document.querySelector('.navbar-toggler');
