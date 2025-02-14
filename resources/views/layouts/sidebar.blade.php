@@ -14,7 +14,7 @@
         cursor: pointer;
         box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.2);
         transition: all 200ms ease;
-        z-index: 100;
+        z-index: 40;
     }
 
     .sidebar-toggler:hover {
@@ -32,7 +32,7 @@
         left: 0;
         border-right: 1px solid #e0e0e0;
         box-shadow: 5px 0 5px rgba(0, 0, 0, 0.1);
-        z-index: 999;
+        z-index: 40;
         transform: translateX(-101%);
         transition: transform 0.3s ease;
     }
@@ -190,7 +190,18 @@
         <i class="bi bi-caret-right-fill"></i>
     </button>
     <div class="d-flex">
-        <div class="sidebar" :class="{ 'show': isSidebarVisible }" x-init="initSidebar">
+        <div class="sidebar" :class="{ 'show': isSidebarVisible }" x-init="$nextTick(() => { 
+            isSidebarVisible = localStorage.getItem('sidebarVisible') === 'true';
+            window.addEventListener('beforeunload', () => {
+                localStorage.setItem('scrollPosition', window.scrollY);
+            });
+            if (performance.navigation.type === 1) {
+                const scrollPosition = localStorage.getItem('scrollPosition');
+                if (scrollPosition) {
+                    window.scrollTo(0, parseInt(scrollPosition));
+                }
+            }
+        })">
             <div class="close-sidebar mt-5">
                 <button type="button" x-on:click="toggleSidebar" aria-label="Close">
                     <i class="fas fa-times"></i>
@@ -278,24 +289,6 @@
         Alpine.data('sidebarState', () => ({
             isSidebarVisible: localStorage.getItem('sidebarVisible') === 'true',
             
-            initSidebar() {
-                // Set initial state from localStorage
-                this.isSidebarVisible = localStorage.getItem('sidebarVisible') === 'true';
-
-                // Save scroll position before unload
-                window.addEventListener('beforeunload', () => {
-                    localStorage.setItem('scrollPosition', window.scrollY);
-                });
-
-                // Restore scroll position
-                if (performance.navigation.type === 1) { // If page was reloaded
-                    const scrollPosition = localStorage.getItem('scrollPosition');
-                    if (scrollPosition) {
-                        window.scrollTo(0, parseInt(scrollPosition));
-                    }
-                }
-            },
-
             toggleSidebar() {
                 this.isSidebarVisible = !this.isSidebarVisible;
                 localStorage.setItem('sidebarVisible', this.isSidebarVisible);

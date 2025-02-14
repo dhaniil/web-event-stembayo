@@ -28,11 +28,11 @@ body {
     border: none;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
     opacity: 0;
-    animation: fadeInLeft 800ms ease forwards;
+    animation: fadeInRight 800ms ease forwards;
     z-index: 2;
     position: absolute;
-    left: calc(50% - 200px);
-    transform: translateX(-35px);
+    right: calc(50% - 200px);
+    transform: translateX(100px);
 }
 
 .right-card {
@@ -40,17 +40,15 @@ body {
     min-height: 500px;
     padding: 40px;
     border-radius: 30px;
-    background-position: center;
     background-size: cover;
     background-image: url(https://i.ibb.co/LhwSwy5/SOC02116.jpg);
     border: none;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
     opacity: 0;
-    animation: fadeInRight 800ms ease forwards;
+    animation: fadeInLeft 500ms ease forwards;
     z-index: 1;
     position: absolute;
-    left: calc(50% - 200px);
-    transform: translateX(35px);
+    transform: translateX(-100px);
 }
 
 .left-card .judul {
@@ -187,8 +185,7 @@ form .input-group {
 }
 
 .right-card::after {
-    content: "";
-    position: absolute;    
+    content: "";   
     border-radius: 30px;
     bottom: 0;
     left: 0;
@@ -223,19 +220,9 @@ form .input-group {
     z-index: 2;
 }
 
-.right-card .img-card {
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    position: relative;
-    z-index: 2;
-}
 
-.right-card .img-card img {
-    justify-content: center;
-    text-align: center;
-    width: 250px;
-}
+
+
 
 .alert {
     font-size: 13px;
@@ -261,22 +248,22 @@ form .input-group {
 @keyframes fadeInLeft {
     0% {
         opacity: 0;
-        transform: translateX(-135px);
+        transform: translateX(-200px);
     }
     100% {
         opacity: 1;
-        transform: translateX(-35px); 
+        transform: translateX(-100px); 
     }
 }
 
 @keyframes fadeInRight {
     0% {
         opacity: 0;
-        transform: translateX(135px);
+        transform: translateX(200px);
     }
     100% {
         opacity: 1;
-        transform: translateX(35px); 
+        transform: translateX(100px); 
     }
 }
 
@@ -318,11 +305,12 @@ form .input-group {
     .left-card {
         position: relative;
         transform: none;
-        left: 0;
+        right: 0;
         width: 100%;
         max-width: 400px;
         margin: auto;
         animation: fadeIn 800ms ease forwards;
+        opacity: 1;
         min-height: auto;
         padding-bottom: 40px;
     }
@@ -335,26 +323,6 @@ form .input-group {
     }
 }
 
-@media (max-width: 992px) {
-    .right-card {
-        display: none;
-    }
-    .left-card {
-        position: relative;
-        transform: none;
-        left: 0;
-        width: 100%;
-        max-width: 400px;
-        margin: auto;
-        animation: fadeIn 800ms ease forwards;
-        opacity: 1;
-        min-height: auto;
-        padding-bottom: 40px;
-    }
-    .login-register {
-        padding-bottom: 0;
-    }
-}
 
 @media (max-height: 700px) {
     .left-card {

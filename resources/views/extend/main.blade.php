@@ -27,13 +27,14 @@
     @include('layouts.footer')
 
     <!-- Scripts -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('sidebarState', () => ({
-                isSidebarVisible: false,
+                isSidebarVisible: localStorage.getItem('sidebarVisible') === 'true',
                 toggleSidebar() {
                     this.isSidebarVisible = !this.isSidebarVisible;
+                    localStorage.setItem('sidebarVisible', this.isSidebarVisible);
                 }
             }))
         })
@@ -42,7 +43,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
     
-    <!-- Flash Message Notifications -->
     @if(session('success'))
         <script>
             Swal.fire({

@@ -24,6 +24,8 @@ class BeritaResource extends Resource
     protected static ?string $navigationGroup = 'Content';
 
     protected static ?string $recordTitleAttribute = 'title';
+    protected static ?string $label = 'Berita';
+    protected static ?string $labelPlural = 'Berita';
 
     public static function form(Form $form): Form
     {

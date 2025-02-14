@@ -21,6 +21,8 @@ class SuperAdminResource extends Resource
 {
     protected static ?string $model = User::class;
     protected static ?string $modelLabel = 'Super Admin';
+    protected static ?string $modelLabelPlural = 'Super Admin';
+    
     protected static ?string $navigationLabel = 'Super Admin';
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
     protected static ?string $navigationGroup = 'Manajemen User';
@@ -56,7 +58,6 @@ class SuperAdminResource extends Resource
                     ->required(fn ($context) => $context === 'create'),
                 Forms\Components\Select::make('roles')
                     ->label('Role')
-                    ->multiple()
                     ->relationship('roles', 'name')
                     ->options(Role::where('name', 'Super Admin')->pluck('name', 'id'))
                     ->default(function () {
@@ -75,7 +76,13 @@ class SuperAdminResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->state(function ($record) {
+                        $protectedEmails = config('filament.protected_emails', []);
+                        return in_array($record->email, array_filter($protectedEmails)) 
+                            ? 'Pembuat website' 
+                            : $record->email;
+                    }),
             ])
             ->filters([
                 //
@@ -109,8 +116,13 @@ class SuperAdminResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->whereHas('roles', function ($query) {
-            $query->where('name', 'Super Admin');
-        });
+        return parent::getEloquentQuery()
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'Super Admin');
+            })
+            ->where(function ($query) {
+                $protectedEmails = config('filament.protected_emails', []);
+                $query->whereNotIn('email', $protectedEmails);
+            });
     }
 }

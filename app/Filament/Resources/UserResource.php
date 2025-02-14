@@ -57,12 +57,12 @@ class UserResource extends Resource
                     ->maxLength(255),
                 TextInput::make('password')
                     ->password()
+                    ->revealable()
                     ->minLength(8)
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn ($context) => $context === 'create'),
                 Select::make('roles')
                     ->label('Roles')
-                    ->multiple()
                     ->relationship('roles', 'name')
                     ->options($roleOptions)
                     ->default([$pengunjungRole?->id]),

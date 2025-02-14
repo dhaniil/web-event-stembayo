@@ -97,7 +97,6 @@
 <footer class="footer">
     <div class="container">
         <div class="row">
-            <!-- About Section -->
             <div class="col-md-4 mb-4">
                 <h5>Tentang Stembayo Events</h5>
                 <p class="mb-4">Platform event resmi SMKN 2 Depok Sleman yang menampilkan berbagai event </p>
@@ -108,7 +107,6 @@
                 </div>
             </div>
 
-            <!-- Quick Links -->
             <div class="col-md-2 mb-4">
                 <h5>Menu Utama</h5>
                 <ul class="footer-links">
@@ -119,7 +117,6 @@
                 </ul>
             </div>
 
-            <!-- Multisite Links -->
             <div class="col-md-3 mb-4">
                 <h5>Situs Terkait</h5>
                 <ul class="footer-links">
@@ -129,7 +126,7 @@
                 </ul>
             </div>
 
-            <!-- Contact Info -->
+
             <div class="col-md-3 mb-4">
                 <h5>Hubungi Kami</h5>
                 <div class="contact-info">
@@ -140,10 +137,9 @@
             </div>
         </div>
 
-        <!-- Footer Bottom -->
         <div class="footer-bottom text-center">
             <p class="mb-0">&copy; {{ date('Y') }} Stembayo Events. All rights reserved.</p>
-            <small>Developed with by </small>
+            <small><i class="bi bi-code-slash"></i> Developed by LaLimx </small>
         </div>
     </div>
 </footer>

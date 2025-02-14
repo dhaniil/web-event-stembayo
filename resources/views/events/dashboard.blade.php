@@ -36,7 +36,7 @@
     <div class="gambar-awal">
   <div class="carousel-inner">
     <div class="carousel-item active">
-    <img src="https://i.ibb.co/LhwSwy5/SOC02116.jpg" class="d-block w-full bg-grey-500" style="width: 100%" alt="..." draggable="false">
+    <img src="{{ asset('storage/assets/SOC02116.jpg') }}" class="d-block w-full bg-grey-500" style="width: 100%" alt="..." draggable="false">
     <div class="carousel-caption text-center"></div>
       <div id="caption" class="carousel-caption text-center">
         <h1 class="judul font-extrabold text-1xl sm:text-4xl md:text-6xl lg:text-5xl text-center">SELAMAT DATANG</h1>
@@ -101,7 +101,7 @@
                                         </div>
                                         <div class="option col-12 col-md-auto d-flex justify-content-center align-items-center flex-wrap">
                                         <div class="filter-container mb-4">
-                                                <form action="{{ route('events.eventonly') }}" method="GET" class="d-flex align-items-center">
+                                                <form action="{{ route('events.dashboard') }}" method="GET" class="d-flex align-items-center">
                                                     <input type="text" name="tanggal" id="datepicker" class="form-control me-2 tanggal" placeholder="Pilih Tanggal" readonly>
                                             
                                                     <!-- Ikon Kalender -->
