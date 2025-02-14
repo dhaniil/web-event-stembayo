@@ -10,12 +10,18 @@ Bursa Event Sekolah adalah aplikasi web yang dibangun dengan Laravel untuk memud
 - **Admin Panel**: Admin dapat mengelola semua event, pengguna, dan konten di dalam web.
 - **Favorites**: Menandai event.
 - **Reviews**: Pengunjung dapat memberikan review dan komentar.
+- **Activity Logs**: Melacak semua aktivitas penting dalam sistem.
+- **Role & Permissions**: Manajemen hak akses berbasis peran.
 
 ## Teknologi yang Digunakan
 
-- **Backend**: Laravel 11, Filament Admin Panel
+- **Backend**: Laravel 11.x, Filament Admin Panel 3.x
 - **Frontend**: Blade, Bootstrap, HTML, dan CSS
 - **Database**: MariaDB/MySQL
+- **Package**: 
+  - Spatie Permission untuk role & permissions
+  - Spatie Activity Log untuk logging
+  - Laravel Breeze untuk authentication
 
 ## Persyaratan Sistem
 
@@ -50,12 +56,15 @@ cp .env.example .env
 
 # Generate application key
 php artisan key:generate
+
+# Link storage folder
+php artisan storage:link
 ```
 
 5. **Konfigurasi Database**
-- Buat database baru di MariaDB/MySQL
-- Edit file .env dan sesuaikan konfigurasi database:
-```
+
+Buat database baru di MariaDB/MySQL, lalu sesuaikan konfigurasi di .env:
+```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -64,13 +73,23 @@ DB_USERNAME=username_database
 DB_PASSWORD=password_database
 ```
 
+Atau gunakan SQLite untuk development:
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database.sqlite
+```
+Lalu buat file database:
+```bash
+touch database/database.sqlite
+```
+
 6. **Jalankan Migrasi & Seeder**
 ```bash
 # Jalankan migrasi database
 php artisan migrate
 
-# Jalankan seeder untuk membuat role dan admin default
-php artisan db:seed
+# Jalankan seeder untuk membuat Super Admin
+php artisan db:seed --class=SuperAdminSeeder
 ```
 
 7. **Build Assets**
@@ -85,7 +104,7 @@ php artisan serve
 
 Aplikasi sekarang bisa diakses di http://localhost:8000
 
-## Informasi Login Default
+## Akun Default
 
 **Super Admin:**
 - Email: admin@admin.com
