@@ -69,7 +69,7 @@
     <section class="login-form animate__animated animate__fadeIn">
         <div id="app" class="container-fluid" v-cloak>
             <div class="row">
-                <div class="card left-card col-lg-6">
+                <div class="card left-card col-lg-6 h-auto">
                     <div class="judul">
                         <h1 class="login-title">Welcome!</h1>
                         <p>Event Stembayo</p>
@@ -112,7 +112,7 @@
                         <div class="form-group form-check d-flex justify-content-between">
                             <div class="checkbox">
                                 <input type="checkbox" name="remember" class="form-check-input" id="remember">
-                                <label class="form-check-label" for="remember">Remember me</label>
+                                <label class="form-check-label" for="remember">Ingat saya</label>
                             </div>
                             <!-- <a href="#" class="forgot-password">Forgot Password?</a> -->
                         </div>
@@ -120,7 +120,7 @@
                             <button type="submit" class="btn" :class="{'loading': isLoading}" :disabled="isLoading || !isFormValid">
                                 @{{ isLoading ? 'Loading...' : 'Log In' }}
                             </button>
-                            <p class="text-center">Don't have an account yet? <br> <a href="{{ route('register') }}">Register</a> now!</p>  
+                            <p class="text-center">Belum memiliki akun?<br> <a href="{{ route('register') }}">Register</a> Sekarang</p>  
                         </div>
                     </form>
                 </div>

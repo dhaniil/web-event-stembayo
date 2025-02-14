@@ -18,7 +18,7 @@ export default defineConfig({
         port: 5173,
         cors: true,
         hmr: {
-            host: '10.20.12.137',  // Sesuaikan dengan IP server Anda
+            host: '10.20.12.137',
             protocol: 'ws'
         },
         headers: {
