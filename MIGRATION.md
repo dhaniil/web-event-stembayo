@@ -1,239 +1,315 @@
-# Migration & Deployment Guide with Laravel Octane (FrankenPHP)
+# Panduan Migrasi Laravel Event App
 
-## Prerequisites
-- PHP >= 8.2
+Dokumen ini berisi langkah-langkah untuk migrasi aplikasi Laravel Event dari satu server ke server lain menggunakan Laravel Octane dengan FrankenPHP.
+
+## 1. Backup Data (Di Server Lama)
+
+```bash
+# Backup database
+mysqldump -u [username] -p [nama_database] > database_backup.sql
+
+# Backup file storage
+cd /var/www/event
+tar -czf storage_backup.tar.gz storage/app/public/*
+
+# Backup .env
+cp .env .env.backup
+```
+
+## 2. Persiapan Server Baru
+
+Pastikan server tujuan memiliki:
+- Git
+- PHP 8.1 atau lebih tinggi dengan ekstensi yang diperlukan:
+  - BCMath
+  - Ctype
+  - Fileinfo
+  - JSON
+  - Mbstring
+  - OpenSSL
+  - PDO
+  - Tokenizer
+  - XML
 - Composer
 - Node.js & NPM
-- MariaDB/MySQL
-- FrankenPHP Runtime
-- Git
+- MySQL/MariaDB
+- Supervisor (opsional tapi direkomendasikan)
+- Nginx (opsional jika menggunakan sebagai reverse proxy)
 
-## Step 1: Project & Octane Setup
+## 3. Clone Repository
 
-1. Install FrankenPHP Runtime:
 ```bash
-curl -sSL https://raw.githubusercontent.com/dunglas/frankenphp/main/install.sh | sh
-```
-
-2. Clone and setup project:
-```bash
-git clone <repository-url>
+# Clone repository
+cd /var/www
+git clone [URL_REPOSITORY] event
 cd event
-composer install
+```
+
+## 4. Setup Aplikasi
+
+```bash
+# Install dependencies PHP
+composer install --optimize-autoloader --no-dev
+
+# Install dependencies Node.js
 npm install
+
+# Copy .env.example
 cp .env.example .env
+
+# Generate app key
 php artisan key:generate
-```
 
-3. Install Laravel Octane:
-```bash
-composer require laravel/octane
-php artisan octane:install
-```
-
-4. Configure Octane for FrankenPHP in `config/octane.php`:
-```php
-// filepath: /var/www/event/config/octane.php
-return [
-    'server' => 'frankenphp',
-    'https' => false,
-    'host' => '0.0.0.0',
-    'port' => 8000,
-    'workers' => 4,
-    'max_requests' => 500,
-];
-```
-
-## Step 2: Database Configuration
-
-1. Create database:
-```sql
-CREATE DATABASE event_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-2. Update `.env`:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=event_db
-DB_USERNAME=<username>
-DB_PASSWORD=<password>
-
+# Setup environment di .env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://domain-anda.com
+DB_HOST=localhost
+DB_DATABASE=nama_database
+DB_USERNAME=username
+DB_PASSWORD=password
 OCTANE_SERVER=frankenphp
+VITE_SERVER=false
 ```
 
-3. Run migrations:
+## 5. Setup Database
+
 ```bash
-php artisan migrate
+# Buat database baru
+mysql -u root -p
+CREATE DATABASE nama_database;
+exit;
+
+# Import database dari backup (jika ada)
+mysql -u [username] -p nama_database < backup.sql
+
+# Atau jalankan migration fresh jika instalasi baru
+php artisan migrate:fresh --seed
 ```
 
-## Step 3: Performance Optimizations
+## 6. Setup File Storage
 
-1. Enable OPcache in `php.ini`:
+```bash
+# Buat symlink storage
+php artisan storage:link
+
+# Restore backup storage dari server lama (jika ada)
+cd /var/www/event
+tar -xzf storage_backup.tar.gz -C storage/app/public/
+
+# Set permission yang benar
+sudo chown -R www-data:www-data /var/www/event
+sudo find /var/www/event -type f -exec chmod 644 {} \;
+sudo find /var/www/event -type d -exec chmod 755 {} \;
+sudo chmod -R 775 storage bootstrap/cache
+
+# Verify storage symlink
+ls -la public/storage
+```
+
+## 7. Build Assets dan Setup Vite
+
+```bash
+# Build Vite assets untuk production
+npm run build
+
+# Publish assets Filament
+php artisan vendor:publish --tag=filament-assets --force
+php artisan filament:assets
+
+# Tambahkan konfigurasi Vite di .env untuk mencegah CORS issues
+APP_ENV=production
+VITE_SERVER=false
+ASSET_URL=https://domain-anda.com
+```
+
+Catatan: Jika mengalami masalah CORS dengan Vite:
+- Pastikan VITE_SERVER=false di .env
+- Pastikan assets sudah di-build dengan `npm run build`
+- Pastikan ASSET_URL sudah dikonfigurasi dengan benar
+- Clear cache setelah mengubah konfigurasi
+
+## 8. Optimasi Laravel
+
+```bash
+# Clear semua cache
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+
+# Optimize
+php artisan optimize
+```
+
+## 9. Setup Laravel Octane dengan FrankenPHP
+
+```bash
+# Install Octane
+php artisan octane:install
+
+# Edit config/octane.php, pastikan:
+'server' => env('OCTANE_SERVER', 'frankenphp'),
+
+# Edit .env:
+OCTANE_SERVER=frankenphp
+OCTANE_HTTPS=true     # Jika menggunakan HTTPS
+
+# Start Octane dengan FrankenPHP
+php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000
+
+# Untuk development mode (opsional):
+php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --watch
+```
+
+Catatan penting untuk FrankenPHP:
+- FrankenPHP adalah server web modern yang terintegrasi dengan PHP
+- Lebih baik performa dibanding server PHP-FPM tradisional
+- Mendukung HTTP/2 dan HTTP/3
+- Auto-reload ketika file berubah (dengan flag --watch)
+
+## 10. Setup Supervisor (Opsional tapi Direkomendasikan)
+
+Buat file konfigurasi supervisor:
+```bash
+sudo nano /etc/supervisor/conf.d/octane.conf
+```
+
+Isi dengan:
 ```ini
-opcache.enable=1
-opcache.enable_cli=1
-opcache.validate_timestamps=0
-opcache.max_accelerated_files=10000
-opcache.memory_consumption=128
-opcache.interned_strings_buffer=16
+[program:octane]
+process_name=%(program_name)s
+command=php /var/www/event/artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000
+autostart=true
+autorestart=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=/var/www/event/storage/logs/octane.log
 ```
 
-2. Cache application:
+Kemudian:
 ```bash
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan event:cache
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start octane
 ```
 
-## Step 4: FrankenPHP Service Setup
+## 11. Setup Nginx sebagai Reverse Proxy (Opsional tapi Direkomendasikan)
 
-1. Create systemd service:
-```ini
-// filepath: /etc/systemd/system/frankenphp-event.service
-[Unit]
-Description=FrankenPHP Event Service
-After=network.target
-
-[Service]
-User=www-data
-Group=www-data
-WorkingDirectory=/var/www/event
-ExecStart=/usr/local/bin/frankenphp run --config=/var/www/event/Caddyfile
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-2. Create Caddyfile configuration:
-```caddy
-// filepath: /var/www/event/Caddyfile
-{
-    order php_server before file_server
-}
-
-:8000 {
-    root * public/
-    php_server
-}
-```
-
-3. Enable and start service:
 ```bash
-sudo systemctl enable frankenphp-event
-sudo systemctl start frankenphp-event
+sudo nano /etc/nginx/sites-available/event
 ```
 
-## Step 5: Nginx Reverse Proxy (Optional)
-
+Isi dengan:
 ```nginx
-// filepath: /etc/nginx/sites-available/event
 server {
     listen 80;
-    server_name event.example.com;
+    server_name domain-anda.com;
     
     location / {
         proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
     }
 }
 ```
 
-## Step 6: Environment Specific Settings
-
-1. Production `.env` adjustments:
-```env
-APP_ENV=production
-APP_DEBUG=false
-OCTANE_HTTPS=true
-OCTANE_WORKERS=4
-SESSION_DRIVER=octane
-CACHE_DRIVER=octane
-QUEUE_CONNECTION=octane
+Aktifkan dan restart Nginx:
+```bash
+sudo ln -s /etc/nginx/sites-available/event /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
 ```
 
-2. Set permissions:
+## 12. Setup SSL/HTTPS (Direkomendasikan)
+
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Dapatkan dan pasang sertifikat
+sudo certbot --nginx -d domain-anda.com
+```
+
+## 13. Verifikasi Instalasi
+
+Setelah menyelesaikan semua langkah, verifikasi instalasi dengan:
+
+```bash
+# Cek status Octane
+php artisan octane:status
+
+# Cek status Supervisor
+sudo supervisorctl status octane
+
+# Cek status Nginx (jika menggunakan)
+sudo systemctl status nginx
+
+# Tes koneksi database
+php artisan tinker
+DB::connection()->getPdo();
+exit;
+
+# Cek symlink storage
+ls -la public/storage
+
+# Cek permission
+ls -la storage
+ls -la bootstrap/cache
+
+# Cek versi PHP dan ekstensi
+php -v
+php -m
+```
+
+Tes fungsional:
+1. Buka website di browser
+2. Coba login ke admin panel
+3. Upload file ke storage
+4. Verifikasi asset CSS/JS dimuat dengan benar
+5. Cek performa dengan developer tools
+
+## Troubleshooting
+
+Jika mengalami masalah:
+
+1. Cek logs:
+```bash
+tail -f storage/logs/laravel.log
+tail -f storage/logs/octane.log
+```
+
+2. Jika ada masalah permission:
 ```bash
 sudo chown -R www-data:www-data /var/www/event
 sudo chmod -R 775 storage bootstrap/cache
 ```
 
-## Step 7: Monitoring & Maintenance
-
-1. Monitor Octane processes:
+3. Jika ada masalah dengan assets:
 ```bash
-php artisan octane:status
+npm run build
+php artisan optimize
+php artisan view:clear
+php artisan cache:clear
 ```
 
-2. Graceful reload:
+4. Jika ada masalah dengan Octane/FrankenPHP:
 ```bash
-php artisan octane:reload
+# Stop semua instance
+php artisan octane:stop
+
+# Clear octane cache
+rm bootstrap/cache/octane-*.php
+
+# Restart dengan debug
+php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --watch
 ```
 
-3. Check logs:
+5. Restart services:
 ```bash
-tail -f storage/logs/laravel.log
-```
-
-## Troubleshooting
-
-1. If Octane fails to start:
-```bash
-sudo systemctl status frankenphp-event
-journalctl -u frankenphp-event
-```
-
-2. Clear all caches:
-```bash
-php artisan optimize:clear
-php artisan octane:clear
-```
-
-3. Check FrankenPHP status:
-```bash
-frankenphp doctor
-```
-
-## Performance Tips
-
-1. Enable preloading in `php.ini`:
-```ini
-opcache.preload=/var/www/event/preload.php
-opcache.preload_user=www-data
-```
-
-2. Create preload file:
-```php
-// filepath: /var/www/event/preload.php
-<?php
-require_once __DIR__.'/vendor/autoload.php';
-```
-
-3. Optimize Composer:
-```bash
-composer install --optimize-autoloader --no-dev
-```
-
-## Security Notes
-
-1. Update security headers in `Caddyfile`:
-```caddy
-header {
-    X-Frame-Options "SAMEORIGIN"
-    X-XSS-Protection "1; mode=block"
-    X-Content-Type-Options "nosniff"
-    Referrer-Policy "strict-origin-when-cross-origin"
-}
-```
-
-2. Enable HTTPS in production:
-```env
-OCTANE_HTTPS=true
-SESSION_SECURE_COOKIE=true
+sudo supervisorctl restart octane
+sudo systemctl restart nginx
 ```

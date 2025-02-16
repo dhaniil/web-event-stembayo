@@ -131,37 +131,38 @@ label{
 .right-card .view-card{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
-    padding: 20px;
+    padding: 10px;
     animation: fadeIn 1s ease forwards;
 
 }
 
 .right-card .view-card img{
-    text-align: center;
     width: 100px;
     height: 100px;
     border-radius: 50px;
     object-fit: cover;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: solid 1px #9c9c9c;
+    padding: 3px;
 }
 
-.right-card .view-card h3{
+/* .right-card .view-card h3{
     font-size: 20px;
     font-weight: 600;
     margin-top: 5px;
     margin-bottom: 0;
-}
+} */
 
-.right-card .view-card p{
+/* .right-card .view-card p{
     margin: 0;
     font-size: 15px;
     font-weight: 550;
     color:#5356FF
-}
+} */
 
-.right-card .view-card h4{
-    font-size: 13px;
-}
+ .right-card .view-card .jurusan{
+    color: #5356FF;
+} 
 
 .right-card .pw-card{
     margin-top: 30px;

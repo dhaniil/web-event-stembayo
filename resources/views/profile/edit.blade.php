@@ -1,8 +1,10 @@
-@extends('extend.main') <!-- Menggunakan layout yang ada -->
+@extends('extend.main') 
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}" />
 @endsection
+
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 @section('content')
 <section class="profile-page">
@@ -13,7 +15,7 @@
                     <div class="left-card">
                         <h1> User Profile</h1>
                             <div class="img-profile d-flex mb-3">
-                                <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar">
+                                <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar" draggable="false">
                                 <div class="img-option">
                                     <form action="{{ route('profile.update.picture') }}" method="POST" enctype="multipart/form-data" style="display: inline;">
                                         @csrf
@@ -115,13 +117,47 @@
                 <div class="col-lg-3">
                     <div class="right-card">
                         <div class="view-card">
-                            <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar justify-center items-center">
-                            <h3>{{ $user->name }}</h3>
-                            <p>{{ $user->email }}</p>
+                            <div class="flex justify-center">
+                                <img class="avatar" src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" draggable="false">
+                            </div>
+                            <div class="user">
+                                <h3 class="text-sm pt-2 m-0">{{ $user->name }}</h3>
+                                <p class="text-xs text-[#5356FF]">{{ $user->email }}</p>
+                            </div>
                             <hr>
-                            <h4>{{ $user->kelas }} {{ $user->jurusan }}</h4>
-                            <h4>Sistem Informasi Jaringan Aplikasi </h4>
-                            <h4>SMKN 2 Depok</h4>
+                            <div class="desc">
+                                <div class="w-full">
+                                    <span class="jurusan rounded-md py-0.5 px-1 text-[#5356FF] text-sm font-semibold">{{ $user->kelas }} {{ $user->jurusan }}</span>
+                                </div>
+                                <h4 class="desc-jurusan text-xs">
+                                    @if(str_contains($user->jurusan, 'SIJA'))
+                                        Sistem Informasi Jaringan dan Aplikasi
+                                    @elseif(str_contains($user->jurusan, 'TFLM'))
+                                        Teknik Fabrikasi Logam dan Manufaktur
+                                    @elseif(str_contains($user->jurusan, 'KA'))
+                                        Kimia Analisis
+                                    @elseif(str_contains($user->jurusan, 'GP'))
+                                        Geologi Pertambangan
+                                    @elseif(str_contains($user->jurusan, 'DPIB'))
+                                        Desain Pemodelan dan Informasi Bangunan
+                                    @elseif(str_contains($user->jurusan, 'TKR'))
+                                        Teknik Kendaraan Ringan
+                                    @elseif(str_contains($user->jurusan, 'TOI'))
+                                        Teknik Otomasi Industrial
+                                    @elseif(str_contains($user->jurusan, 'TEK'))
+                                        Teknik Elektronika
+                                    @elseif(str_contains($user->jurusan, 'TKI'))
+                                        Teknik Kimia Industri
+                                    @elseif($user->jurusan == 'TP')
+                                        Teknik Pemesinan
+                                    @elseif($user->jurusan == 'TBKR')
+                                        Teknik Bodi Kendaraan Ringan
+                                    @elseif($user->jurusan == 'TITL')
+                                        Teknik Instalasi Tenaga Listrik
+                                    @endif
+                                </h4>
+                                <h4 class="text-sm">SMKN 2 Depok</h4>
+                            </div>
                         </div>
                         <div class="pw-card">
                             <h4>Change Password</h4>
