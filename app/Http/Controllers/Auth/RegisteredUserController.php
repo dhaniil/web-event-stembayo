@@ -36,18 +36,14 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'nomer' => ['required', 'string', 'max:13'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'kelas' => ['nullable', 'string', 'max:255'],
-            'jurusan' => ['nullable', 'string', 'max:255'],
         ]);
 
         try {
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
                 'nomer' => $request->nomer,
-                'kelas' => $request->kelas,
-                'jurusan' => $request->jurusan,
             ]);
 
             // Assign default Pengunjung role
@@ -75,7 +71,9 @@ class RegisteredUserController extends Controller
 
             Auth::login($user);
 
-            return redirect('/home');
+            return redirect('/home')
+                ->with('success', 'Registrasi berhasil! Selamat datang.')
+                ->with('show_profile_modal', true);
 
         } catch (\Exception $e) {
             // Log registration failure
@@ -90,7 +88,8 @@ class RegisteredUserController extends Controller
                 ])
                 ->log('Registrasi user gagal');
 
-            throw $e;
+            return back()->withInput()
+                ->withErrors(['error' => 'Registrasi gagal! Silakan coba lagi.']);
         }
     }
 }

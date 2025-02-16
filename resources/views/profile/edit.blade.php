@@ -115,7 +115,7 @@
                 <div class="col-lg-3">
                     <div class="right-card">
                         <div class="view-card">
-                            <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar">
+                            <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg' }}" alt="Avatar" class="avatar justify-center items-center">
                             <h3>{{ $user->name }}</h3>
                             <p>{{ $user->email }}</p>
                             <hr>

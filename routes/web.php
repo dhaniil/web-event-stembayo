@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
     Route::post('/profile/update-picture', [ProfileController::class, 'updateProfilePicture'])->name('profile.update.picture');
     Route::post('/profile/delete-picture', [ProfileController::class, 'deleteProfilePicture'])->name('profile.delete.picture');
+    Route::put('/profile/update-kelas-jurusan', [ProfileController::class, 'updateKelasJurusan'])->name('profile.update.kelas-jurusan');
 });
 
 Route::get('/logs', function () {

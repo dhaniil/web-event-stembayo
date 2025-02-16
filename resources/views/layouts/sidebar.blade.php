@@ -236,34 +236,34 @@
 
             <div class="menu" id="sidebar">
                 <ul class="menu-items">
-                    <li :class="{ active: request()->is('home') }">
+                    <li class="{{ request()->is('home') ? 'active' : '' }}">
                         <a href="/home">
                             <i class="bi bi-house"></i> Dashboard
                         </a>
                     </li>
-                    <li :class="{ active: request()->routeIs('berita.index') }">
+                    <li class="{{ request()->routeIs('berita.index') ? 'active' : '' }}">
                         <a href="{{ route('berita.index') }}">
                             <i class="bi bi-newspaper"></i> Berita Acara
                         </a>
                     </li>
-                    <li :class="{ active: request()->routeIs('favourites') }">
+                    <li class="{{ request()->routeIs('favourites') ? 'active' : '' }}">
                         <a href="{{ route('favourites') }}">
                             <i class="bi bi-heart"></i> Favourite
                         </a>
                     </li>
-                    <li :class="{ active: request()->routeIs('profile.edit') }">
+                    <li class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
                         <a href="{{ route('profile.edit') }}">
                             <i class="bi bi-person"></i> Profile
                         </a>
                     </li>
-                    <li :class="{ active: request()->routeIs('back') }">
+                    <li>
                         <a href="javascript:void(0)" onclick="goBack()">
                             <i class="bi bi-arrow-left-short"></i> Back
                         </a>
                     </li>
                     
                     @if(Auth::check() && Auth::user()->hasAnyRole(['Sekbid', 'Admin', 'Super Admin']))
-                    <li :class="{ active: request()->routeIs('admin') }">
+                    <li class="{{ request()->routeIs('admin') ? 'active' : '' }}">
                         <a href="/admin"  class="text-warning">
                             <i class="bi bi-shield-lock"></i> Admin Panel
                         </a>
