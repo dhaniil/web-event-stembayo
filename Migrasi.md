@@ -66,7 +66,33 @@ stembayo.png:1 Failed to load resource
 - Test di environment staging terlebih dahulu jika memungkinkan
 - Dokumentasikan setiap perubahan yang dilakukan
 - Monitor error log setelah deployment
-- Git tracking untuk storage files:
-  - .gitignore di public/storage telah dihapus untuk memungkinkan file-file storage di-track oleh git
-  - Pastikan untuk menjalankan `git add public/storage/*` untuk menambahkan semua file ke repository
-  - Commit dan push perubahan ke repository agar file-file tersedia di server production
+- Penanganan Storage Files:
+  1. File storage seharusnya berada di `storage/app/public`, bukan di `public/storage`
+  2. Langkah yang benar untuk menangani file storage:
+     ```bash
+     # Di server development
+     # 1. Salin semua file dari public/storage ke storage/app/public
+     cp -r public/storage/* storage/app/public/
+     
+     # 2. Hapus symbolic link lama
+     rm public/storage
+     
+     # 3. Buat ulang symbolic link
+     php artisan storage:link
+     
+     # 4. Track file di storage/app/public
+     git add storage/app/public/*
+     git commit -m "Add storage files"
+     git push
+     
+     # Di server production
+     # 1. Pull perubahan
+     git pull
+     
+     # 2. Buat symbolic link
+     php artisan storage:link
+     
+     # 3. Set permission
+     chmod -R 775 storage/app/public
+     chown -R www-data:www-data storage/app/public
+     ```
