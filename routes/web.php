@@ -56,4 +56,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/berita/{berita}', [BeritaController::class, 'show'])->name('berita.show');
 });
 
+// Auth pages
+Route::get('/auth', function () {
+    return view('auth.auth');
+})->name('auth');
+
 require __DIR__.'/auth.php';

@@ -8,6 +8,7 @@
         "php": "^8.2",
         "awcodes/filament-curator": "^3.6",
         "awcodes/filament-quick-create": "^3.6",
+        "awcodes/overlook": "^2.2",
         "bezhansalleh/filament-shield": "^3.3",
         "blade-ui-kit/blade-heroicons": "^2.5",
         "filament/filament": "*",

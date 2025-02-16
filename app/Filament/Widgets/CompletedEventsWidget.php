@@ -10,11 +10,7 @@ class CompletedEventsWidget extends BaseWidget
 {
 
     
-    protected int | string | array $columnSpan = [
-        'default' => 12,
-        'sm' => 12,
-        'lg' => 6,
-    ];
+    protected int | string | array $columnSpan = 'full';
 
     protected function getStats(): array
     {

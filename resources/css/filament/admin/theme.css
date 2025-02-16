@@ -7,13 +7,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Bokeh Background */
-.bokeh-background {
-    background-image: url('/images/bokeh-background.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
 
 /* Glassmorphism Effect */
 .glassmorphism {
