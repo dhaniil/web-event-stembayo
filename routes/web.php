@@ -58,7 +58,8 @@ Route::middleware('auth')->group(function () {
 
 // Auth pages
 Route::get('/auth', function () {
-    return view('auth.auth');
+    $mode = request()->query('mode', 'login');
+    return view('auth.auth', ['defaultView' => $mode]);
 })->name('auth');
 
 require __DIR__.'/auth.php';

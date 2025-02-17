@@ -227,7 +227,7 @@
                     :class="[isLoginView ? 'translate-x-0' : 'translate-x-full']"
                 >
                     <!-- Overlay Content for Login View -->
-                    <div v-if="isLoginView" class="relative z-10 h-full flex flex-col items-center justify-center text-white p-8 text-center">
+                    <div v-if="isLoginView" class="relative z-10 h-full flex flex-col items-center justify-center text-white p-8 text-center bg-indigo-600 rounded-xl">
                         <h2 class="text-3xl font-bold mb-4">Sudah memiliki akun?</h2>
                         <p class="mb-8">Login sekarang dan bergabung!</p>
                         <button 
@@ -239,7 +239,7 @@
                     </div>
 
                     <!-- Overlay Content for Register View -->
-                    <div v-else class="relative z-10 h-full flex flex-col items-center justify-center text-white p-8 text-center">
+                    <div v-else class="relative z-10 h-full flex flex-col items-center justify-center text-white p-8 text-center bg-indigo-600 rounded-xl">
                         <h2 class="text-3xl font-bold mb-4">Belum memiliki akun?</h2>
                         <p class="mb-8">Daftar sekarang dan bergabung dengan Event Stembayo!</p>
                         <button 
@@ -325,14 +325,14 @@
     <script>
         new Vue({
             el: '#app',
-            data: {
-                isLoginView: true,
-                email: '',
-                password: '',
-                passwordFieldType: 'password',
-                isLoading: false,
-                emailError: '',
-                passwordIcon: 'bi bi-eye-slash'
+    data: {
+        isLoginView: '{{ $defaultView ?? "login" }}' === 'register',
+        email: '',
+        password: '',
+        passwordFieldType: 'password',
+        isLoading: false,
+        emailError: '',
+        passwordIcon: 'bi bi-eye-slash'
             },
             computed: {
                 isFormValid() {
