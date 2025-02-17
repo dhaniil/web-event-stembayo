@@ -35,7 +35,7 @@
                 <!-- Login Form - Left Side -->
                 <div class="w-1/2 bg-white rounded-l-3xl p-8 shadow-lg">
                     <div class="text-center mb-8">
-                        <h1 class="text-4xl font-extrabold text-indigo-600 mb-1">Welcome!</h1>
+                        <h1 class="text-4xl font-extrabold text-indigo-600 mb-1">Selamat datang!</h1>
                         <p class="text-gray-600">Event Stembayo</p>
                     </div>
 

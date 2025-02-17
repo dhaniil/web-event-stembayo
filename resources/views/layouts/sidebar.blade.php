@@ -213,9 +213,9 @@
                     <div class="user-info d-flex align-items-center">
                         <div class="user-profile">
                             @if(Auth::user()->profile_picture)
-                                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Avatar" class="avatar">
+                                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Avatar" class="avatar ring-4">
                             @else
-                                <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Avatar" class="avatar">
+                                <img src="{{ asset('storage/assets/SOC02116.jpg') }}" alt="Avatar" class="avatar">
                             @endif
                         </div>
                         <div class="user-name">
@@ -227,8 +227,8 @@
             @else
                 <div class="user-info d-flex justify-content-center align-items-center flex-column" style="padding: 20px;">
                     <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Guest" class="avatar mb-3">
-                    <h5 class="text-center mb-3">Welcome, Guest!</h5>
-                    <p class="text-center text-muted mb-4">Please login to access all features</p>
+                    <h5 class="text-center mb-3">Selamat datang!</h5>
+                    <p class="text-center text-muted mb-4">Silahkan login untuk mengakses semua fitur</p>
                     <a href="{{ route('login') }}" class="btn btn-primary mb-2" style="width: 200px;">Login</a>
                     <a href="{{ route('register') }}" class="btn btn-outline-primary" style="width: 200px;">Register</a>
                 </div>
