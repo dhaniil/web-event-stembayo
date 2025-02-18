@@ -17,6 +17,7 @@
         "filament/tables": "^3.2",
         "laravel/framework": "^11.9",
         "laravel/octane": "*",
+        "laravel/scout": "^10.13",
         "laravel/tinker": "^2.9",
         "spatie/image": "^3.8",
         "spatie/image-optimizer": "^1.8",

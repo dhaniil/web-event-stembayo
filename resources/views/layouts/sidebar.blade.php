@@ -61,7 +61,7 @@
         align-items: center;
     }
 
-    .sidebar .user-info img {
+    /* .sidebar .user-info img {
         width: 62px;
         height: 62px;
         border-radius: 50%;
@@ -70,7 +70,7 @@
         object-fit: cover;
         padding: 2px;
         border: 2px solid #d6d6d6;
-    }
+    } */
 
     .sidebar .user-info h5 {
         margin-bottom: 5px;
@@ -213,12 +213,12 @@
                     <div class="user-info d-flex align-items-center">
                         <div class="user-profile">
                             @if(Auth::user()->profile_picture)
-                                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Avatar" class="avatar ring-4">
+                                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Avatar" class="avatar">
                             @else
                                 <img src="{{ asset('storage/assets/SOC02116.jpg') }}" alt="Avatar" class="avatar">
                             @endif
                         </div>
-                        <div class="user-name">
+                        <div class="user-name px-2">
                             <h5>{{ Auth::user()->name }}</h5>
                             <p>{{ Auth::user()->email }}</p>
                         </div>

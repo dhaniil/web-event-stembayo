@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -22,7 +23,7 @@ class Berita extends Model
             ->dontSubmitEmptyLogs();
     }
 
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Searchable;
 
     protected $table = 'berita';
 
@@ -43,6 +44,21 @@ class Berita extends Model
         'published_at' => 'datetime',
         'views' => 'integer'
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->title,
+            'content' => $this->content,
+            'excerpt' => $this->excerpt,
+            'category' => $this->category
+        ];
+    }
+
+    public function shouldBeSearchable()
+    {
+        return true;
+    }
 
     public function author()
     {

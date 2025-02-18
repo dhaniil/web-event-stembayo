@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -24,7 +25,23 @@ class Event extends Model
             ->dontSubmitEmptyLogs();
     }
 
-    use HasFactory;
+    use HasFactory, Searchable;
+
+    public function toSearchableArray()
+    {
+        return [
+            'title' => $this->name, // menggunakan name karena itu adalah field judul di tabel events
+            'description' => $this->description,
+            'type' => $this->type,
+            'kategori' => $this->kategori,
+            'penyelenggara' => $this->penyelenggara
+        ];
+    }
+
+    public function shouldBeSearchable()
+    {
+        return true; // memastikan semua event dapat dicari
+    }
 
     protected $table = 'events';
     protected $appends = ['image_url'];

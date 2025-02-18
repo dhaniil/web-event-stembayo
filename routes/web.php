@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\BeritaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UlasanController;
 use App\Http\Middleware\TrackPengunjung;
 
@@ -61,5 +62,7 @@ Route::get('/auth', function () {
     $mode = request()->query('mode', 'login');
     return view('auth.auth', ['defaultView' => $mode]);
 })->name('auth');
+
+Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 require __DIR__.'/auth.php';
