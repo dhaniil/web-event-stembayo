@@ -43,3 +43,22 @@ window.addEventListener('scroll', function () {
 
 });
 
+$(document).ready(function() {
+    // Initialize datepicker
+    $('#datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true,
+        clearBtn: true,
+        zIndexOffset: 1000
+    });
+
+    // Add event listener for form submission
+    $('form').on('submit', function() {
+        let date = $('#datepicker').val();
+        if (date) {
+            $(this).find('input[name="tanggal"]').val(date);
+        }
+    });
+});
+

@@ -397,3 +397,33 @@ footer .col-md-6{
         margin-right: 10px;
     }
 }    */
+
+/* Add these styles to your existing CSS */
+.datepicker {
+    z-index: 1600 !important; /* Ensures datepicker shows above other elements */
+}
+
+.filter-container {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-primary, .btn-secondary {
+    min-width: 80px;
+}
+
+.input-group {
+    min-width: 200px;
+}

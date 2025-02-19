@@ -210,4 +210,24 @@ class EventController extends Controller
 
         return view('events.eventonly', compact('user', 'events', 'tanggal', 'kategori'));
     }
+
+    public function dashboard(Request $request)
+    {
+        $query = Event::query();
+
+        if ($request->filled('tanggal')) {
+            $date = Carbon::parse($request->tanggal)->format('Y-m-d');
+            $query->where(function($q) use ($date) {
+                $q->whereDate('start_date', '<=', $date)
+                  ->whereDate('end_date', '>=', $date);
+            });
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        $events = $query->latest()->get();
+        return view('events.dashboard', compact('events'));
+    }
 }

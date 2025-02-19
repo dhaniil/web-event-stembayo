@@ -32,7 +32,13 @@
         <div class="card-container">
             <div class="row">
                 @if($favourites->isEmpty())
-                    <p class="text-center">Silahkan favoritkan event yang ada</p>
+                <div class="empty-state text-center py-5">
+                    <div class="empty-state-icon mb-4">
+                        <i class="far fa-heart" style="font-size: 4rem; color: #dc3545;"></i>
+                    </div>
+                    <h3 class="empty-state-title mb-2">Belum Ada Event Favorit</h3>
+                    <p class="empty-state-description mb-4 text-muted">Silahkan favoritkan event yang ada</p>
+                </div>
                 @else
                     @foreach($favourites as $favourite)
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">

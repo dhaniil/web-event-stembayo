@@ -31,7 +31,16 @@
         <div class="card-container">
             <div class="row">
                 @if($beritas->isEmpty())
-                    <p class="text-center">Tidak ada berita</p>
+                <div class="empty-state text-center py-5">
+                    <div class="empty-state-icon mb-4">
+                        <i class="far fa-newspaper" style="font-size: 4rem; color: #0d6efd;"></i>
+                    </div>
+                    <h3 class="empty-state-title mb-2">Tidak Ada Berita</h3>
+                    <p class="empty-state-description mb-4 text-muted">
+                        Belum ada berita yang tersedia untuk kategori dan filter yang dipilih.
+                        Coba ubah filter atau kembali lagi nanti.
+                    </p>
+                </div>
                 @else
                     @foreach($beritas as $berita)
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">

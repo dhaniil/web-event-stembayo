@@ -100,29 +100,35 @@
                                             <h4 class="title">Events</h4>
                                         </div>
                                         <div class="option col-12 col-md-auto d-flex justify-content-center align-items-center flex-wrap">
-                                        <div class="filter-container mb-4">
+                                            <div class="filter-container mb-4">
                                                 <form action="{{ route('events.dashboard') }}" method="GET" class="d-flex align-items-center">
-                                                    <input type="text" name="tanggal" id="datepicker" class="form-control me-2 tanggal" placeholder="Pilih Tanggal" readonly>
-                                            
-                                                    <!-- Ikon Kalender -->
-                                                    {{-- <i class="fas fa-calendar-alt" id="calendar-icon" style="position: absolute; right: 10px; cursor: pointer; font-size: 20px;"></i> --}}
+                                                    <div class="input-group me-2">
+                                                        <input type="text" 
+                                                               name="tanggal" 
+                                                               id="datepicker" 
+                                                               class="form-control datepicker" 
+                                                               value="{{ request('tanggal') }}" 
+                                                               placeholder="Pilih Tanggal" 
+                                                               autocomplete="off">
+                                                    </div>
                                                     
-                                                    <select name="kategori" class="form-control me-2 filter">
+                                                    <select name="kategori" class="form-control me-2">
                                                         <option value="">Pilih Kategori</option>
-                                                        <option value="KTYME Islam" {{ request('kategori') == 'KTYME Islam' ? 'selected' : '' }}>KTYME Islam</option>
-                                                        <option value="KTYME Kristiani" {{ request('kategori') == 'KTYME Kristiani' ? 'selected' : '' }}>KTYME Kristiani</option>
-                                                        <option value="KBBP" {{ request('kategori') == 'KBBP' ? 'selected' : '' }}>KBBP</option>
-                                                        <option value="KBPL" {{ request('kategori') == 'KBPL' ? 'selected' : '' }}>KBPL</option>
-                                                        <option value="BPPK" {{ request('kategori') == 'BPPK' ? 'selected' : '' }}>BPPK</option>
-                                                        <option value="KK" {{ request('kategori') == 'KK' ? 'selected' : '' }}>KK</option>
-                                                        <option value="PAKS" {{ request('kategori') == 'PAKS' ? 'selected' : '' }}>PAKS</option>
-                                                        <option value="KJDK" {{ request('kategori') == 'KJDK' ? 'selected' : '' }}>KJDK</option>
-                                                        <option value="PPBN" {{ request('kategori') == 'PPBN' ? 'selected' : '' }}>PPBN</option>
-                                                        <option value="HUMTIK" {{ request('kategori') == 'HUMTIK' ? 'selected' : '' }}>HUMTIK</option>
+                                                        @php
+                                                            $categories = [
+                                                                'KTYME Islam', 'KTYME Kristiani', 'KBBP', 'KBPL',
+                                                                'BPPK', 'KK', 'PAKS', 'KJDK', 'PPBN', 'HUMTIK'
+                                                            ];
+                                                        @endphp
+                                                        @foreach($categories as $category)
+                                                            <option value="{{ $category }}" {{ request('kategori') == $category ? 'selected' : '' }}>
+                                                                {{ $category }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
 
-                                                    <button type="submit" class="btn me-2">Filter</button>
-                                                    <a href="{{ route('events.eventonly') }}" class="btn">Reset</a>
+                                                    <button type="submit" class="btn btn-primary me-2">Filter</button>
+                                                    <a href="{{ route('events.dashboard') }}" class="btn btn-secondary">Reset</a>
                                                 </form>
                                             </div>
                                         </div>
@@ -131,48 +137,26 @@
 
 
                                 <div class="body-card">
-                                            <!-- @php
-                                                $chunks = $events->chunk(4);
-                                            @endphp
-                                
-                                            @foreach($chunks as $chunkIndex => $chunk) -->
-                                                    <div class="atasan-card flex justify-center items-center gap-4 p-4 ">
-                                                        <!-- @foreach($chunk as $event) -->
-                                                                <div class="kard transition-all rounded-xl">
-                                                                    <a href="{{ route('events.show', $event->id) }}" class="img-href no-underline">
-                                                                        <div class="p-2 bg-white flex flex-col rounded-xl justify-center items-center">
-                                                                            <img src="{{ asset('storage/' . $event->image) }}" alt="Image" class="card-img" loading="lazy">
-                                                                            <div class="flex flex-col items-center text-center w-full">
-                                                                                <h1 class="head text-lg max-w-sm text-center text-black w-full">{{ $event->name }}</h1>
-                                                                                <p class="desc max-w-sm w-full">{{ $event->description }}</p>
-                                                                                <!-- <figcaption>{{ $event->name }}</figcaption> -->
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                        <!-- @endforeach -->
+                                    <div class="atasan-card flex justify-center items-center gap-4 p-4 flex-wrap">
+                                        @forelse($events as $event)
+                                            <div class="kard transition-all rounded-xl">
+                                                <a href="{{ route('events.show', $event->id) }}" class="img-href no-underline">
+                                                    <div class="p-2 bg-white flex flex-col rounded-xl justify-center items-center">
+                                                        <img src="{{ asset('storage/' . $event->image) }}" alt="Image" class="card-img" loading="lazy">
+                                                        <div class="flex flex-col items-center text-center w-full">
+                                                            <h1 class="head text-lg max-w-sm text-center text-black w-full">{{ $event->name }}</h1>
+                                                            <p class="desc max-w-sm w-full">{{ $event->description }}</p>
+                                                        </div>
                                                     </div>
-                                            <!-- @endforeach -->
+                                                </a>
+                                            </div>
+                                        @empty
+                                            <div class="text-center w-full p-4">
+                                                <p>No events found matching your criteria.</p>
+                                            </div>
+                                        @endforelse
+                                    </div>
                                 </div>
-
-                                 <!-- <div class="card-footer">
-                                    <nav aria-label="Page navigation">
-                                    <ul class="pagination justify-content-center">
-                                        <li class="page-item">
-                                        <a class="page-link" data-bs-target="#carouselExample" data-bs-slide="prev">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1">1</a></li>
-                                        <li class="page-item"><a class="page-link" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2">2</a></li>
-                                        <li class="page-item">
-                                        <a class="page-link" data-bs-target="#carouselExample" data-bs-slide="next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                        </li>
-                                    </ul>
-                                    </nav>
-                                </div> -->
                             </div>
                         </div>
                     </div>

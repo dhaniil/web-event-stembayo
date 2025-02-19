@@ -4,26 +4,26 @@
     <div class="absolute w-[400px] h-[400px] bg-white/15 rounded-full -bottom-36 -left-24 blur-[70px]"></div>
 
     <div class="container mx-auto px-4 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="flex flex-wrap justify-between gap-8">
             <!-- About Section -->
-            <div>
+            <div class="flex-1 min-w-[250px]">
                 <h5 class="text-lg font-semibold mb-4">Tentang Stembayo Events</h5>
                 <p class="text-white/80 mb-6">Platform event resmi SMKN 2 Depok Sleman yang menampilkan berbagai event</p>
                 <div class="flex space-x-4">
                     <a href="https://www.instagram.com/event.stembayo/" class="hover:-translate-y-1 transition-transform">
-                        <i class="bi bi-instagram text-2xl"></i>
+                        <i class="bi bi-instagram text-2xl text-white"></i>
                     </a>
                     <a href="https://web.facebook.com/stembayolover/" class="hover:-translate-y-1 transition-transform">
-                        <i class="bi bi-facebook text-2xl"></i>
+                        <i class="bi bi-facebook text-2xl text-white"></i>
                     </a>
                     <a href="https://www.youtube.com/@smkn2depoksleman/" class="hover:-translate-y-1 transition-transform">
-                        <i class="bi bi-youtube text-2xl"></i>
+                        <i class="bi bi-youtube text-2xl text-white"></i>
                     </a>
                 </div>
             </div>
 
             <!-- Menu Section -->
-            <div>
+            <div class="flex-1 min-w-[200px]">
                 <h5 class="text-lg font-semibold mb-4">Menu Utama</h5>
                 <ul class="space-y-3">
                     <li><a href="/" class="text-white/80 hover:text-white hover:translate-x-1 transition-all inline-block">Beranda</a></li>
@@ -34,7 +34,7 @@
             </div>
 
             <!-- Related Sites -->
-            <div>
+            <div class="flex-1 min-w-[200px]">
                 <h5 class="text-lg font-semibold mb-4">Situs Terkait</h5>
                 <ul class="space-y-3">
                     <li><a href="https://smkn2depoksleman.sch.id" class="text-white/80 hover:text-white hover:translate-x-1 transition-all inline-block">Website Utama</a></li>
@@ -44,7 +44,7 @@
             </div>
 
             <!-- Contact Section -->
-            <div>
+            <div class="flex-1 min-w-[250px]">
                 <h5 class="text-lg font-semibold mb-4">Hubungi Kami</h5>
                 <div class="space-y-3">
                     <p class="flex items-start space-x-3">
@@ -66,10 +66,6 @@
         <!-- Footer Bottom -->
         <div class="mt-12 pt-8 border-t border-white/10 text-center">
             <p class="text-white/80">&copy; {{ date('Y') }} Stembayo Events. All rights reserved.</p>
-            <p class="text-sm text-white/60 mt-2">
-                <i class="bi bi-code-slash"></i> 
-                Developed by LaLimx
-            </p>
         </div>
     </div>
 </footer>

@@ -63,6 +63,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
+
             ])
             ->maxContentWidth('full')
             ->authMiddleware([
