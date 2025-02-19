@@ -35,6 +35,7 @@
         z-index: 40;
         transform: translateX(-101%);
         transition: transform 0.3s ease;
+        overflow-y: auto;
     }
 
     .sidebar.show {
@@ -55,22 +56,27 @@
     }
 
     .sidebar .user-info {
-        margin-top: 10px;
-        padding-left: 20px;
+        margin: 10px 20px;
+        padding: 15px;
         border-bottom: 1px solid #e0e0e0;
+        display: flex;
         align-items: center;
+        gap: 15px;
     }
 
-    /* .sidebar .user-info img {
-        width: 62px;
-        height: 62px;
+    .user-profile {
+        flex-shrink: 0;
+    }
+
+    .avatar {
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
-        margin-bottom: 10px;
-        margin-top: 10px;
         object-fit: cover;
+        border: 2px solid #3c5cff;
         padding: 2px;
-        border: 2px solid #d6d6d6;
-    } */
+        background-color: white;
+    }
 
     .sidebar .user-info h5 {
         margin-bottom: 5px;
@@ -84,16 +90,27 @@
     }
 
     .sidebar .user-name {
-        align-items: center;
-        padding-left: 10px;
+        flex-grow: 1;
+        overflow: hidden;
     }
 
     .sidebar .user-name h5 {
-        font-size: 15px;
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+        color: #2d3748;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .sidebar .user-name p {
-        margin: 0;
+        font-size: 13px;
+        color: #718096;
+        margin: 4px 0 0 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .sidebar .menu ul {
@@ -119,49 +136,52 @@
 
     .sidebar .menu ul li a {
         text-decoration: none;
-        padding: 10px 5px;
-        color: #595959;
+        padding: 12px 15px;
+        color: #4a5568;
         display: flex;
         align-items: center;
-        transition: all 100ms ease-in;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        font-weight: 500;
     }
 
     .sidebar .menu ul li a:hover,
     .sidebar .menu ul li.active a {
-        background-color: #5356ff;
-        border-radius: 10px;
-        color: #fff;
+        background-color: #3c5cff;
+        color: white;
+        transform: translateX(5px);
     }
 
     .menu-items {
-        padding-bottom: 60px;
+        padding: 10px 0;
+        margin-bottom: 70px;
     }
 
     .logout-button {
         position: absolute;
         bottom: 20px;
+        left: 20px;
         right: 20px;
-        width: calc(100% - 40px);
     }
 
     .btn-logout {
-        background: none;
-        border: none;
-        color: #595959;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
-        padding: 10px;
-        cursor: pointer;
-        gap: 7px;
-        width: 100%;
-        text-align: right;
-        transition: all 100ms ease-in;
+        justify-content: center;
+        gap: 8px;
+        background-color: #f8f9fa;
+        color: #4a5568;
+        transition: all 0.2s ease;
+        border: 1px solid #e2e8f0;
     }
 
     .btn-logout:hover {
-        background-color: #5356ff;
-        border-radius: 10px;
-        color: #fff;
+        background-color: #3c5cff;
+        color: white;
+        border-color: #3c5cff;
     }
     
     .user-info-link {
@@ -210,27 +230,35 @@
             
             @auth
                 <a href="{{ route('profile.edit') }}" class="user-info-link">
-                    <div class="user-info d-flex align-items-center">
+                    <div class="user-info">
                         <div class="user-profile">
                             @if(Auth::user()->profile_picture)
-                                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" alt="Avatar" class="avatar">
+                            <img src="{{ asset('storage/assets/user-avatar.jpg') }}" 
+     onerror="this.src='{{ asset('storage/assets/default-avatar.jpg') }}';">
+
                             @else
-                                <img src="{{ asset('storage/assets/SOC02116.jpg') }}" alt="Avatar" class="avatar">
+                                <img src="{{ asset('storage/assets/default-avatar.jpg') }}" 
+                                     alt="Default avatar" 
+                                     class="avatar">
                             @endif
                         </div>
-                        <div class="user-name px-2">
+                        <div class="user-name">
                             <h5>{{ Auth::user()->name }}</h5>
                             <p>{{ Auth::user()->email }}</p>
                         </div>
                     </div>
                 </a>
             @else
-                <div class="user-info d-flex justify-content-center align-items-center flex-column" style="padding: 20px;">
-                    <img src="https://as2.ftcdn.net/v2/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg" alt="Guest" class="avatar mb-3">
-                    <h5 class="text-center mb-3">Selamat datang!</h5>
-                    <p class="text-center text-muted mb-4">Silahkan login untuk mengakses semua fitur</p>
-                    <a href="{{ route('login') }}" class="btn btn-primary mb-2" style="width: 200px;">Login</a>
-                    <a href="{{ route('register') }}" class="btn btn-outline-primary" style="width: 200px;">Register</a>
+                <div class="user-info guest">
+                    <img src="{{ asset('storage/assets/default-avatar.jpg') }}" 
+                         alt="Guest" 
+                         class="avatar">
+                    <h5>Selamat datang!</h5>
+                    <p class="text-muted">Silahkan login untuk mengakses semua fitur</p>
+                    <div class="auth-buttons">
+                        <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                        <a href="{{ route('register') }}" class="btn btn-outline-primary">Register</a>
+                    </div>
                 </div>
             @endauth
 
