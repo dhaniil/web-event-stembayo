@@ -18,7 +18,9 @@ class EventBannerResource extends Resource
     protected static ?string $model = EventBanner::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
-    protected static ?string $navigationGroup = 'Manajemen Event';
+    protected static ?string $navigationGroup = 'Content';
+    protected static ?string $modelLabel = 'Banner Event';
+    protected static ?string $pluralModelLabel = 'Banner Event';
 
     public static function form(Form $form): Form
     {

@@ -17,7 +17,7 @@ class UlasanResource extends Resource
     protected static ?string $model = Ulasan::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left';
-    protected static ?string $navigationGroup = 'Manajemen Event';
+    protected static ?string $navigationGroup = 'Content';
     protected static ?string $navigationLabel = 'Ulasan';
     protected static ?string $modelLabel = 'Ulasan';
     protected static ?string $pluralModelLabel = 'Ulasan';

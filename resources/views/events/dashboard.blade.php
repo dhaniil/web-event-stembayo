@@ -2,6 +2,105 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
+<style>
+    .kard {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    .kard.fade-up {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .filter-container {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        width: 100%;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .filter-select {
+        width: 100%;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .btn-filter {
+        flex: 1;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @media (min-width: 768px) {
+        .filter-form {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .filter-select {
+            width: auto;
+            min-width: 200px;
+        }
+
+        .button-group {
+            width: auto;
+        }
+
+        .btn-filter {
+            width: 120px;
+            flex: none;
+        }
+    }
+
+    .btn-filter.primary {
+        background: #4f46e5;
+        color: white;
+        border: 2px solid #4f46e5;
+    }
+
+    .btn-filter.primary:hover {
+        background: #4338ca;
+        border-color: #4338ca;
+        transform: translateY(-1px);
+    }
+
+    .btn-filter.outline {
+        background: transparent;
+        color: #4f46e5;
+        border: 2px solid #4f46e5;
+    }
+
+    .btn-filter.outline:hover {
+        background: rgba(79, 70, 229, 0.1);
+        transform: translateY(-1px);
+    }
+</style>
 @endsection
 
 @section('content')
@@ -101,19 +200,9 @@
                                         </div>
                                         <div class="option col-12 col-md-auto d-flex justify-content-center align-items-center flex-wrap">
                                             <div class="filter-container mb-4">
-                                                <form action="{{ route('events.dashboard') }}" method="GET" class="d-flex align-items-center">
-                                                    <div class="input-group me-2">
-                                                        <input type="text" 
-                                                               name="tanggal" 
-                                                               id="datepicker" 
-                                                               class="form-control datepicker" 
-                                                               value="{{ request('tanggal') }}" 
-                                                               placeholder="Pilih Tanggal" 
-                                                               autocomplete="off">
-                                                    </div>
-                                                    
-                                                    <select name="kategori" class="form-control me-2">
-                                                        <option value="">Pilih Kategori</option>
+                                                <form id="filterForm" action="{{ route('events.dashboard') }}#event" method="GET" class="filter-form">
+                                                    <select name="kategori" class="filter-select">
+                                                        <option value="">Semua Kategori</option>
                                                         @php
                                                             $categories = [
                                                                 'KTYME Islam', 'KTYME Kristiani', 'KBBP', 'KBPL',
@@ -127,8 +216,10 @@
                                                         @endforeach
                                                     </select>
 
-                                                    <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                                    <a href="{{ route('events.dashboard') }}" class="btn btn-secondary">Reset</a>
+                                                    <div class="button-group">
+                                                        <button type="submit" class="btn-filter primary">Filter</button>
+                                                        <a href="{{ route('events.dashboard') }}" class="btn-filter primary outline">Reset</a>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -152,7 +243,7 @@
                                             </div>
                                         @empty
                                             <div class="text-center w-full p-4">
-                                                <p>No events found matching your criteria.</p>
+                                                <p>Tidak ada event yang sesuai dengan kriteria yang anda cari.</p>
                                             </div>
                                         @endforelse
                                     </div>
@@ -171,4 +262,76 @@
 
 @section('scripts')
 <script src="{{ asset('js/filament/dashboard/move.js') }}"></script>
+<script>
+// Function to handle animations
+function animateCards() {
+    const cards = document.querySelectorAll('.kard:not(.fade-up)');
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add('fade-up');
+        }, index * 100); // 100ms delay between each card
+    });
+}
+
+// Initialize Intersection Observer
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateCards();
+        }
+    });
+}, { threshold: 0.1 });
+
+// Observe the cards container
+observer.observe(document.querySelector('.atasan-card'));
+
+// Function to fetch and update content with animations
+function fetchAndUpdateContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            
+            const newEvents = temp.querySelector('.atasan-card');
+            const currentEvents = document.querySelector('.atasan-card');
+            
+            if (newEvents && currentEvents) {
+                currentEvents.innerHTML = newEvents.innerHTML;
+                // Reset and trigger animations after content update
+                const cards = document.querySelectorAll('.kard');
+                cards.forEach(card => card.classList.remove('fade-up'));
+                animateCards();
+            }
+
+            history.pushState({}, '', url);
+        });
+}
+
+// Handle filter form submit
+document.getElementById('filterForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = this;
+    const url = new URL(form.action);
+    const formData = new FormData(form);
+    
+    for (const [key, value] of formData) {
+        url.searchParams.append(key, value);
+    }
+
+    fetchAndUpdateContent(url);
+});
+
+// Update reset button selector to match new class
+document.querySelector('.btn-filter.outline').addEventListener('click', function(e) {
+    e.preventDefault();
+    const resetUrl = this.href + '#event';
+    fetchAndUpdateContent(resetUrl);
+});
+
+// Trigger initial animation
+document.addEventListener('DOMContentLoaded', () => {
+    animateCards();
+});
+</script>
 @endsection

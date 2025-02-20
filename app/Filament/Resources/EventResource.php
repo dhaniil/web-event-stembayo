@@ -25,7 +25,7 @@ use Filament\Tables\Filters\Filter;
 class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
-    protected static ?string $navigationGroup = 'Manajemen Event';
+    protected static ?string $navigationGroup = 'Content';
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     protected static array $kategoriOptions = [

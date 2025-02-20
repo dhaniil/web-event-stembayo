@@ -233,9 +233,10 @@
                     <div class="user-info">
                         <div class="user-profile">
                             @if(Auth::user()->profile_picture)
-                            <img src="{{ asset('storage/assets/user-avatar.jpg') }}" 
-     onerror="this.src='{{ asset('storage/assets/default-avatar.jpg') }}';">
-
+                            <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" 
+                                alt="Profile picture" 
+                                class="avatar"
+                                onerror="this.src='{{ asset('storage/assets/default-avatar.jpg') }}'">
                             @else
                                 <img src="{{ asset('storage/assets/default-avatar.jpg') }}" 
                                      alt="Default avatar" 

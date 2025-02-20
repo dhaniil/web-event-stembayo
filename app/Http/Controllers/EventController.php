@@ -14,11 +14,22 @@ class EventController extends Controller
     // Fungsi untuk menampilkan halaman dashboard
     public function index(Request $request)
     {
-        $events = Event::all();
-        $user = Auth::user();
-        return view('events.dashboard', compact('events',"user"));
+        $query = Event::query();
 
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Add orderBy to always get the latest events first
+        $events = $query->orderBy('created_at', 'desc')->get();
         
+        // Debugging
+        \Log::info('Query SQL: ' . $query->toSql());
+        \Log::info('Query Bindings: ', $query->getBindings());
+        \Log::info('Total events found: ' . $events->count());
+
+        $user = Auth::user();
+        return view('events.dashboard', compact('events', 'user'));
     }
 
     // Fungsi untuk menampilkan form create event
@@ -209,25 +220,5 @@ class EventController extends Controller
         $user = Auth::user();
 
         return view('events.eventonly', compact('user', 'events', 'tanggal', 'kategori'));
-    }
-
-    public function dashboard(Request $request)
-    {
-        $query = Event::query();
-
-        if ($request->filled('tanggal')) {
-            $date = Carbon::parse($request->tanggal)->format('Y-m-d');
-            $query->where(function($q) use ($date) {
-                $q->whereDate('start_date', '<=', $date)
-                  ->whereDate('end_date', '>=', $date);
-            });
-        }
-
-        if ($request->filled('kategori')) {
-            $query->where('kategori', $request->kategori);
-        }
-
-        $events = $query->latest()->get();
-        return view('events.dashboard', compact('events'));
     }
 }

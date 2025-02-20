@@ -20,8 +20,10 @@ class BeritaResource extends Resource
     protected static ?string $model = Berita::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-
     protected static ?string $navigationGroup = 'Content';
+    protected static ?string $navigationLabel = 'Berita';
+    protected static ?string $modelLabel = 'Berita';
+
 
     protected static ?string $recordTitleAttribute = 'title';
     protected static ?string $label = 'Berita';
