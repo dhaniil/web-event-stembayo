@@ -302,12 +302,15 @@
             </div>
 
             <div class="logout-button">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn-logout">
+                @auth
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn-logout">
                         <i class="bi bi-box-arrow-right"></i> Log Out
-                    </button>
-                </form>
+                    </a>
+                    
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @endauth
             </div>
         </div>
     </div>
@@ -338,4 +341,5 @@
             window.scrollTo(0, parseInt(scrollPosition));
         }
     });
+
 </script>

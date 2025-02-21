@@ -39,7 +39,7 @@
                         <p class="text-gray-600">Event Stembayo</p>
                     </div>
 
-                    <form method="POST" action="{{ route('login') }}" class="space-y-4">
+                    <form method="POST" action="{{ url('/auth/login') }}" class="space-y-4">
                         @csrf
                         <!-- Email Input -->
                         <div class="relative">
@@ -126,7 +126,7 @@
                         <p class="text-gray-600">Event Stembayo</p>
                     </div>
 
-                    <form method="POST" action="{{ route('register') }}" class="space-y-4">
+                    <form method="POST" action="{{ url('/auth/register') }}" class="space-y-4">
                         @csrf
                         <!-- Name Input -->
                         <div class="relative">
@@ -325,14 +325,14 @@
     <script>
         new Vue({
             el: '#app',
-    data: {
-        isLoginView: '{{ $defaultView ?? "login" }}' === 'register',
-        email: '',
-        password: '',
-        passwordFieldType: 'password',
-        isLoading: false,
-        emailError: '',
-        passwordIcon: 'bi bi-eye-slash'
+            data: {
+                isLoginView: '{{ $defaultView ?? "login" }}' === 'register',
+                email: '',
+                password: '',
+                passwordFieldType: 'password',
+                emailError: '',
+                passwordIcon: 'bi bi-eye-slash',
+                isLoading: false
             },
             computed: {
                 isFormValid() {
@@ -342,6 +342,11 @@
             methods: {
                 toggleView() {
                     this.isLoginView = !this.isLoginView;
+                    // Update URL without page reload
+                    const mode = this.isLoginView ? 'register' : 'login';
+                    const url = new URL(window.location);
+                    url.searchParams.set('mode', mode);
+                    window.history.pushState({}, '', url);
                 },
                 togglePasswordVisibility() {
                     this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';

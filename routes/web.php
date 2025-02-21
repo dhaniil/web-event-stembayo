@@ -26,10 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/update-kelas-jurusan', [ProfileController::class, 'updateKelasJurusan'])->name('profile.update.kelas-jurusan');
 });
 
-Route::get('/logs', function () {
-    $logs = array_slice(file(storage_path('logs/laravel.log')), -100);
-    return response()->json($logs);
-})->middleware('auth');
 
 //Ulasan
 Route::middleware(['auth'])->group(function () {
@@ -56,12 +52,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
     Route::get('/berita/{berita}', [BeritaController::class, 'show'])->name('berita.show');
 });
-
-// Auth pages
-Route::get('/auth', function () {
-    $mode = request()->query('mode', 'login');
-    return view('auth.auth', ['defaultView' => $mode]);
-})->name('auth');
+// Remove these auth routes since they're now in auth.php
+// Route::middleware('guest')->group(function () { ... });
+// Route::post('/logout', ...);
 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
