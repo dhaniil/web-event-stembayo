@@ -303,12 +303,12 @@
 
             <div class="logout-button">
                 @auth
-                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn-logout">
-                        <i class="bi bi-box-arrow-right"></i> Log Out
-                    </a>
-                    
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <form method="POST" action="{{ route('logout') }}" onsubmit="console.log('Form submitted', this.action)">
                         @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn-logout" onclick="console.log('Logout button clicked')">
+                            <i class="bi bi-box-arrow-right"></i> Log Out
+                        </button>
                     </form>
                 @endauth
             </div>

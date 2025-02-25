@@ -1,216 +1,228 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth - Event Stembayo</title>
-    @vite(['resources/css/app.css'])
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-</head>
-<body class="bg-gradient-to-t from-indigo-200 to-white font-montserrat min-h-screen antialiased">
-    <div id="app" class="min-h-screen" v-cloak>
-        <!-- Login Form -->
-        <div v-if="isLoginView" class="p-4">
-            <div class="text-center mb-8 pt-8">
-                <h1 class="text-3xl font-extrabold text-indigo-600 mb-1">Selamat datang!</h1>
-                <p class="text-gray-600">Event Stembayo</p>
-            </div>
-
-            <form method="POST" action="{{ route('login') }}" class="space-y-4">
-                @csrf
-                <!-- Email Input -->
-                <div class="space-y-2">
-                    <label class="text-sm text-gray-600">Email</label>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        v-model="email"
-                        @input="validateEmail"
-                        placeholder="Email" 
-                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                        required
-                    >
-                    <p v-if="emailError" class="text-xs text-red-500">@{{ emailError }}</p>
-                </div>
-
-                <!-- Password Input -->
-                <div class="space-y-2">
-                    <label class="text-sm text-gray-600">Password</label>
-                    <div class="relative">
-                        <input 
-                            :type="passwordFieldType"
-                            name="password" 
-                            v-model="password"
-                            placeholder="Password" 
-                            class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                            required
-                        >
-                        <button 
-                            type="button"
-                            @click="togglePasswordVisibility"
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2"
-                        >
-                            <i :class="passwordIcon"></i>
-                        </button>
-                    </div>
-                </div>
-
-                @if($errors->any())
-                    <div class="p-3 rounded-lg bg-red-50 text-red-600 text-sm">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
-
-                <button 
-                    type="submit"
-                    :disabled="!isFormValid"
-                    class="w-full py-3 bg-indigo-600 text-white rounded-lg font-medium disabled:bg-indigo-400"
-                >
-                    Login
-                </button>
-            </form>
-
-            <div class="mt-6 text-center">
-                <p class="text-gray-600">Belum punya akun?</p>
-                <button 
-                    @click="toggleView"
-                    class="mt-2 text-indigo-600 font-medium"
-                >
-                    Register
-                </button>
-            </div>
-        </div>
-
-        <!-- Register Form -->
-        <div v-else class="p-4">
-            <div class="text-center mb-8 pt-8">
-                <h1 class="text-3xl font-extrabold text-indigo-600 mb-1">Register</h1>
-                <p class="text-gray-600">Event Stembayo</p>
-            </div>
-
-            <form method="POST" action="{{ route('register') }}" class="space-y-4">
-                @csrf
-                <!-- Name Input -->
-                <div class="space-y-2">
-                    <label class="text-sm text-gray-600">Nama</label>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        placeholder="Nama Lengkap" 
-                        value="{{ old('name') }}"
-                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                        required
-                    >
-                </div>
-
-                <!-- Email Input -->
-                <div class="space-y-2">
-                    <label class="text-sm text-gray-600">Email</label>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        placeholder="Email" 
-                        value="{{ old('email') }}"
-                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                        required
-                    >
-                </div>
-
-                <!-- Password Input -->
-                <div class="space-y-2">
-                    <label class="text-sm text-gray-600">Password</label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        placeholder="Password" 
-                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                        required
-                    >
-                </div>
-
-                <!-- Confirm Password -->
-                <div class="space-y-2">
-                    <label class="text-sm text-gray-600">Konfirmasi Password</label>
-                    <input 
-                        type="password" 
-                        name="password_confirmation" 
-                        placeholder="Konfirmasi Password" 
-                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                        required
-                    >
-                </div>
-
-                <!-- Phone Number -->
-                <div class="space-y-2">
-                    <label class="text-sm text-gray-600">Nomor HP</label>
-                    <input 
-                        type="text" 
-                        name="nomer" 
-                        placeholder="Nomor HP" 
-                        value="{{ old('nomer') }}"
-                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                        required
-                    >
-                </div>
-
-                <button 
-                    type="submit"
-                    class="w-full py-3 bg-indigo-600 text-white rounded-lg font-medium"
-                >
-                    Register
-                </button>
-            </form>
-
-            <div class="mt-6 text-center">
-                <p class="text-gray-600">Sudah punya akun?</p>
-                <button 
-                    @click="toggleView"
-                    class="mt-2 text-indigo-600 font-medium"
-                >
-                    Login
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                isLoginView: true,
-                email: '',
-                password: '',
-                passwordFieldType: 'password',
-                emailError: '',
-                passwordIcon: 'bi bi-eye-slash'
-            },
-            computed: {
-                isFormValid() {
-                    return this.email && this.password && !this.emailError;
-                }
-            },
-            methods: {
-                toggleView() {
-                    this.isLoginView = !this.isLoginView;
-                },
-                togglePasswordVisibility() {
-                    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
-                    this.passwordIcon = this.passwordFieldType === 'password' ? 'bi bi-eye-slash' : 'bi bi-eye';
-                },
-                validateEmail() {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!this.email) {
-                        this.emailError = 'Email is required';
-                    } else if (!emailRegex.test(this.email)) {
-                        this.emailError = 'Please enter a valid email address';
-                    } else {
-                        this.emailError = '';
-                    }
-                }
+<x-guest-layout>
+    <div x-data="{ 
+            activeTab: window.location.href.includes('register') ? 'register' : 'login',
+            isLoginLoading: false, 
+            isRegisterLoading: false, 
+            showPassword: false,
+            switchTab(tab) {
+                this.activeTab = tab;
+                window.history.pushState({}, '', `?tab=${tab}`);
             }
-        });
-    </script>
-</body>
-</html>
+        }" 
+        class="min-h-screen bg-gradient-to-t from-indigo-200 to-white font-montserrat antialiased overflow-hidden"
+        x-cloak>
+        <div class="flex min-h-screen items-center justify-center p-4 relative z-10">
+            <div class="w-full max-w-md">
+                <!-- Auth Container -->
+                <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 relative overflow-hidden">
+                    <!-- Header -->
+                    <div class="text-center mb-8">
+                        <div class="bg-white/80 rounded-2xl w-24 h-24 mx-auto mb-4 flex items-center justify-center shadow-lg">
+                            <img src="{{ asset('storage/assets/stembayo.png') }}" alt="STEMBAYO" class="w-16 h-16 object-contain">
+                        </div>
+                        <h1 class="text-3xl font-bold text-indigo-600 mb-1">Event STEMBAYO</h1>
+                        <p class="text-gray-600 text-sm">Platform Event Sekolah</p>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="flex justify-center mb-8">
+                        <nav class="flex bg-gray-100 p-1 rounded-xl">
+                            <button 
+                                type="button"
+                                @click="switchTab('login')"
+                                :class="{'bg-white shadow text-indigo-600': activeTab === 'login', 'text-gray-600': activeTab !== 'login'}"
+                                class="px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200"
+                            >
+                                <i class="bi bi-box-arrow-in-right mr-2"></i>Masuk
+                            </button>
+                            <button 
+                                type="button"
+                                @click="switchTab('register')"
+                                :class="{'bg-white shadow text-indigo-600': activeTab === 'register', 'text-gray-600': activeTab !== 'register'}"
+                                class="px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200"
+                            >
+                                <i class="bi bi-person-plus mr-2"></i>Daftar
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div x-show="activeTab === 'login'"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 translate-y-4"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         class="space-y-6">
+                        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+                            @csrf
+                            <!-- Email Input -->
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-300 bg-white text-gray-500">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        placeholder="Email" 
+                                        class="flex-1 block w-full rounded-r-xl border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-200"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Password Input -->
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-300 bg-white text-gray-500">
+                                        <i class="bi bi-shield-lock"></i>
+                                    </span>
+                                    <div class="relative flex-1">
+                                        <input 
+                                            :type="showPassword ? 'text' : 'password'"
+                                            name="password" 
+                                            placeholder="Password" 
+                                            class="w-full rounded-r-xl border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-200"
+                                            required
+                                        >
+                                        <button 
+                                            type="button"
+                                            @click="showPassword = !showPassword"
+                                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-indigo-600"
+                                        >
+                                            <i class="bi" :class="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Remember Me -->
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="remember" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                    <span class="ml-2 text-sm text-gray-600">Ingat saya</span>
+                                </label>
+                            </div>
+
+                            <!-- Error Messages -->
+                            @if($errors->any())
+                                <div class="p-3 rounded-xl bg-red-50 text-red-600 text-sm">
+                                    {{ $errors->first() }}
+                                </div>
+                            @endif
+
+                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg">
+                                Masuk
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div x-show="activeTab === 'register'"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 translate-y-4"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         class="space-y-6">
+                        <form method="POST" action="{{ route('register') }}" class="space-y-4">
+                            @csrf
+                            <!-- Name -->
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-300 bg-white text-gray-500">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input 
+                                        type="text" 
+                                        name="name" 
+                                        placeholder="Nama Lengkap" 
+                                        class="flex-1 block w-full rounded-r-xl border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-200"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-300 bg-white text-gray-500">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        placeholder="Email" 
+                                        class="flex-1 block w-full rounded-r-xl border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-200"
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-300 bg-white text-gray-500">
+                                        <i class="bi bi-shield-lock"></i>
+                                    </span>
+                                    <div class="relative flex-1">
+                                        <input 
+                                            :type="showPassword ? 'text' : 'password'"
+                                            name="password" 
+                                            placeholder="Password" 
+                                            class="w-full rounded-r-xl border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-200"
+                                            required
+                                        >
+                                        <button 
+                                            type="button"
+                                            @click="showPassword = !showPassword"
+                                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-indigo-600"
+                                        >
+                                            <i class="bi" :class="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-300 bg-white text-gray-500">
+                                        <i class="bi bi-shield-lock"></i>
+                                    </span>
+                                    <div class="relative flex-1">
+                                        <input 
+                                            :type="showPassword ? 'text' : 'password'"
+                                            name="password_confirmation" 
+                                            placeholder="Konfirmasi Password" 
+                                            class="w-full rounded-r-xl border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 transition-all duration-200"
+                                            required
+                                        >
+                                        <button 
+                                            type="button"
+                                            @click="showPassword = !showPassword"
+                                            class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-indigo-600"
+                                        >
+                                            <i class="bi" :class="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg">
+                                Daftar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-8 text-center">
+                    <p class="text-sm text-gray-600">
+                        SMK Negeri 2 Depok Sleman &copy; {{ date('Y') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Link Stylesheet -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </div>
+</x-guest-layout>

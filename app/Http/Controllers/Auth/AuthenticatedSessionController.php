@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Spatie\Activitylog\Facades\LogActivity;
+use Jenssegers\Agent\Agent;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -18,7 +19,11 @@ class AuthenticatedSessionController extends Controller
     public function create(Request $request): View
     {
         $mode = $request->query('mode', 'login');
-        return view('auth.auth', ['defaultView' => $mode]);
+        
+        $agent = new Agent();
+        $view = $agent->isMobile() ? 'auth.auth-mobile' : 'auth.auth';
+        
+        return view($view, ['defaultView' => $mode]);
     }
 
 
@@ -65,25 +70,30 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        // Log logout event
-        activity()
-            ->useLog('authentication')
-            ->causedBy($user)
-            ->event('logout')
-            ->withProperties([
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent()
-            ])
-            ->log('User telah logout');
+            // Log logout event
+            activity()
+                ->useLog('authentication')
+                ->causedBy($user)
+                ->event('logout')
+                ->withProperties([
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ])
+                ->log('User telah logout');
 
-        Auth::guard('web')->logout();
+            Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
+            $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+            $request->session()->regenerateToken();
 
-        return redirect('/');
+            return redirect('/');
+            
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

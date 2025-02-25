@@ -13,6 +13,14 @@ use App\Http\Middleware\TrackPengunjung;
 Route::get('/', function () {
     return redirect('/home');
 });
+
+Route::get('/login', function () {
+    return redirect('/auth?mode=login');
+})->name('login');
+Route::get('register', function () {
+    return redirect('/auth?mode=register');
+})->name('register');
+
 Route::get('/home', [EventController::class, 'index'])->name('events.dashboard');
 
 // Profile
@@ -57,5 +65,6 @@ Route::middleware('auth')->group(function () {
 // Route::post('/logout', ...);
 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
+
 
 require __DIR__.'/auth.php';
