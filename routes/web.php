@@ -41,6 +41,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/ulasan/{id}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
 });
 
+Route::get('/debug/banners', [App\Http\Controllers\EventBannerController::class, 'checkBannerDisplay'])
+    ->middleware('auth'); // Protect with auth to prevent public access
+
 // Event 
 Route::get('/events/{event}', [EventController::class, 'show'])
     ->name('events.show')

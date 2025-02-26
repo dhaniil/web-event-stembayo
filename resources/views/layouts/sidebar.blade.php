@@ -340,17 +340,16 @@
                 </ul>
             </div>
 
-            <div class="logout-button">
+            <!-- <div class="logout-button">
                 @auth
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                    <form method="POST" action="{{ route('logout') }}" class="mb-0">
                         @csrf
-                        @method('DELETE')
                         <button type="submit" class="btn-logout">
                             <i class="bi bi-box-arrow-right"></i> Log Out
                         </button>
                     </form>
                 @endauth
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

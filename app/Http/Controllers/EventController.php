@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventBanner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class EventController extends Controller
 {
-    // Fungsi untuk menampilkan halaman dashboard
     public function index(Request $request)
     {
         $query = Event::query();
@@ -20,19 +19,30 @@ class EventController extends Controller
             $query->where('kategori', $request->kategori);
         }
 
-        // Add orderBy to always get the latest events first
         $events = $query->orderBy('created_at', 'desc')->get();
         
-        // Debugging
-        \Log::info('Query SQL: ' . $query->toSql());
-        \Log::info('Query Bindings: ', $query->getBindings());
-        \Log::info('Total events found: ' . $events->count());
-
+        // Get banners with logging to debug
+        $eventBannerController = new EventBannerController();
+        $banners = $eventBannerController->getActiveBanners();
+        
+        // Log banner count and details for debugging
+        Log::info('EventBanner count: ' . $banners->count());
+        if ($banners->count() > 0) {
+            foreach ($banners as $index => $banner) {
+                Log::info("Banner #{$index}: ID={$banner->id}, Image={$banner->image}");
+                // Check if image file exists
+                if ($banner->image && file_exists(public_path('storage/' . $banner->image))) {
+                    Log::info("Banner image exists: storage/{$banner->image}");
+                } else {
+                    Log::warning("Banner image does not exist: {$banner->image}");
+                }
+            }
+        }
+        
         $user = Auth::user();
-        return view('events.dashboard', compact('events', 'user'));
+        return view('events.dashboard', compact('events', 'user', 'banners'));
     }
 
-    // Fungsi untuk menampilkan form create event
     public function create()
     {
         $kategori = [
@@ -221,4 +231,5 @@ class EventController extends Controller
 
         return view('events.eventonly', compact('user', 'events', 'tanggal', 'kategori'));
     }
+
 }

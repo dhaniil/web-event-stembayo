@@ -100,6 +100,55 @@
         background: rgba(79, 70, 229, 0.1);
         transform: translateY(-1px);
     }
+
+    /* Banner carousel styles */
+    .carousel .slides {
+        transition: transform 0.5s ease-in-out;
+    }
+    
+    .carousel .slide {
+        min-height: 300px;
+        aspect-ratio: 19/6;
+    }
+    
+    .carousel .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .carousel .indicator.active {
+        background-color: #4f46e5;
+        width: 8px;
+        height: 8px;
+    }
+    
+    .carousel .empty-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e6e9ff 100%);
+        height: 300px;
+        border-radius: 12px;
+        text-align: center;
+        color: #4f46e5;
+        padding: 2rem;
+    }
+    
+    .carousel .empty-banner i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .carousel .empty-banner h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .carousel .empty-banner p {
+        color: #6b7280;
+    }
 </style>
 @endsection
 
@@ -152,34 +201,67 @@
     <section id="sorotan-event" class="flex m-6 justify-center">
         <div class="carousel relative w-full max-w-6xl mx-auto overflow-hidden rounded-2xl shadow-lg">
             <div class="slides flex transition-transform duration-500 ease-in-out">
-                @php
-                    $banners = App\Models\EventBanner::all();
-                @endphp
-                @if(count($banners) > 0)
+                @if(isset($banners) && $banners->count() > 0)
+                    @php $validBanners = false; @endphp
+                    
                     @foreach($banners as $banner)
-                        <div class="slide w-full flex-shrink-0">
-                            @if($banner->image && file_exists(public_path('storage/' . $banner->image)))
+                        @if($banner->image && file_exists(public_path('storage/' . $banner->image)))
+                            @php $validBanners = true; @endphp
+                            <div class="slide w-full flex-shrink-0">
                                 <img src="{{ asset('storage/' . $banner->image) }}" alt="Banner" class="w-full h-full object-cover" />
-                            @else
-                                <p>No image found.</p>
-                            @endif
-                        </div>
+                            </div>
+                        @else
+                            <!-- Log the issue to browser console for frontend debugging -->
+                            <script>console.warn('Invalid banner image: {{ $banner->image ?? "null" }}');</script>
+                        @endif
                     @endforeach
+                    
+                    <!-- If we have banners in the database but none with valid images -->
+                    @if(!$validBanners)
+                        <div class="slide w-full flex-shrink-0">
+                            <div class="empty-banner">
+                                <div>
+                                    <i class="bi bi-images"></i>
+                                    <h3>Banner Tidak Dapat Ditampilkan</h3>
+                                    <p>File banner tidak ditemukan</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @else
                     <div class="slide w-full flex-shrink-0">
-                        <p>No banners found.</p>
+                        <div class="empty-banner">
+                            <div>
+                                <i class="bi bi-images"></i>
+                                <h3>Belum Ada Banner Event</h3>
+                                <p>Banner event akan ditampilkan di sini saat tersedia</p>
+                            </div>
+                        </div>
                     </div>
                 @endif
             </div>
-            <div class="indicators absolute left-1/2  flex z-30 justify-center gap-3 h-4 p-2 transform -translate-x-1/2 -translate-y-[30px]  items-center rounded-t-lg">
-                @if(count($banners) > 0)
-                    @foreach($banners as $index => $banner)
-                        <button class="indicator w-1 h-1 sm:w-1 sm:h-1 md:w-2 md:h-2 lg:w-2 lg:h-2  bg-gray-300 rounded-full"></button>
-                    @endforeach
+            
+            @if(isset($banners) && $banners->count() > 1)
+                @php $validBannerCount = 0; @endphp
+                @foreach($banners as $banner)
+                    @if($banner->image && file_exists(public_path('storage/' . $banner->image)))
+                        @php $validBannerCount++; @endphp
+                    @endif
+                @endforeach
+                
+                @if($validBannerCount > 1)
+                    <div class="indicators absolute left-1/2 flex z-30 justify-center gap-3 h-4 p-2 transform -translate-x-1/2 -translate-y-[30px] items-center rounded-t-lg">
+                        @php $indicatorIndex = 0; @endphp
+                        @foreach($banners as $banner)
+                            @if($banner->image && file_exists(public_path('storage/' . $banner->image)))
+                                <button class="indicator w-2 h-2 md:w-3 md:h-3 bg-gray-300 rounded-full {{ $indicatorIndex === 0 ? 'active' : '' }}" data-index="{{ $indicatorIndex }}"></button>
+                                @php $indicatorIndex++; @endphp
+                            @endif
+                        @endforeach
+                    </div>
                 @endif
-            </div>
+            @endif
         </div>
-
     </section>
 
     
@@ -332,6 +414,53 @@ document.querySelector('.btn-filter.outline').addEventListener('click', function
 // Trigger initial animation
 document.addEventListener('DOMContentLoaded', () => {
     animateCards();
+    initBannerCarousel();
 });
+
+// Banner Carousel functionality
+function initBannerCarousel() {
+    const slidesContainer = document.querySelector('.slides');
+    const indicators = document.querySelectorAll('.indicator');
+    const slideCount = document.querySelectorAll('.slide').length;
+    
+    if (slideCount <= 1) return; // Don't initialize carousel if there's only one slide
+    
+    let currentSlide = 0;
+    let intervalId;
+    
+    // Function to move to a specific slide
+    function goToSlide(index) {
+        if (index < 0) index = slideCount - 1;
+        if (index >= slideCount) index = 0;
+        
+        currentSlide = index;
+        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update indicators
+        indicators.forEach((indicator, i) => {
+            indicator.classList.toggle('active', i === currentSlide);
+        });
+    }
+    
+    // Add click events to indicators
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            clearInterval(intervalId);
+            goToSlide(index);
+            startAutoSlide();
+        });
+    });
+    
+    function startAutoSlide() {
+        clearInterval(intervalId);
+        intervalId = setInterval(() => {
+            goToSlide(currentSlide + 1);
+        }, 5000); // Change slides every 5 seconds
+    }
+    
+    // Start the carousel
+    startAutoSlide();
+    goToSlide(0);
+}
 </script>
 @endsection
