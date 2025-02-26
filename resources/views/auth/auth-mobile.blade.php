@@ -25,7 +25,7 @@
                     </div>
 
                     <!-- Tab Navigation -->
-                    <div class="flex justify-center mb-8">
+                    <div class="flex flex-col justify-center mb-8">
                         <nav class="flex bg-gray-100 p-1 rounded-xl">
                             <button 
                                 type="button"

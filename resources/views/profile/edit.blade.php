@@ -28,7 +28,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                            <form id="profile-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="input-profile">
                                     <div class="mb-3">
@@ -37,7 +37,7 @@
                                             <span class="input-group-text">
                                                 <i class="bi bi-person-fill"></i>
                                             </span>
-                                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
+                                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required readonly>
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -46,7 +46,7 @@
                                             <span class="input-group-text">
                                                 <i class="bi bi-envelope-fill"></i>
                                             </span>
-                                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+                                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required readonly>
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -55,7 +55,7 @@
                                             <span class="input-group-text">
                                                 <i class="bi bi-telephone-fill"></i>
                                             </span>
-                                        <input type="text" class="form-control" id="nomer" value="{{ old('nomer', $user->nomer) }}" name="nomer">
+                                        <input type="text" class="form-control" id="nomer" value="{{ old('nomer', $user->nomer) }}" name="nomer" readonly>
                                         </div>
                                     </div>
                                     <div class="d-flex">
@@ -65,7 +65,7 @@
                                                 <span class="input-group-text">
                                                     <i class="bi bi-easel-fill"></i>
                                                 </span>
-                                            <select class="form-control" id="kelas" name="kelas">
+                                            <select class="form-control" id="kelas" name="kelas" disabled>
                                                 <option value="10" {{ old('kelas', $user->kelas) == 10 ? 'selected' : '' }}>10</option>
                                                 <option value="11" {{ old('kelas', $user->kelas) == 11 ? 'selected' : '' }}>11</option>
                                                 <option value="12" {{ old('kelas', $user->kelas) == 12 ? 'selected' : '' }}>12</option>
@@ -80,7 +80,7 @@
                                                 <span class="input-group-text">
                                                     <i class="bi bi-mortarboard-fill"></i>
                                                 </span>
-                                            <select class="form-control" id="jurusan" name="jurusan">
+                                            <select class="form-control" id="jurusan" name="jurusan" disabled>
                                                 <option value="SIJA A" {{ old('jurusan', $user->jurusan) == "SIJA A" ? 'selected' : '' }}>SIJA A</option>
                                                 <option value="SIJA B" {{ old('jurusan', $user->jurusan) == "SIJA B" ? 'selected' : '' }}>SIJA B</option>
                                                 <option value="TFLM A" {{ old('jurusan', $user->jurusan) == "TFLM A" ? 'selected' : '' }}>TFLM A</option>
@@ -109,7 +109,7 @@
                                     </div>
                                 </div>
                                 <div class="btn-profile">
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" id="edit-save-btn" class="btn btn-primary">Edit</button>
                                 </div>
                             </form>
                     </div>
@@ -210,6 +210,49 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editSaveBtn = document.getElementById('edit-save-btn');
+    const formFields = document.querySelectorAll('#profile-form input:not([type="hidden"]), #profile-form select');
+    const form = document.getElementById('profile-form');
+    let isEditMode = false;
+    
+    // Function to toggle between edit and save modes
+    function toggleEditMode() {
+        isEditMode = !isEditMode;
+        
+        // Update button text
+        editSaveBtn.textContent = isEditMode ? 'Save' : 'Edit';
+        
+        // Enable/disable form fields
+        formFields.forEach(field => {
+            if (isEditMode) {
+                field.removeAttribute('readonly');
+                field.removeAttribute('disabled');
+            } else {
+                field.setAttribute('readonly', 'readonly');
+                if (field.tagName === 'SELECT') {
+                    field.setAttribute('disabled', 'disabled');
+                }
+            }
+        });
+        
+        // If we're trying to save, submit the form
+        if (!isEditMode) {
+            form.submit();
+        }
+    }
+    
+    // Add click event listener to the button
+    editSaveBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        toggleEditMode();
+    });
+});
+</script>
+@endpush
 
 
 

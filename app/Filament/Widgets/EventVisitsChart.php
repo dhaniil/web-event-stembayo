@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Event;
+use App\Models\Pengunjung;
 use Filament\Widgets\LineChartWidget;
 use Carbon\Carbon;
 
@@ -20,8 +20,8 @@ class EventVisitsChart extends LineChartWidget
             $date = Carbon::now()->subDays($i)->format('Y-m-d');
             $labels->push(Carbon::now()->subDays($i)->format('D'));
             
-            // Count visits for each day
-            $visits = Event::whereDate('created_at', $date)->sum('visit_count');
+            // Count visits for each day using the pengunjung table
+            $visits = Pengunjung::whereDate('visited_at', $date)->count();
             $data->push($visits);
         }
 
@@ -31,10 +31,9 @@ class EventVisitsChart extends LineChartWidget
                     'label' => 'Pengunjung Event',
                     'data' => $data->toArray(),
                     'fill' => 'start',
-                    'borderColor' => '#3c5cff',
-                    'backgroundColor' => 'rgba(60, 92, 255, 0.1)',
-                    'tension' => 0.3,
-                ]
+                    'backgroundColor' => 'rgba(59, 130, 246, 0.2)',
+                    'borderColor' => 'rgb(59, 130, 246)',
+                ],
             ],
             'labels' => $labels->toArray(),
         ];

@@ -64,6 +64,43 @@
         gap: 15px;
     }
 
+    .sidebar .user-info.guest {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        padding-top: 10px;
+    }
+
+    .auth-buttons .btn {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+    }
+
+    .auth-buttons .btn-primary {
+        background-color: #3c5cff;
+        color: white;
+        border: none;
+    }
+
+    .auth-buttons .btn-outline-primary {
+        background-color: transparent;
+        color: #3c5cff;
+        border: 1px solid #3c5cff;
+    }
+
+    .auth-buttons .btn-outline-primary:hover {
+        background-color: #3c5cff;
+        color: white;
+    }
+
     .user-profile {
         flex-shrink: 0;
     }
@@ -236,7 +273,7 @@
                             <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" 
                                 alt="Profile picture" 
                                 class="avatar"
-                                onerror="this.src='{{ asset('storage/assets/default-avatar.jpg') }}'">
+                                onerror="setDefaultImage(this)">
                             @else
                                 <img src="{{ asset('storage/assets/default-avatar.jpg') }}" 
                                      alt="Default avatar" 
@@ -251,11 +288,13 @@
                 </a>
             @else
                 <div class="user-info guest">
-                    <img src="{{ asset('storage/assets/default-avatar.jpg') }}" 
-                         alt="Guest" 
+                    <img src="https://api.dicebear.com/7.x/initials/svg?seed= &backgroundColor=d3d3d3"
+                         alt="Anonymous" 
                          class="avatar">
-                    <h5>Selamat datang!</h5>
-                    <p class="text-muted">Silahkan login untuk mengakses semua fitur</p>
+                    <div class="guest-info">
+                        <h5>Selamat datang!</h5>
+                        <p class="text-muted">Silahkan login untuk mengakses semua fitur</p>
+                    </div>
                     <div class="auth-buttons">
                         <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
                         <a href="{{ route('register') }}" class="btn btn-outline-primary">Register</a>
@@ -303,10 +342,10 @@
 
             <div class="logout-button">
                 @auth
-                    <form method="POST" action="{{ route('logout') }}" onsubmit="console.log('Form submitted', this.action)">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn-logout" onclick="console.log('Logout button clicked')">
+                        <button type="submit" class="btn-logout">
                             <i class="bi bi-box-arrow-right"></i> Log Out
                         </button>
                     </form>
@@ -342,4 +381,11 @@
         }
     });
 
+</script>
+
+<script>
+function setDefaultImage(img) {
+    img.onerror = null; // prevent infinite loop
+    img.src = "https://api.dicebear.com/7.x/initials/svg?seed= &backgroundColor=d3d3d3";
+}
 </script>

@@ -25,22 +25,22 @@ class ProfileController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
-            'nomer' => ['required', 'string', 'max:13'],
+            'nomer' => ['nullable', 'string', 'max:13'], // Changed from required to nullable
             'kelas' => ['nullable', 'string'],
             'jurusan' => ['nullable', 'string']
         ]);
-
+    
         DB::table('users')
             ->where('id', $user->id)
             ->update($request->only(['name', 'email', 'nomer', 'kelas', 'jurusan']));
-
+    
         activity()
             ->useLog('user')
             ->causedBy($user)
             ->event('profile_update')
             ->withProperties($request->only(['name', 'email', 'nomer', 'kelas', 'jurusan']))
             ->log('User memperbarui profil');
-
+    
         return redirect()->back()->with('success', 'Profil berhasil diperbarui');
     }
 
