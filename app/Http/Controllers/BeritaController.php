@@ -11,9 +11,6 @@ class BeritaController extends Controller
     public function index(Request $request)
     {
         $query = Berita::where('status', 'published')
-            ->when($request->has('category'), function ($q) use ($request) {
-                return $q->where('category', $request->category);
-            })
             ->when($request->has('tanggal'), function ($q) use ($request) {
                 return $q->whereDate('published_at', $request->tanggal);
             })

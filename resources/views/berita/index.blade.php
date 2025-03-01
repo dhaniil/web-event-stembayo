@@ -10,24 +10,7 @@
 @section('content')
 <section class="event">
     <div class="main-content mt-16">
-        <div class="filter-container mb-4">
-            <form action="{{ route('berita.index') }}" method="GET" class="d-flex align-items-center">
-                <input type="text" name="tanggal" id="datepicker" class="form-control me-2 tanggal" placeholder="Pilih Tanggal" readonly>
-                
-                <select name="category" class="form-control me-2 filter">
-                    <option value="">Pilih Kategori</option>
-                    <option value="umum" {{ request('category') == 'umum' ? 'selected' : '' }}>Umum</option>
-                    <option value="teknologi" {{ request('category') == 'teknologi' ? 'selected' : '' }}>Teknologi</option>
-                    <option value="budaya" {{ request('category') == 'budaya' ? 'selected' : '' }}>Budaya</option>
-                    <option value="pendidikan" {{ request('category') == 'pendidikan' ? 'selected' : '' }}>Pendidikan</option>
-                    <option value="kesehatan" {{ request('category') == 'kesehatan' ? 'selected' : '' }}>Kesehatan</option>
-                </select>
-
-                <button type="submit" class="btn me-2">Filter</button>
-                <a href="{{ route('berita.index') }}" class="btn">Reset</a>
-            </form>
-        </div>
-
+        <!-- Filter container div has been removed -->
         <div class="card-container">
             <div class="row">
                 @if($beritas->isEmpty())

@@ -15,66 +15,157 @@
     }
 
     .filter-container {
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 12px;
         padding: 1rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         width: 100%;
+        border: 1px solid #edf2f7;
+        transition: all 0.3s ease;
     }
 
     .filter-form {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.25rem; /* Increased vertical gap for mobile */
+        width: 100%;
     }
 
     .filter-select {
         width: 100%;
         border: 2px solid #e2e8f0;
         border-radius: 8px;
-        padding: 0.5rem 1rem;
+        padding: 0.6rem 1rem;
         font-size: 0.95rem;
+        background-color: #f8fafc;
+        color: #4a5568;
         transition: all 0.3s ease;
+        font-weight: 500;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234a5568'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1rem;
+        padding-right: 2.5rem;
+    }
+
+    .filter-select:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        outline: none;
+    }
+
+    .filter-select option {
+        font-weight: 500;
     }
 
     .button-group {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.75rem;
         width: 100%;
     }
 
     .btn-filter {
         flex: 1;
-        padding: 0.5rem 1rem;
+        padding: 0.6rem 1rem;
         border-radius: 8px;
-        font-weight: 500;
+        font-weight: 600;
         transition: all 0.3s ease;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         display: inline-flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .btn-filter.primary {
+        background: #4f46e5;
+        color: white;
+        border: 2px solid #4f46e5;
+    }
+
+    .btn-filter.primary:hover {
+        background: #4338ca;
+        border-color: #4338ca;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .btn-filter.outline {
+        background: transparent;
+        color: #4f46e5;
+        border: 2px solid #4f46e5;
+    }
+
+    .btn-filter.outline:hover {
+        background: rgba(79, 70, 229, 0.08);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    }
+
+    .card-header {
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        padding: 1rem 1.5rem;
+        background: #ffffff;
+    }
+
+    .card-header .title {
+        color: #1a202c;
+        font-weight: 700;
+        font-size: 1.5rem;
+        position: relative;
+        padding-left: 0.8rem;
+        line-height: 1.2;
+    }
+
+    .card-header .title:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: #4f46e5;
+        border-radius: 2px;
     }
 
     @media (min-width: 768px) {
         .filter-form {
             flex-direction: row;
             align-items: center;
+            gap: 2rem; /* Significantly increased horizontal gap */
         }
 
         .filter-select {
-            width: auto;
-            min-width: 200px;
+            flex: 1;
+            min-width: 220px;
+            max-width: 280px; /* Control select width */
         }
 
         .button-group {
             width: auto;
+            flex-shrink: 0;
+            margin-left: auto; /* Push button group to the right */
         }
 
         .btn-filter {
-            width: 120px;
+            width: 110px;
             flex: none;
+        }
+
+        .card-header .row {
+            justify-content: space-between;
+        }
+    }
+
+    @supports (-webkit-touch-callout: none) {
+        @media (min-width: 768px) {
+            .filter-form {
+                gap: 2.5rem; /* Even more space for Safari */
+            }
         }
     }
 
@@ -148,6 +239,297 @@
     
     .carousel .empty-banner p {
         color: #6b7280;
+    }
+
+    /* Improved card header and filter container */
+    .card-header {
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        padding: 1rem 1.5rem;
+        background: #ffffff;
+    }
+    
+    .card-header .row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .card-header .title-container {
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+    
+    .card-header .title {
+        color: #1a202c;
+        font-weight: 700;
+        font-size: 1.5rem;
+        position: relative;
+        padding-left: 0.8rem;
+        line-height: 1.2;
+        margin: 0;
+    }
+    
+    .card-header .title:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: #4f46e5;
+        border-radius: 2px;
+    }
+    
+    .card-header .filter-wrapper {
+        width: 100%;
+    }
+    
+    .filter-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 0.75rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        width: 100%;
+        border: 1px solid #edf2f7;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+    }
+    
+    /* Responsive styles */
+    @media (min-width: 768px) {
+        .card-header .row {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-header .title-container {
+            margin-bottom: 0;
+            width: auto;
+        }
+        
+        .card-header .filter-wrapper {
+            width: auto;
+            max-width: 60%;
+        }
+        
+        .filter-form {
+            flex-direction: row;
+            align-items: center;
+        }
+        
+        .filter-select {
+            flex: 1;
+            min-width: 220px;
+            max-width: 300px;
+        }
+        
+        .button-group {
+            width: auto;
+            flex-shrink: 0;
+        }
+        
+        .btn-filter {
+            min-width: 110px;
+            flex: none;
+        }
+    }
+
+    /* Completely redesigned filter section */
+    .card-header {
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        padding: 1.25rem 1.5rem;
+        background: #ffffff;
+    }
+    
+    .card-header .header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    
+    .card-header .title-container {
+        width: 100%;
+    }
+    
+    .card-header .title {
+        color: #1a202c;
+        font-weight: 700;
+        font-size: 1.5rem;
+        position: relative;
+        padding-left: 1rem;
+        line-height: 1.2;
+        margin: 0;
+    }
+    
+    .card-header .title:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: #4f46e5;
+        border-radius: 2px;
+    }
+    
+    .card-header .filter-container {
+        width: 100%;
+        background: #f9fafb;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .filter-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        width: 100%;
+    }
+    
+    .filter-field {
+        width: 100%;
+    }
+    
+    .filter-actions {
+        display: flex;
+        gap: 0.75rem;
+        width: 100%;
+    }
+    
+    .filter-select {
+        width: 100%;
+        height: 45px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
+        background-color: white;
+        color: #4a5568;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234a5568'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1rem;
+        padding-right: 2.5rem;
+    }
+    
+    .filter-select:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        outline: none;
+    }
+    
+    .btn-filter {
+        height: 45px;
+        padding: 0 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+    
+    .btn-filter.primary {
+        background: #4f46e5;
+        color: white;
+        border: 2px solid #4f46e5;
+    }
+    
+    .btn-filter.primary:hover {
+        background: #4338ca;
+        border-color: #4338ca;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+    
+    .btn-filter.outline {
+        background: transparent;
+        color: #4f46e5;
+        border: 2px solid #4f46e5;
+    }
+    
+    .btn-filter.outline:hover {
+        background: rgba(79, 70, 229, 0.08);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    }
+    
+    /* Filter icon spacing */
+    .btn-filter i {
+        margin-right: 0.5rem;
+    }
+    
+    @media (min-width: 768px) {
+        .card-header .header-content {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header .title-container {
+            width: auto;
+        }
+        
+        .card-header .filter-container {
+            width: auto;
+            min-width: 300px;
+            max-width: 550px;
+        }
+        
+        .filter-grid {
+            grid-template-columns: minmax(180px, 1fr) auto;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .filter-actions {
+            width: auto;
+            min-width: 240px;
+        }
+        
+        .filter-select {
+            min-width: 180px;
+        }
+    }
+    
+    /* Fix for older browsers */
+    @supports not (display: grid) {
+        .filter-grid {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 768px) {
+            .filter-grid {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            
+            .filter-field {
+                flex: 1;
+                min-width: 180px;
+                margin-right: 1.5rem;
+            }
+        }
     }
 </style>
 @endsection
@@ -276,34 +658,39 @@
                         <div class="col-10">
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="row">
-                                        <div class="col">
+                                    <div class="header-content">
+                                        <div class="title-container">
                                             <h4 class="title">Events</h4>
                                         </div>
-                                        <div class="option col-12 col-md-auto d-flex justify-content-center align-items-center flex-wrap">
-                                            <div class="filter-container mb-4">
-                                                <form id="filterForm" action="{{ route('events.dashboard') }}#event" method="GET" class="filter-form">
-                                                    <select name="kategori" class="filter-select">
-                                                        <option value="">Semua Kategori</option>
-                                                        @php
-                                                            $categories = [
-                                                                'KTYME Islam', 'KTYME Kristiani', 'KBBP', 'KBPL',
-                                                                'BPPK', 'KK', 'PAKS', 'KJDK', 'PPBN', 'HUMTIK'
-                                                            ];
-                                                        @endphp
-                                                        @foreach($categories as $category)
-                                                            <option value="{{ $category }}" {{ request('kategori') == $category ? 'selected' : '' }}>
-                                                                {{ $category }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-
-                                                    <div class="button-group">
-                                                        <button type="submit" class="btn-filter primary">Filter</button>
-                                                        <a href="{{ route('events.dashboard') }}" class="btn-filter primary outline">Reset</a>
+                                        <div class="filter-container">
+                                            <form id="filterForm" action="{{ route('events.dashboard') }}#event" method="GET">
+                                                <div class="filter-grid">
+                                                    <div class="filter-field">
+                                                        <select name="kategori" class="filter-select" id="kategoriSelect">
+                                                            <option value="" {{ request('kategori') == '' ? 'selected' : '' }}>Semua Kategori</option>
+                                                            @php
+                                                                $categories = [
+                                                                    'KTYME Islam', 'KTYME Kristiani', 'KBBP', 'KBPL',
+                                                                    'BPPK', 'KK', 'PAKS', 'KJDK', 'PPBN', 'HUMTIK'
+                                                                ];
+                                                            @endphp
+                                                            @foreach($categories as $category)
+                                                                <option value="{{ $category }}" {{ request('kategori') == $category ? 'selected' : '' }}>
+                                                                    {{ $category }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
-                                                </form>
-                                            </div>
+                                                    <div class="filter-actions">
+                                                        <button type="submit" class="btn-filter primary">
+                                                            <i class="bi bi-funnel-fill"></i> Filter
+                                                        </button>
+                                                        <a href="{{ route('events.dashboard') }}" class="btn-filter outline">
+                                                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -369,7 +756,7 @@ observer.observe(document.querySelector('.atasan-card'));
 
 // Function to fetch and update content with animations
 function fetchAndUpdateContent(url) {
-    fetch(url)
+    return fetch(url)
         .then(response => response.text())
         .then(html => {
             const temp = document.createElement('div');
@@ -397,18 +784,43 @@ document.getElementById('filterForm').addEventListener('submit', function(e) {
     const url = new URL(form.action);
     const formData = new FormData(form);
     
+    // Clear previous parameters
+    url.search = '';
+    
     for (const [key, value] of formData) {
-        url.searchParams.append(key, value);
+        if (value) { // Only add parameters with values
+            url.searchParams.append(key, value);
+        }
     }
 
-    fetchAndUpdateContent(url);
+    // Add loading state to buttons
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Loading...';
+    submitBtn.disabled = true;
+    
+    fetchAndUpdateContent(url).finally(() => {
+        // Restore button state
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+    });
 });
 
 // Update reset button selector to match new class
 document.querySelector('.btn-filter.outline').addEventListener('click', function(e) {
     e.preventDefault();
+    const resetBtn = this;
+    const originalBtnText = resetBtn.innerHTML;
+    resetBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Resetting...';
+    resetBtn.disabled = true;
+    
     const resetUrl = this.href + '#event';
-    fetchAndUpdateContent(resetUrl);
+    fetchAndUpdateContent(resetUrl).finally(() => {
+        // Restore button state and reset the select field
+        resetBtn.innerHTML = originalBtnText;
+        resetBtn.disabled = false;
+        document.getElementById('kategoriSelect').value = '';
+    });
 });
 
 // Trigger initial animation

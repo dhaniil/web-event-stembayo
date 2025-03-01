@@ -13,7 +13,7 @@ class FavouriteController extends Controller
     public function favourite($eventId)
     {
         try {
-            $user = auth()->user();
+            $user = Auth::user();
             if (!$user->favourites()->where('events_id', $eventId)->exists()) {
                 $user->favourites()->attach($eventId);
                 return response()->json(['success' => true]);
@@ -27,7 +27,7 @@ class FavouriteController extends Controller
     public function unfavourite($eventId)
     {
         try {
-            $user = auth()->user();
+            $user = Auth::user();
             $user->favourites()->wherePivot('events_id', $eventId)->detach();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
