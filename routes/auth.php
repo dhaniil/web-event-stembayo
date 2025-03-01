@@ -61,7 +61,11 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
+<<<<<<< HEAD
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+=======
+    Route::delete('/auth/logout', [AuthenticatedSessionController::class, 'destroy'])
+>>>>>>> 85bb9ea (Save changes before pulling updates)
         ->name('logout');
     Route::delete('/auth/logout', [AuthenticatedSessionController::class, 'destroy']);
 
