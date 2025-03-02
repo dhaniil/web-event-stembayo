@@ -9,4 +9,4 @@ Disallow: /register
 Disallow: /password
 Disallow: /filament
 
-
+Sitemap: https://event.stembayo.sch.id/sitemap.xml

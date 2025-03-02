@@ -20,12 +20,12 @@ class RoleMiddleware
     {
         // Pastikan user sudah login
         if (!$request->user()) {
-            abort(403, 'Unauthorized.');
+            return redirect()->route('login');
         }
 
-        // Periksa apakah role user termasuk dalam daftar role yang diizinkan
-        if (!in_array($request->user()->role, $roles)) {
-            abort(403, 'Forbidden.');
+        // Periksa apakah user memiliki salah satu role yang diizinkan
+        if (!$request->user()->hasAnyRole($roles)) {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         return $next($request);

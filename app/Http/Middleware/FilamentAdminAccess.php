@@ -15,11 +15,11 @@ class FilamentAdminAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!request->user()){
+        if (!$request->user()){
             return redirect('/');
         }
       
-        if (!in_array($request->user()->role, ['superadmin', 'admin', 'sekbid'])) {
+        if (!$request->user()->hasAnyRole(['Super Admin', 'Admin', 'Sekbid'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         

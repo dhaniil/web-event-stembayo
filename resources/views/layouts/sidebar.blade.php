@@ -396,7 +396,7 @@
             <!-- New consistent sidebar header -->
             <div class="sidebar-header">
                 <div class="sidebar-brand">
-                    <img src="{{ asset('storage/assets/stmby.png') }}" alt="Logo" />
+                    <img src="{{ asset('storage/assets/stembayo.png') }}" alt="Logo" />
                     <span>STEMBAYO</span>
                 </div>
             </div>
@@ -486,18 +486,18 @@
                 </div>
             </div>
 
-            <!-- Update just the logout button section -->
-            <div class="logout-button">
+            <!-- Replace just the logout section -->
+            <!-- <div class="logout-button">
                 @auth
-                    <form method="POST" action="{{ route('logout') }}" class="mb-0" id="logout-form">
+                    <form method="POST" action="{{ route('logout') }}" class="mb-0">
                         @csrf
-                        <button type="submit" class="btn-logout" onclick="handleLogout(event)">
+                        <button type="submit" class="btn-logout">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Logout</span>
                         </button>
                     </form>
                 @endauth
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -527,11 +527,6 @@
             window.scrollTo(0, parseInt(scrollPosition));
         }
     });
-
-    function handleLogout(e) {
-        e.preventDefault();
-        document.getElementById('logout-form').submit();
-    }
 </script>
 
 <script>

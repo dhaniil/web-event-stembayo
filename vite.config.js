@@ -20,7 +20,7 @@ export default defineConfig({
         port: 5173,
         cors: true,
         hmr: {
-            host: 'localhost',
+            host: process.env.VITE_HMR_HOST || 'localhost',
             protocol: 'ws'
         },
         headers: {
@@ -30,4 +30,17 @@ export default defineConfig({
         },
         https: true, // Enable HTTPS for the dev server
     },
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: [
+                        'vue',
+                    ]
+                }
+            }
+        }
+    }
 });
