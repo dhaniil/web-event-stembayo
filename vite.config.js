@@ -10,6 +10,8 @@ export default defineConfig({
                 'resources/css/filament/admin/theme.css',
             ],
             refresh: true,
+            // Force HTTPS for assets during development if your site uses HTTPS
+            https: true,
         }),
     ],
     server: {
@@ -18,13 +20,14 @@ export default defineConfig({
         port: 5173,
         cors: true,
         hmr: {
-            host: '10.20.12.137',
+            host: 'localhost',
             protocol: 'ws'
         },
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-        }
+        },
+        https: true, // Enable HTTPS for the dev server
     },
 });
