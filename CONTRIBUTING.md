@@ -19,7 +19,7 @@ Kami menggunakan model branching berikut:
 1. **Fork repository** (jika Anda bukan anggota tim inti)
 2. **Clone repository**:
    ```bash
-   git clone https://github.com/username/bursa-event-sekolah.git
+   git clone https://github.com/dhaniil/bursa-event-sekolah.git
    cd bursa-event-sekolah
    ```
 
