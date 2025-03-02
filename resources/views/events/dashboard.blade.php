@@ -2,11 +2,196 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/empty-state.css') }}" />
 <style>
+    /* Full page background gradient - modified to remove white bottom */
+    body {
+        background: linear-gradient(135deg, #4f46e5, #2563eb);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /* Modified bubbles to be fixed and cover the entire page */
+    .bubbles {
+        position: fixed; /* Changed from absolute to fixed */
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        pointer-events: none; /* Ensures bubbles don't interfere with clicks */
+    }
+
+    /* Adjust content positioning */
+    .main-content {
+        position: relative;
+        z-index: 1;
+        background: transparent !important;
+    }
+
+    /* Make cards more visible with adjusted transparency */
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px; /* Optional: slightly rounder corners */
+        margin-bottom: 2rem; /* Add some space at bottom */
+    }
+
+    /* Remove the specific background from the greeting section since we have a global background now */
+    .gambar-awal .carousel-item {
+        background: none !important;
+    }
+
+    /* Adjust text colors for better visibility */
+    .dikit {
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Bubble animation with white color */
+    .bubbles {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+    
+    .bubble {
+        position: absolute;
+        bottom: -100px;
+        background: rgba(255, 255, 255, 0.3); 
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: rise 10s infinite ease-in;
+    }
+    
+    .bubble:nth-child(1) {
+        width: 40px;
+        height: 40px;
+        left: 10%;
+        animation-duration: 8s;
+    }
+    
+    .bubble:nth-child(2) {
+        width: 80px;
+        height: 80px;
+        left: 20%;
+        animation-duration: 15s;
+        animation-delay: 1s;
+    }
+    
+    .bubble:nth-child(3) {
+        width: 60px;
+        height: 60px;
+        left: 35%;
+        animation-duration: 10s;
+        animation-delay: 2s;
+    }
+    
+    .bubble:nth-child(4) {
+        width: 100px;
+        height: 100px;
+        left: 50%;
+        animation-duration: 18s;
+        animation-delay: 0s;
+    }
+    
+    .bubble:nth-child(5) {
+        width: 55px;
+        height: 55px;
+        left: 65%;
+        animation-duration: 12s;
+        animation-delay: 3s;
+    }
+    
+    .bubble:nth-child(6) {
+        width: 70px;
+        height: 70px;
+        left: 80%;
+        animation-duration: 16s;
+        animation-delay: 2s;
+    }
+    
+    .bubble:nth-child(7) {
+        width: 45px;
+        height: 45px;
+        left: 90%;
+        animation-duration: 11s;
+        animation-delay: 4s;
+    }
+    
+    @keyframes rise {
+        0% {
+            bottom: -100px;
+            transform: translateX(0) rotate(0);
+            opacity: 0.5;
+        }
+        50% {
+            transform: translateX(100px) rotate(180deg);
+            opacity: 0.8;
+        }
+        100% {
+            bottom: 100vh;
+            transform: translateX(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    /* Enhanced welcome text with improved animation */
+    .welcome-text {
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+        text-align: center;
+    }
+    
+    .welcome-text-animated {
+        background: linear-gradient(45deg, #ffffff, #60a5fa, #ffffff);
+        background-size: 200% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: gradient 3s ease infinite;
+        font-weight: 800;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        display: block;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .welcome-text-animated.fade-out {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    
+    .welcome-text-animated.fade-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    
+    /* Smooth card animations */
     .kard {
         opacity: 0;
         transform: translateY(20px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
+        transition: opacity 0.7s ease, transform 0.7s ease;
     }
     
     .kard.fade-up {
@@ -14,6 +199,7 @@
         transform: translateY(0);
     }
 
+    /* Existing styles... */
     .filter-container {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 12px;
@@ -192,7 +378,7 @@
         transform: translateY(-1px);
     }
 
-    /* Banner carousel styles */
+    /* Banner carousel styles - updated for consistent height */
     .carousel .slides {
         transition: transform 0.5s ease-in-out;
     }
@@ -219,11 +405,13 @@
         align-items: center;
         justify-content: center;
         background: linear-gradient(135deg, #f0f4ff 0%, #e6e9ff 100%);
-        height: 300px;
+        height: 100%;  /* Match parent height */
+        width: 100%;   /* Match parent width */
         border-radius: 12px;
         text-align: center;
         color: #4f46e5;
         padding: 2rem;
+        aspect-ratio: 19/6; /* Match slide aspect ratio */
     }
     
     .carousel .empty-banner i {
@@ -531,55 +719,153 @@
             }
         }
     }
+
+    /* Additional footer link styling */
+    footer a {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    footer a:hover {
+        color: #4f46e5;
+        transition: color 0.3s ease;
+    }
+    
+    footer .footer-links a {
+        display: inline-block;
+        margin: 0 0.5rem;
+        font-weight: 500;
+    }
+
+    /* Updated carousel styles for transparency */
+    .carousel .carousel-item {
+        background: transparent !important;
+    }
+
+    .carousel-caption {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        background: transparent;
+        padding: 2rem;
+        z-index: 2;
+    }
+
+    /* Optional: Add text shadow to make text more readable against bubbles */
+    .welcome-text-animated {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .dikit {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the Jelajah button */
+    .button {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin-top: 1.5rem;
+        text-decoration: none;
+    }
+
+    .button:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Remove any existing background colors */
+    .gambar-awal, .carousel-inner, .carousel-item, .d-block {
+        background: transparent !important;
+    }
+
+    .event {
+        background: transparent !important;
+    }
+
+    .carousel-event {
+        background: transparent !important;
+    }
+
+    /* Remove gradient overlay from carousel */
+    .carousel-inner::after {
+        display: none !important;
+        background: none !important;
+        background-image: none !important;
+    }
+
+    .carousel-inner::before {
+        display: none !important;
+        background: none !important;
+        background-image: none !important;
+    }
+
+    /* Ensure all carousel elements are truly transparent */
+    .carousel, .carousel-inner, .carousel-item {
+        background: transparent !important;
+    }
 </style>
 @endsection
 
 @section('content')
-    <!-- Navbar -->
-    <!-- <nav class="navbar sticky-top navbar-expand-lg ">
-        <div class="container p-4">
-        <a class="navbar-brand px-2" href="https://www.instagram.com/smkn2depoksleman.official?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
-            <img src="https://i.ibb.co.com/P5Lyxyc/stmby.png" alt="Logo" width="80" height="80" class="d-inline-block align-middle">
-           STEMBAYO
-            </a>
-            {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-            </button> --}}
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    {{-- <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Cart</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link " href="#">Log In</a>
-                    </li> --}}
-                </ul>
+    <script>
+        // Simple script to hide login buttons when user is authenticated
+        document.addEventListener('DOMContentLoaded', function() {
+            if ({{ auth()->check() ? 'true' : 'false' }}) {
+                // Target all possible auth button containers in various navbars
+                document.querySelectorAll('.login-button, .register-button, .nav-item-login, .nav-item-register, .auth-links, .auth-buttons').forEach(function(element) {
+                    if (element) element.style.display = 'none';
+                });
+                
+                // If there's a dedicated auth container that holds both buttons
+                const authContainer = document.querySelector('.auth-container');
+                if (authContainer) authContainer.style.display = 'none';
+            }
+        });
+    </script>
+    
+    <!-- Move bubbles outside the carousel to be page-wide -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <!-- Carousel Awal with bubbles -->
+    <div class="carousel">
+        <div class="gambar-awal">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="d-block w-full" style="width: 100%; height: 100vh; background: transparent;">
+                        <div id="caption" class="carousel-caption text-center">
+                            <h1 class="judul font-extrabold text-1xl sm:text-4xl md:text-6xl lg:text-5xl text-center">
+                                <span class="welcome-text">
+                                    <span id="animated-text" class="welcome-text-animated fade-in">EVENT STEMBAYO</span>
+                                </span>
+                            </h1>
+                            <h4 class="dikit text-center font-medium text-xs sm:text-sm md:text-xl lg:text-1xl">
+                                Temukan event-event menarik dan berkembang bersama Stembayo
+                            </h4>
+                            <a class="button mt-2 active:scale-90" id="scroll" type="submit">Jelajah</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav> -->
-
-    <!-- Carousel Awal -->
-<div class="carousel">
-    <div class="gambar-awal">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-    <img src="{{ asset('storage/assets/SOC02116.jpg') }}" class="d-block w-full bg-grey-500" style="width: 100%" alt="..." draggable="false">
-    <div class="carousel-caption text-center"></div>
-      <div id="caption" class="carousel-caption text-center">
-        <h1 class="judul font-extrabold text-1xl sm:text-4xl md:text-6xl lg:text-5xl text-center">SELAMAT DATANG</h1>
-        <h4 class="dikit text-center font-medium text-xs sm:text-sm  md:text-xl lg:text-1xl">Seputar Info Mengenai Event Stembayo</h4>
-        <!-- <input type="text" class="search-bar form-control" placeholder="Search Event" aria-label="Search"> -->
-        <a class="button mt-2 active:scale-90" id="scroll" type="submit">See More</a>
-      </div>
-      </div>
-    </div>
-    </div>
     </div>
 
-      
     <section id="sorotan-event" class="flex m-6 justify-center">
         <div class="carousel relative w-full max-w-6xl mx-auto overflow-hidden rounded-2xl shadow-lg">
             <div class="slides flex transition-transform duration-500 ease-in-out">
@@ -651,14 +937,14 @@
 
     <main class="main-content bg-transparent p-0">
         <!-- Event -->
-        <section id="event" class="event" >
+        <section id="event" class="event">
             <div id="app">
                 <div class="carousel-event position-relative">
                     <div class="d-flex justify-content-center">
-                        <div class="col-10">
+                        <div class="col-12 col-md-10 col-lg-8 mx-auto"> <!-- Changed to have proper centering with responsive widths -->
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="header-content">
+                                     <div class="header-content">
                                         <div class="title-container">
                                             <h4 class="title">Events</h4>
                                         </div>
@@ -711,8 +997,14 @@
                                                 </a>
                                             </div>
                                         @empty
-                                            <div class="text-center w-full p-4">
-                                                <p>Tidak ada event yang sesuai dengan kriteria yang anda cari.</p>
+                                            <div class="w-full py-8 px-4">
+                                                @include('components.empty-state', [
+                                                    'iconClass' => 'bi bi-calendar-x text-indigo-500 text-5xl mb-3',
+                                                    'title' => request('kategori') ? 'Tidak ada event untuk kategori ini' : 'Belum ada event',
+                                                    'message' => request('kategori') 
+                                                        ? 'Coba pilih kategori lain atau reset filter untuk melihat semua event'
+                                                        : 'Event akan ditampilkan di sini ketika sudah tersedia'
+                                                ])
                                             </div>
                                         @endforelse
                                     </div>
@@ -722,7 +1014,6 @@
                     </div>
                 </div> 
             </div>
-            
         </section>
     </main>     
 
@@ -731,30 +1022,107 @@
 
 @section('scripts')
 <script src="{{ asset('js/filament/dashboard/move.js') }}"></script>
-<script>
-// Function to handle animations
+<script type="text/javascript" defer>
+// Enhanced animation function with smoother transitions
 function animateCards() {
     const cards = document.querySelectorAll('.kard:not(.fade-up)');
     cards.forEach((card, index) => {
         setTimeout(() => {
             card.classList.add('fade-up');
-        }, index * 100); // 100ms delay between each card
+        }, 150 * index); // Increased delay between cards for smoother effect
     });
 }
 
-// Initialize Intersection Observer
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            animateCards();
+// Improved scroll behavior for the "Explore Now" button
+document.addEventListener('DOMContentLoaded', () => {
+    const scrollButton = document.getElementById('scroll');
+    if (scrollButton) {
+        scrollButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.getElementById('sorotan-event');
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 50,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    }
+
+    // Enhanced text animation with transition effect
+    const animatedText = document.getElementById('animated-text');
+    if (animatedText) {
+        const textOptions = ["EVENT STEMBAYO", "Ikuti Keseruannya", "Meriahkan Acaranya", "Jadilah Bagian dari Event"];
+        let currentIndex = 0;
+        
+        function animateText() {
+            // Fade out with downward movement
+            animatedText.classList.remove('fade-in');
+            animatedText.classList.add('fade-out');
+            
+            setTimeout(() => {
+                // Change text while invisible
+                currentIndex = (currentIndex + 1) % textOptions.length;
+                animatedText.textContent = textOptions[currentIndex];
+                
+                // Fade in with upward movement (transition is defined in CSS)
+                animatedText.classList.remove('fade-out');
+                animatedText.classList.add('fade-in');
+            }, 500); // Wait for fade-out to complete
         }
+        
+        // Start animation cycle
+        setInterval(animateText, 4000);
+    }
+    
+    animateCards();
+    initBannerCarousel();
+    
+    const slidesContainer = document.querySelector('.slides');
+    const indicators = document.querySelectorAll('.indicator');
+    const slideCount = document.querySelectorAll('.slide').length;
+    
+    if (slideCount <= 1) return; // Don't initialize carousel if there's only one slide
+    
+    let currentSlide = 0;
+    let intervalId;
+    
+    // Function to move to a specific slide
+    function goToSlide(index) {
+        if (index < 0) index = slideCount - 1;
+        if (index >= slideCount) index = 0;
+        
+        currentSlide = index;
+        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update indicators
+        indicators.forEach((indicator, i) => {
+            indicator.classList.toggle('active', i === currentSlide);
+        });
+    }
+    
+    // Add click events to indicators
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            clearInterval(intervalId);
+            goToSlide(index);
+            startAutoSlide();
+        });
     });
-}, { threshold: 0.1 });
+    
+    function startAutoSlide() {
+        clearInterval(intervalId);
+        intervalId = setInterval(() => {
+            goToSlide(currentSlide + 1);
+        }, 5000); // Change slides every 5 seconds
+    }
+    
+    // Start the carousel
+    startAutoSlide();
+    goToSlide(0);
+}
 
-// Observe the cards container
-observer.observe(document.querySelector('.atasan-card'));
-
-// Function to fetch and update content with animations
+// Your other existing functions...
 function fetchAndUpdateContent(url) {
     return fetch(url)
         .then(response => response.text())
@@ -828,51 +1196,5 @@ document.addEventListener('DOMContentLoaded', () => {
     animateCards();
     initBannerCarousel();
 });
-
-// Banner Carousel functionality
-function initBannerCarousel() {
-    const slidesContainer = document.querySelector('.slides');
-    const indicators = document.querySelectorAll('.indicator');
-    const slideCount = document.querySelectorAll('.slide').length;
-    
-    if (slideCount <= 1) return; // Don't initialize carousel if there's only one slide
-    
-    let currentSlide = 0;
-    let intervalId;
-    
-    // Function to move to a specific slide
-    function goToSlide(index) {
-        if (index < 0) index = slideCount - 1;
-        if (index >= slideCount) index = 0;
-        
-        currentSlide = index;
-        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-        
-        // Update indicators
-        indicators.forEach((indicator, i) => {
-            indicator.classList.toggle('active', i === currentSlide);
-        });
-    }
-    
-    // Add click events to indicators
-    indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => {
-            clearInterval(intervalId);
-            goToSlide(index);
-            startAutoSlide();
-        });
-    });
-    
-    function startAutoSlide() {
-        clearInterval(intervalId);
-        intervalId = setInterval(() => {
-            goToSlide(currentSlide + 1);
-        }, 5000); // Change slides every 5 seconds
-    }
-    
-    // Start the carousel
-    startAutoSlide();
-    goToSlide(0);
-}
 </script>
 @endsection

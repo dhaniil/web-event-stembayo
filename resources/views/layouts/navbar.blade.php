@@ -60,12 +60,6 @@
                 <div id="searchResults" class="search-results"></div>
             </div>
           
-            @guest
-            <div>
-                <a href="{{ route('login') }}" class="no-underline bg-white text-blue-600 px-4 font-semibold py-2 rounded-md transition-all hover: active:scale-95">Log In</a>
-                <a href="{{ route('register') }}" class="no-underline bg-[#3c5cff] text-sm text-white px-3 font-semibold py-2 rounded-xl transition-all hover:bg-[#1a40ff] active:scale-95">Sign Up</a>
-            </div>
-            @endguest
         </div>
   
         <button id="menu-toggle" class="md:hidden text-[#3c5cff] focus:outline-none">
@@ -87,10 +81,6 @@
                 <i class="fas fa-search"></i>
             </button>
             <div id="mobileSearchResults" class="search-results mt-1"></div>
-        </div>
-        <div class="flex justify-center mt-4">
-            <a href="{{ route('login') }}" class="bg-white text-blue-600 px-4 no-underline font-semibold py-1 rounded-md transition-all hover: active:scale-95">Log In</a>
-            <a href="{{ route('register') }}" class="bg-[#3c5cff] text-sm text-white no-underline px-3 font-semibold py-2 rounded-xl transition-all hover:bg-[#1a40ff] active:scale-95">Sign Up</a>
         </div>
     </div>
 </nav>

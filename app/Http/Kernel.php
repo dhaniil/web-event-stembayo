@@ -25,6 +25,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\DetectMobileDevice::class,
+            \App\Http\Middleware\HandleInvalidatedSessions::class,
         ],
 
         'api' => [

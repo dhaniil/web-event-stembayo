@@ -15,6 +15,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     @yield('styles')
+
+    {{-- Remove or modify the navbar section to not display login/register for authenticated users --}}
+    <script>
+        // Add this script to the head section to hide auth buttons as early as possible
+        document.addEventListener('DOMContentLoaded', function() {
+            if ({{ auth()->check() ? 'true' : 'false' }}) {
+                // Find all login/register buttons in the navbar
+                const authButtons = document.querySelectorAll('.auth-button, .nav-item-auth, .dropdown-auth');
+                
+                // Hide them
+                authButtons.forEach(btn => {
+                    if (btn) btn.style.display = 'none';
+                });
+            }
+        });
+    </script>
 </head>
 <body>
 @include('layouts.navbar', ['user' => $user])

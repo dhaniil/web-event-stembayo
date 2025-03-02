@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\BeritaController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UlasanController;
@@ -63,9 +64,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
     Route::get('/berita/{berita}', [BeritaController::class, 'show'])->name('berita.show');
 });
-// Remove these auth routes since they're now in auth.php
-// Route::middleware('guest')->group(function () { ... });
-// Route::post('/logout', ...);
+
+// Update the logout routes
+Route::middleware('auth')->group(function () {
+    // Handle POST logout (form submission)
+    Route::post('/logout', function () {
+        Auth::guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect('/login');
+    })->name('logout');
+
+    // Handle GET logout (direct URL access)
+    Route::get('/logout', function () {
+        Auth::guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect('/login');
+    });
+});
 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
