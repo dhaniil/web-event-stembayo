@@ -2,41 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class SuperAdminSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Super Admin Role if it doesn't exist
-        $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
+        // Pastikan role Super Admin sudah ada
+        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
 
-        // Give all permissions to super admin
-        $permissions = [
-            'view_events',
-            'create_events',
-            'edit_events',
-            'delete_events',
-            'manage_users',
-            'view_activity_logs',
-            'manage_roles',
-            'manage_permissions',
-            'manage_berita',
-            'manage_banners',
-            'manage_ulasan',
-        ];
-
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
-        }
-
-        $superAdminRole->syncPermissions($permissions);
-
-        // Create Super Admin User
+        // Buat user Super Admin jika belum ada
         $superAdmin = User::firstOrCreate(
             ['email' => 'admin@admin.com'],
             [
@@ -46,6 +24,13 @@ class SuperAdminSeeder extends Seeder
             ]
         );
 
+        // Assign role Super Admin
         $superAdmin->assignRole($superAdminRole);
+
+        // Tambahkan email Super Admin ke protected emails
+        $this->command->info('Super Admin created successfully!');
+        $this->command->info('Email: admin@admin.com');
+        $this->command->info('Password: password');
+        $this->command->info('Please change the password after first login!');
     }
 }

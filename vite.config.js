@@ -18,7 +18,7 @@ export default defineConfig({
         port: 5173,
         cors: true,
         hmr: {
-            host: '10.20.12.137',
+            host: process.env.VITE_HMR_HOST || 'localhost',
             protocol: 'ws'
         },
         headers: {
@@ -27,4 +27,17 @@ export default defineConfig({
             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
         }
     },
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: [
+                        'vue',
+                    ]
+                }
+            }
+        }
+    }
 });

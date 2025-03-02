@@ -33,12 +33,12 @@ return [
             'widgets' => [],
         ],
     ],
-    'brand' => 'Admin Panel Sekolahku', 
-    'title' => 'Dashboard Admin Sekolahku', // Title di tab browser
+    'brand' => 'Admin Panel Stembayo', 
+    'title' => 'Dashboard Admin Stembayo', // Title di tab browser
     'middleware' => [
         'auth',
         'filament', // Middleware bawaan Filament
-        'filament-access', // Middleware untuk mengecek role
+        'filament-admin', // Middleware untuk mengecek role
     ],
 
     /*
@@ -52,7 +52,7 @@ return [
     |
     */
     'protected_emails' => [
-        env('PROTECTED_EMAIL_1', ''),
+        env('PROTECTED_EMAIL_1', 'admin@admin.com'),
         env('PROTECTED_EMAIL_2', ''),
         env('PROTECTED_EMAIL_3', ''),
     ],

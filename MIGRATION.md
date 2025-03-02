@@ -1,315 +1,151 @@
-# Panduan Migrasi Laravel Event App
+# Deployment Guide
 
-Dokumen ini berisi langkah-langkah untuk migrasi aplikasi Laravel Event dari satu server ke server lain menggunakan Laravel Octane dengan FrankenPHP.
-
-## 1. Backup Data (Di Server Lama)
+## 1. Server Requirements
 
 ```bash
-# Backup database
-mysqldump -u [username] -p [nama_database] > database_backup.sql
+# Update system
+sudo apt update && sudo apt upgrade -y
 
-# Backup file storage
-cd /var/www/event
-tar -czf storage_backup.tar.gz storage/app/public/*
+# Install dependencies
+sudo apt install -y git curl unzip nginx mariadb-server \
+    php8.2-fpm php8.2-cli php8.2-common php8.2-mysql \
+    php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl \
+    php8.2-xml php8.2-bcmath php8.2-intl php8.2-opcache
 
-# Backup .env
-cp .env .env.backup
+# Install Node.js 18
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Install Composer
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install image optimization tools (optional)
+sudo apt-get install -y jpegoptim optipng pngquant gifsicle webp
 ```
 
-## 2. Persiapan Server Baru
+## 2. Database Setup
 
-Pastikan server tujuan memiliki:
-- Git
-- PHP 8.1 atau lebih tinggi dengan ekstensi yang diperlukan:
-  - BCMath
-  - Ctype
-  - Fileinfo
-  - JSON
-  - Mbstring
-  - OpenSSL
-  - PDO
-  - Tokenizer
-  - XML
-- Composer
-- Node.js & NPM
-- MySQL/MariaDB
-- Supervisor (opsional tapi direkomendasikan)
-- Nginx (opsional jika menggunakan sebagai reverse proxy)
+```sql
+CREATE DATABASE event_stembayo;
+CREATE USER 'event_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON event_stembayo.* TO 'event_user'@'localhost';
+FLUSH PRIVILEGES;
+```
 
-## 3. Clone Repository
+## 3. Application Setup
 
 ```bash
-# Clone repository
+# Clone and set permissions
 cd /var/www
-git clone [URL_REPOSITORY] event
+sudo git clone https://github.com/username/bursa-event-sekolah.git event
 cd event
-```
-
-## 4. Setup Aplikasi
-
-```bash
-# Install dependencies PHP
-composer install --optimize-autoloader --no-dev
-
-# Install dependencies Node.js
-npm install
-
-# Copy .env.example
-cp .env.example .env
-
-# Generate app key
-php artisan key:generate
-
-# Setup environment di .env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://domain-anda.com
-DB_HOST=localhost
-DB_DATABASE=nama_database
-DB_USERNAME=username
-DB_PASSWORD=password
-OCTANE_SERVER=frankenphp
-VITE_SERVER=false
-```
-
-## 5. Setup Database
-
-```bash
-# Buat database baru
-mysql -u root -p
-CREATE DATABASE nama_database;
-exit;
-
-# Import database dari backup (jika ada)
-mysql -u [username] -p nama_database < backup.sql
-
-# Atau jalankan migration fresh jika instalasi baru
-php artisan migrate:fresh --seed
-```
-
-## 6. Setup File Storage
-
-```bash
-# Buat symlink storage
-php artisan storage:link
-
-# Restore backup storage dari server lama (jika ada)
-cd /var/www/event
-tar -xzf storage_backup.tar.gz -C storage/app/public/
-
-# Set permission yang benar
 sudo chown -R www-data:www-data /var/www/event
 sudo find /var/www/event -type f -exec chmod 644 {} \;
 sudo find /var/www/event -type d -exec chmod 755 {} \;
 sudo chmod -R 775 storage bootstrap/cache
 
-# Verify storage symlink
-ls -la public/storage
+# Install dependencies
+composer install --optimize-autoloader --no-dev
+npm install
+
+# Environment setup
+cp .env.example .env
+php artisan key:generate
 ```
 
-## 7. Build Assets dan Setup Vite
-
-```bash
-# Build Vite assets untuk production
-npm run build
-
-# Publish assets Filament
-php artisan vendor:publish --tag=filament-assets --force
-php artisan filament:assets
-
-# Tambahkan konfigurasi Vite di .env untuk mencegah CORS issues
+### Production .env Configuration
+```env
+APP_NAME="Bursa Event Sekolah"
 APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://event.stembayo.sch.id
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_DATABASE=event_stembayo
+DB_USERNAME=event_user
+DB_PASSWORD=your_password
+
 VITE_SERVER=false
-ASSET_URL=https://domain-anda.com
+ASSET_URL=https://event.stembayo.sch.id
 ```
 
-Catatan: Jika mengalami masalah CORS dengan Vite:
-- Pastikan VITE_SERVER=false di .env
-- Pastikan assets sudah di-build dengan `npm run build`
-- Pastikan ASSET_URL sudah dikonfigurasi dengan benar
-- Clear cache setelah mengubah konfigurasi
-
-## 8. Optimasi Laravel
-
+### Initialize Application
 ```bash
-# Clear semua cache
-php artisan config:clear
-php artisan cache:clear
-php artisan view:clear
-php artisan route:clear
-
-# Optimize
+php artisan migrate --seed
+php artisan storage:link
 php artisan optimize
+npm run build
+php artisan filament:assets
 ```
 
-## 9. Setup Laravel Octane dengan FrankenPHP
+## 4. Nginx Configuration
 
-```bash
-# Install Octane
-php artisan octane:install
-
-# Edit config/octane.php, pastikan:
-'server' => env('OCTANE_SERVER', 'frankenphp'),
-
-# Edit .env:
-OCTANE_SERVER=frankenphp
-OCTANE_HTTPS=true     # Jika menggunakan HTTPS
-
-# Start Octane dengan FrankenPHP
-php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000
-
-# Untuk development mode (opsional):
-php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --watch
-```
-
-Catatan penting untuk FrankenPHP:
-- FrankenPHP adalah server web modern yang terintegrasi dengan PHP
-- Lebih baik performa dibanding server PHP-FPM tradisional
-- Mendukung HTTP/2 dan HTTP/3
-- Auto-reload ketika file berubah (dengan flag --watch)
-
-## 10. Setup Supervisor (Opsional tapi Direkomendasikan)
-
-Buat file konfigurasi supervisor:
-```bash
-sudo nano /etc/supervisor/conf.d/octane.conf
-```
-
-Isi dengan:
-```ini
-[program:octane]
-process_name=%(program_name)s
-command=php /var/www/event/artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000
-autostart=true
-autorestart=true
-user=www-data
-redirect_stderr=true
-stdout_logfile=/var/www/event/storage/logs/octane.log
-```
-
-Kemudian:
-```bash
-sudo supervisorctl reread
-sudo supervisorctl update
-sudo supervisorctl start octane
-```
-
-## 11. Setup Nginx sebagai Reverse Proxy (Opsional tapi Direkomendasikan)
-
-```bash
-sudo nano /etc/nginx/sites-available/event
-```
-
-Isi dengan:
 ```nginx
 server {
     listen 80;
-    server_name domain-anda.com;
-    
+    server_name event.stembayo.sch.id;
+    root /var/www/event/public;
+
+    index index.php;
+    charset utf-8;
+
     location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
     }
 }
 ```
 
-Aktifkan dan restart Nginx:
+## 5. SSL Setup
 ```bash
-sudo ln -s /etc/nginx/sites-available/event /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d event.stembayo.sch.id
 ```
 
-## 12. Setup SSL/HTTPS (Direkomendasikan)
+## Maintenance & Updates
 
 ```bash
-# Install Certbot
-sudo apt install certbot python3-certbot-nginx
-
-# Dapatkan dan pasang sertifikat
-sudo certbot --nginx -d domain-anda.com
+cd /var/www/event
+git pull origin main
+composer install --optimize-autoloader --no-dev
+php artisan migrate --force
+npm install && npm run build
+php artisan optimize
+php artisan filament:assets
 ```
-
-## 13. Verifikasi Instalasi
-
-Setelah menyelesaikan semua langkah, verifikasi instalasi dengan:
-
-```bash
-# Cek status Octane
-php artisan octane:status
-
-# Cek status Supervisor
-sudo supervisorctl status octane
-
-# Cek status Nginx (jika menggunakan)
-sudo systemctl status nginx
-
-# Tes koneksi database
-php artisan tinker
-DB::connection()->getPdo();
-exit;
-
-# Cek symlink storage
-ls -la public/storage
-
-# Cek permission
-ls -la storage
-ls -la bootstrap/cache
-
-# Cek versi PHP dan ekstensi
-php -v
-php -m
-```
-
-Tes fungsional:
-1. Buka website di browser
-2. Coba login ke admin panel
-3. Upload file ke storage
-4. Verifikasi asset CSS/JS dimuat dengan benar
-5. Cek performa dengan developer tools
 
 ## Troubleshooting
 
-Jika mengalami masalah:
-
-1. Cek logs:
+### Assets Issues
+1. Rebuild assets: `npm run build`
+2. Check VITE_SERVER=false in .env
+3. Verify ASSET_URL configuration
+4. Clear caches:
 ```bash
-tail -f storage/logs/laravel.log
-tail -f storage/logs/octane.log
-```
-
-2. Jika ada masalah permission:
-```bash
-sudo chown -R www-data:www-data /var/www/event
-sudo chmod -R 775 storage bootstrap/cache
-```
-
-3. Jika ada masalah dengan assets:
-```bash
-npm run build
-php artisan optimize
 php artisan view:clear
 php artisan cache:clear
+php artisan route:clear
+php artisan config:clear
 ```
 
-4. Jika ada masalah dengan Octane/FrankenPHP:
+### Permission Issues
 ```bash
-# Stop semua instance
-php artisan octane:stop
-
-# Clear octane cache
-rm bootstrap/cache/octane-*.php
-
-# Restart dengan debug
-php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --watch
+sudo chmod -R 775 storage bootstrap/cache
+sudo chown -R www-data:www-data /var/www/event
 ```
 
-5. Restart services:
-```bash
-sudo supervisorctl restart octane
-sudo systemctl restart nginx
-```
+## Default Account
+
+- Email: admin@admin.com
+- Password: password
