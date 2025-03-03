@@ -94,22 +94,15 @@ server {
         try_files $uri $uri/ /index.php?$query_string;
     }
 
-    # Handle static assets
-    location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$ {
-        expires 30d;
-        access_log off;
-        add_header Cache-Control "public, no-transform";
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
     location ~ \.php$ {
         fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
 
-    location ~ /\.(?!well-known).* {
-        deny all;
+    location ~ \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
     }
 }
 ```

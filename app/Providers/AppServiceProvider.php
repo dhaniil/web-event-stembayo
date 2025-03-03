@@ -21,10 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Configure Vite manifest path
         Vite::useManifestFilename('.vite/manifest.json');
-
-        // Configure Filament assets
         Filament::serving(function () {
             Filament::registerViteTheme('resources/css/filament/admin/theme.css');
         });
