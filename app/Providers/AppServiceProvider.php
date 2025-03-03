@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Vite;
+use Filament\Facades\Filament;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,13 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Add CORS headers
-        if (request()->isMethod('OPTIONS')) {
-            app()->router->options('{all}', function () {
-                return response('', 200)
-                    ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
-                    ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
-            })->where('all', '.*');
-        }
+        // Configure Vite manifest path
+        Vite::useManifestFilename('.vite/manifest.json');
+
+        // Configure Filament assets
+        Filament::serving(function () {
+            Filament::registerViteTheme('resources/css/filament/admin/theme.css');
+        });
     }
 }
